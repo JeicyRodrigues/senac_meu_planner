@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Livros que Quero Ler - Capítulo 1</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Montserrat:wght@400;600;700&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --marrom: #633535;
+            --vinho: #8b4361;
+            --rosa: #faeeeb;
+            --borda: #b89794;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            min-height: 100vh;
+            background-image: url('imagens/backgroud.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--marrom);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ══ HEADER ══ */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 28px 6px;
+        }
+        .logo-link { display:flex; align-items:center; text-decoration:none; flex-shrink:0; transition:transform 0.3s; }
+        .logo-link:hover { transform:scale(1.05); }
+        .logo-link img { width:250px; height:auto; }
+
+        .header-titulo { flex:1; display:flex; flex-direction:column; align-items:center; }
+        .titulo-linha { display:flex; align-items:center; justify-content:center; gap:4px; width:100%; }
+        .arabesco { height:54px; width:auto; object-fit:contain; mix-blend-mode:multiply; opacity:0.9; flex-shrink:0; }
+        .arabesco-dir { transform:scaleX(-1); }
+        .titulo-pagina { font-family:'Dancing Script',cursive; font-size:3.5rem; font-weight:700; color:var(--marrom); line-height:1; white-space:nowrap; }
+        .subtitulo-header { font-family:'Dancing Script',cursive; font-size:1.2rem; font-weight:600; color:var(--vinho); }
+
+        .btn-drawer { background:none; border:none; cursor:pointer; padding:4px; flex-shrink:0; transition:transform 0.2s; }
+        .btn-drawer:hover { transform:scale(1.1); }
+        .btn-drawer img { width:52px; height:auto; mix-blend-mode:multiply; }
+
+        /* ══ DRAWER ══ */
+        .drawer-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.35); z-index:1000; }
+        .drawer-overlay.aberto { display:block; }
+        .drawer {
+            position:fixed; top:0; right:-340px; width:300px; height:100vh;
+            background:#faeeeb; border-left:1px solid var(--borda);
+            z-index:1001;
+            transition:right 0.35s cubic-bezier(0.4,0,0.2,1);
+            display:flex; flex-direction:column;
+            box-shadow:-4px 0 20px rgba(99,53,53,0.12);
+            overflow-y:auto;
+        }
+        .drawer.aberto { right:0; }
+        .drawer-header { padding:20px 22px 15px; border-bottom:1px solid rgba(184,151,148,0.4); display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
+        .drawer-titulo { font-family:'Dancing Script',cursive; font-size:1.8rem; color:var(--marrom); }
+        .drawer-fechar { background:none; border:none; font-size:1.4rem; color:var(--marrom); cursor:pointer; padding:4px 8px; border-radius:50%; transition:background 0.2s; }
+        .drawer-fechar:hover { background:rgba(139,67,97,0.12); }
+        .drawer-nav { flex:1; padding:8px 0; }
+        .drawer-nav ul { list-style:none; margin:0; padding:0; }
+        .drawer-nav li { border-bottom:1px solid rgba(184,151,148,0.12); }
+        .drawer-nav li a {
+            display:block; padding:13px 24px;
+            text-decoration:none; color:var(--marrom);
+            font-size:0.88rem; font-weight:600;
+            font-family:'Montserrat',sans-serif;
+            border-left:3px solid transparent;
+            transition:background 0.2s, border-color 0.2s;
+        }
+        .drawer-nav li a:hover { background:#eededa; border-left-color:var(--vinho); }
+        .sub-toggle {
+            display:flex; align-items:center; justify-content:space-between;
+            padding:13px 24px; cursor:pointer;
+            color:var(--marrom); font-size:0.88rem; font-weight:600;
+            font-family:'Montserrat',sans-serif;
+            border-left:3px solid transparent;
+            transition:background 0.2s, border-color 0.2s;
+        }
+        .sub-toggle:hover { background:#eededa; border-left-color:var(--vinho); }
+        .sub-arrow { font-size:0.8rem; color:var(--borda); transition:transform 0.25s; }
+        .sub-arrow.open { transform:rotate(90deg); }
+        .sub-menu { display:none; list-style:none; background:rgba(184,151,148,0.08); }
+        .sub-menu.open { display:block; }
+        .sub-menu li { border-bottom:1px solid rgba(184,151,148,0.08); }
+        .sub-menu li a {
+            display:block; padding:9px 24px 9px 36px;
+            text-decoration:none; color:var(--marrom);
+            font-size:0.8rem; font-weight:500;
+            font-family:'Montserrat',sans-serif;
+            border-left:3px solid transparent;
+            transition:background 0.2s;
+        }
+        .sub-menu li a:hover { background:rgba(139,67,97,0.07); border-left-color:var(--vinho); }
+        .drawer-sep { height:1px; background:rgba(184,151,148,0.3); margin:4px 18px; }
+        .drawer-sep-item { border:none !important; }
+        .drawer-footer { padding:16px 22px; border-top:1px solid rgba(184,151,148,0.4); font-size:0.72rem; color:#999; text-align:center; font-family:'Montserrat',sans-serif; flex-shrink:0; }
+
+        /* ══ CONTAINER ══ */
+        .container-leituras {
+            background-color: rgba(250,238,235,0.78);
+            backdrop-filter: blur(2px);
+            width: 92%; max-width: 1200px;
+            margin: 4px auto 20px;
+            padding: 28px 32px 24px;
+            border-radius: 18px;
+            border: 1px solid rgba(184,151,148,0.5);
+            flex: 1;
+        }
+
+        /* ══ FORMULÁRIO DE ADIÇÃO ══ */
+        .form-adicionar {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr auto;
+            gap: 16px;
+            align-items: end;
+            margin-bottom: 30px;
+        }
+
+        .campo-grupo { display:flex; flex-direction:column; gap:5px; }
+        .campo-label { font-size:0.82rem; font-weight:600; color:var(--marrom); }
+
+        .campo-input {
+            width: 100%;
+            padding: 10px 18px;
+            border: 1px solid var(--marrom);
+            border-radius: 25px;
+            background: rgba(255,255,255,0.2);
+            font-family: 'Montserrat', sans-serif;
+            color: var(--marrom);
+            font-size: 0.83rem;
+            outline: none;
+            transition: border-color 0.2s, background 0.2s;
+        }
+        .campo-input:focus { border-color:var(--vinho); background:rgba(255,255,255,0.4); }
+        .campo-input::placeholder { color:rgba(99,53,53,0.35); }
+
+        .btn-adicionar {
+            padding: 10px 32px;
+            background: var(--marrom);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.15s;
+            white-space: nowrap;
+            height: 42px;
+        }
+        .btn-adicionar:hover { background:var(--vinho); transform:translateY(-1px); }
+
+        /* ══ TABELA ══ */
+        .tabela-wrap {
+            border: 1px solid rgba(184,151,148,0.5);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead tr {
+            background: rgba(184,151,148,0.18);
+        }
+
+        thead th {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--marrom);
+            padding: 14px 20px;
+            text-align: left;
+            border-bottom: 1px solid rgba(184,151,148,0.4);
+        }
+
+        thead th:not(:last-child) {
+            border-right: 1px solid rgba(184,151,148,0.3);
+        }
+
+        tbody tr {
+            border-bottom: 1px solid rgba(184,151,148,0.2);
+            transition: background 0.2s;
+        }
+
+        tbody tr:last-child { border-bottom: none; }
+        tbody tr:hover { background: rgba(184,151,148,0.08); }
+
+        tbody td {
+            padding: 11px 20px;
+            font-size: 0.83rem;
+            color: var(--marrom);
+            border-right: 1px solid rgba(184,151,148,0.2);
+            vertical-align: middle;
+        }
+
+        tbody td:last-child { border-right: none; }
+
+        /* Linha vazia */
+        .linha-vazia td { height: 40px; }
+
+        /* Célula de ações */
+        .td-acoes {
+            width: 60px;
+            text-align: center;
+        }
+
+        .btn-deletar {
+            background: rgba(99,53,53,0.75);
+            border: none; cursor: pointer;
+            color: white;
+            width: 26px; height: 26px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            transition: background 0.2s, transform 0.15s;
+            opacity: 0;
+        }
+        tbody tr:hover .btn-deletar { opacity: 1; }
+        .btn-deletar:hover { background: #8b4361; transform: scale(1.1); }
+
+        /* Checkbox lido */
+        .td-lido { width: 50px; text-align: center; }
+        input[type="checkbox"].check-lido {
+            width: 18px; height: 18px;
+            accent-color: var(--marrom);
+            cursor: pointer;
+        }
+
+        /* Linha marcada como lida */
+        tbody tr.lido td { text-decoration: line-through; opacity: 0.55; }
+        tbody tr.lido { background: rgba(184,151,148,0.06); }
+
+        /* Contador */
+        .contador-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .contador-texto {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.1rem;
+            color: var(--vinho);
+        }
+        .contador-texto strong { color:var(--marrom); font-size:1.3rem; }
+
+        .btn-limpar-lidos {
+            background: none;
+            border: 1px solid var(--borda);
+            border-radius: 20px;
+            padding: 5px 16px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.75rem;
+            color: var(--borda);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-limpar-lidos:hover { border-color:var(--vinho); color:var(--vinho); }
+
+        /* ══ RODAPÉ ══ */
+        .citacao-rodape {
+            text-align: right;
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.8rem;
+            color: var(--marrom);
+            margin-top: 22px;
+            padding-top: 14px;
+            border-top: 1px solid rgba(184,151,148,0.35);
+        }
+
+        footer { text-align:center; padding:14px; font-size:0.75rem; color:#777; }
+        footer a { color:#777; text-decoration:none; }
+        footer a:hover { color:var(--marrom); }
+    </style>
+</head>
+<body>
+
+        <!-- DRAWER -->
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+    <aside class="drawer" id="drawer">
+        <div class="drawer-header">
+            <span class="drawer-titulo">Menu</span>
+            <button class="drawer-fechar" id="drawerFechar">✕</button>
+        </div>
+        <nav class="drawer-nav">
+            <ul>
+                <li><a href="Registro.html">Nova Resenha</a></li>
+
+                <li class="has-sub">
+                    <div class="sub-toggle" onclick="dToggle('dn-leituras')">
+                        <span>Leituras</span><span class="sub-arrow" id="dn-leituras-a">›</span>
+                    </div>
+                    <ul class="sub-menu" id="dn-leituras">
+                        <li><a href="Biblioteca.html">Livros Lidos</a></li>
+                        <li><a href="Estante.html">Minha Estante</a></li>
+                        <li><a href="Leituras.html">Quero Ler</a></li>
+                        <li><a href="Classicos.html">30 Clássicos</a></li>
+                        <li><a href="Memorias.html">Memórias</a></li>
+                    </ul>
+                </li>
+
+                <li class="has-sub">
+                    <div class="sub-toggle" onclick="dToggle('dn-desafios')">
+                        <span>Desafios</span><span class="sub-arrow" id="dn-desafios-a">›</span>
+                    </div>
+                    <ul class="sub-menu" id="dn-desafios">
+                        <li><a href="Bingo.html">Bingo Literário</a></li>
+                        <li><a href="Classicos.html">30 Clássicos</a></li>
+                        <li><a href="Cores.html">Cores</a></li>
+                        <li><a href="Estacoes.html">Estações</a></li>
+                        <li><a href="Calendario.html">Calendário</a></li>
+                    </ul>
+                </li>
+
+                <li class="has-sub">
+                    <div class="sub-toggle" onclick="dToggle('dn-metas')">
+                        <span>Metas</span><span class="sub-arrow" id="dn-metas-a">›</span>
+                    </div>
+                    <ul class="sub-menu" id="dn-metas">
+                        <li><a href="Classicos.html">Meta de Clássicos</a></li>
+                        <li><a href="Leituras.html">Lista de Desejos</a></li>
+                        <li><a href="Estante.html">Livros Pausados</a></li>
+                    </ul>
+                </li>
+
+                <li class="drawer-sep-item"><div class="drawer-sep"></div></li>
+
+                <li><a href="SobreNos.html">Sobre Nós ›</a></li>
+                <li><a href="index.html">Início ›</a></li>
+            </ul>
+        </nav>
+        <div class="drawer-footer">Capítulo 1 © 2026</div>
+    </aside>
+
+    <!-- HEADER -->
+    <header class="page-header">
+        <a href="index.html" class="logo-link" title="Início">
+            <img src="imagens/logo01.png" alt="Capítulo 1">
+        </a>
+        <div class="header-titulo">
+            <div class="titulo-linha">
+                <img src="imagens/arabesco1.PNG" alt="" class="arabesco">
+                <span class="titulo-pagina">Livros que quero ler</span>
+                <img src="imagens/arabesco2.PNG" alt="" class="arabesco arabesco-dir">
+            </div>
+            <span class="subtitulo-header">Livros que eu prometo que vou ler ↩</span>
+        </div>
+        <button class="btn-drawer" id="btnDrawer" title="Menu">
+            <img src="imagens/icone.png" alt="Menu">
+        </button>
+    </header>
+
+    <!-- CONTEÚDO -->
+    <div class="container-leituras">
+
+        <!-- Formulário de adição -->
+        <div class="form-adicionar">
+            <div class="campo-grupo">
+                <label class="campo-label">Título do livro</label>
+                <input type="text" class="campo-input" id="inputTitulo" placeholder="">
+            </div>
+            <div class="campo-grupo">
+                <label class="campo-label">Autor</label>
+                <input type="text" class="campo-input" id="inputAutor" placeholder="">
+            </div>
+            <div class="campo-grupo">
+                <label class="campo-label">Editora</label>
+                <input type="text" class="campo-input" id="inputEditora" placeholder="">
+            </div>
+            <button class="btn-adicionar" id="btnAdicionar">ADICIONAR</button>
+        </div>
+
+        <!-- Contador -->
+        <div class="contador-bar">
+            <div class="contador-texto" id="contadorTexto"></div>
+            <button class="btn-limpar-lidos" id="btnLimparLidos">Remover lidos</button>
+        </div>
+
+        <!-- Tabela -->
+        <div class="tabela-wrap">
+            <table id="tabelaLivros">
+                <thead>
+                    <tr>
+                        <th style="width:40px;"></th>
+                        <th>Título</th>
+                        <th>Autor</th>
+                        <th>Editora</th>
+                        <th style="width:50px;"></th>
+                    </tr>
+                </thead>
+                <tbody id="corpoTabela">
+                    <!-- Linhas vazias de exemplo -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="citacao-rodape">
+            "Ler é sonhar pela mão de outrem."<br>— Fernando Pessoa
+        </div>
+    </div>
+
+    <footer>
+        <p><a href="#">Sobre Nós</a> | <a href="#">Contato</a> | <a href="#">Privacidade</a> | <a href="#">Termos</a></p>
+    </footer>
+
+    <script>
+        // ── DRAWER ──
+        const btnDrawer = document.getElementById('btnDrawer');
+        const drawer = document.getElementById('drawer');
+        const drawerOverlay = document.getElementById('drawerOverlay');
+        const drawerFechar = document.getElementById('drawerFechar');
+        const fecharDrawer = () => { drawer.classList.remove('aberto'); drawerOverlay.classList.remove('aberto'); document.body.style.overflow = ''; };
+        btnDrawer.addEventListener('click', () => { drawer.classList.add('aberto'); drawerOverlay.classList.add('aberto'); document.body.style.overflow = 'hidden'; });
+        drawerFechar.addEventListener('click', fecharDrawer);
+        drawerOverlay.addEventListener('click', fecharDrawer);
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') fecharDrawer(); });
+
+        // ── DADOS ──
+        // Salva lista no localStorage — chave separada para não misturar com livros lidos
+        let lista = JSON.parse(localStorage.getItem('quero_ler') || '[]');
+
+        const LINHAS_MINIMAS = 6; // sempre exibe pelo menos 6 linhas na tabela
+
+        function salvar() {
+            localStorage.setItem('quero_ler', JSON.stringify(lista));
+        }
+
+        // ── RENDERIZA TABELA ──
+        function renderTabela() {
+            const corpo = document.getElementById('corpoTabela');
+            corpo.innerHTML = '';
+
+            // Linhas com dados
+            lista.forEach((livro, i) => {
+                const tr = document.createElement('tr');
+                if (livro.lido) tr.classList.add('lido');
+                tr.innerHTML = `
+                    <td class="td-lido">
+                        <input type="checkbox" class="check-lido" data-idx="${i}" ${livro.lido ? 'checked' : ''}>
+                    </td>
+                    <td>${livro.titulo}</td>
+                    <td>${livro.autor || ''}</td>
+                    <td>${livro.editora || ''}</td>
+                    <td class="td-acoes">
+                        <button class="btn-deletar" data-idx="${i}" title="Remover">✕</button>
+                    </td>`;
+                corpo.appendChild(tr);
+            });
+
+            // Linhas vazias para preencher até o mínimo
+            const vazias = Math.max(0, LINHAS_MINIMAS - lista.length);
+            for (let i = 0; i < vazias; i++) {
+                const tr = document.createElement('tr');
+                tr.className = 'linha-vazia';
+                tr.innerHTML = `<td></td><td></td><td></td><td></td><td></td>`;
+                corpo.appendChild(tr);
+            }
+
+            // Eventos dos checkboxes
+            corpo.querySelectorAll('.check-lido').forEach(cb => {
+                cb.addEventListener('change', () => {
+                    const idx = parseInt(cb.dataset.idx);
+                    lista[idx].lido = cb.checked;
+                    salvar();
+                    renderTabela();
+                    atualizarContador();
+                });
+            });
+
+            // Eventos dos botões deletar
+            corpo.querySelectorAll('.btn-deletar').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const idx = parseInt(btn.dataset.idx);
+                    lista.splice(idx, 1);
+                    salvar();
+                    renderTabela();
+                    atualizarContador();
+                });
+            });
+
+            atualizarContador();
+        }
+
+        function atualizarContador() {
+            const total = lista.length;
+            const lidos = lista.filter(l => l.lido).length;
+            const el = document.getElementById('contadorTexto');
+            if (total === 0) {
+                el.innerHTML = '';
+            } else {
+                el.innerHTML = `<strong>${total}</strong> livro${total !== 1 ? 's' : ''} na lista &nbsp;·&nbsp; <strong>${lidos}</strong> já li${lidos !== 1 ? '' : ''}`;
+            }
+        }
+
+        // ── ADICIONAR ──
+        function adicionarLivro() {
+            const titulo = document.getElementById('inputTitulo').value.trim();
+            const autor  = document.getElementById('inputAutor').value.trim();
+            const editora = document.getElementById('inputEditora').value.trim();
+
+            if (!titulo) {
+                document.getElementById('inputTitulo').focus();
+                return;
+            }
+
+            lista.push({ titulo, autor, editora, lido: false, id: Date.now() });
+            salvar();
+            renderTabela();
+
+            // Limpa os campos
+            document.getElementById('inputTitulo').value = '';
+            document.getElementById('inputAutor').value = '';
+            document.getElementById('inputEditora').value = '';
+            document.getElementById('inputTitulo').focus();
+        }
+
+        document.getElementById('btnAdicionar').addEventListener('click', adicionarLivro);
+
+        // Enter nos inputs também adiciona
+        ['inputTitulo','inputAutor','inputEditora'].forEach(id => {
+            document.getElementById(id).addEventListener('keydown', e => {
+                if (e.key === 'Enter') adicionarLivro();
+            });
+        });
+
+        // ── LIMPAR LIDOS ──
+        document.getElementById('btnLimparLidos').addEventListener('click', () => {
+            const lidos = lista.filter(l => l.lido).length;
+            if (lidos === 0) return;
+            if (confirm(`Remover os ${lidos} livro(s) já lido(s) da lista?`)) {
+                lista = lista.filter(l => !l.lido);
+                salvar();
+                renderTabela();
+            }
+        });
+
+        // ── INIT ──
+        renderTabela();
+    </script>
+
+
+    <script>
+    (function() {
+        var btnDrawer = document.getElementById('btnDrawer');
+        var drawer = document.getElementById('drawer');
+        var overlay = document.getElementById('drawerOverlay');
+        var fechar = document.getElementById('drawerFechar');
+        function open() { drawer.classList.add('aberto'); overlay.classList.add('aberto'); document.body.style.overflow='hidden'; }
+        function close() { drawer.classList.remove('aberto'); overlay.classList.remove('aberto'); document.body.style.overflow=''; }
+        if (btnDrawer) btnDrawer.addEventListener('click', open);
+        if (fechar) fechar.addEventListener('click', close);
+        if (overlay) overlay.addEventListener('click', close);
+        document.addEventListener('keydown', function(e){ if(e.key==='Escape') close(); });
+    })();
+    function dToggle(id) {
+        var sub = document.getElementById(id);
+        var arrow = document.getElementById(id+'-a');
+        var isOpen = sub.classList.contains('open');
+        document.querySelectorAll('.sub-menu').forEach(function(s){ s.classList.remove('open'); });
+        document.querySelectorAll('.sub-arrow').forEach(function(a){ a.classList.remove('open'); });
+        if (!isOpen) { sub.classList.add('open'); if(arrow) arrow.classList.add('open'); }
+    }
+    </script>
+</body>
+</html>

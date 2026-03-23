@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bingo Literário - Capítulo 1</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Montserrat:wght@400;600;700&family=Courier+Prime:wght@400;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --marrom: #633535;
+            --vinho: #8b4361;
+            --rosa: #faeeeb;
+            --borda: #b89794;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            min-height: 100vh;
+            background-image: url('imagens/backgroud.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--marrom);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ══ HEADER ══ */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 28px 6px;
+        }
+
+        .logo-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            flex-shrink: 0;
+            transition: transform 0.3s;
+        }
+
+        .logo-link:hover {
+            transform: scale(1.05);
+        }
+
+        .logo-link img {
+            width: 250px;
+            height: auto;
+        }
+
+        .header-titulo {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .titulo-linha {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            width: 100%;
+        }
+
+        .arabesco {
+            height: 54px;
+            width: auto;
+            object-fit: contain;
+            mix-blend-mode: multiply;
+            opacity: 0.9;
+            flex-shrink: 0;
+        }
+
+        .arabesco-dir {
+            transform: scaleX(-1);
+        }
+
+        .titulo-pagina {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--marrom);
+            line-height: 1;
+            white-space: nowrap;
+        }
+
+        .subtitulo-header {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--vinho);
+        }
+
+        .btn-drawer {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            flex-shrink: 0;
+            transition: transform 0.2s;
+        }
+
+        .btn-drawer:hover {
+            transform: scale(1.1);
+        }
+
+        .btn-drawer img {
+            width: 52px;
+            height: auto;
+            mix-blend-mode: multiply;
+        }
+
+        /* ══ DRAWER ══ */
+        .drawer-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.35); z-index:1000; }
+        .drawer-overlay.aberto { display:block; }
+        .drawer {
+            position:fixed; top:0; right:-340px; width:300px; height:100vh;
+            background:#faeeeb; border-left:1px solid var(--borda);
+            z-index:1001;
+            transition:right 0.35s cubic-bezier(0.4,0,0.2,1);
+            display:flex; flex-direction:column;
+            box-shadow:-4px 0 20px rgba(99,53,53,0.12);
+            overflow-y:auto;
+        }
+        .drawer.aberto { right:0; }
+        .drawer-header { padding:20px 22px 15px; border-bottom:1px solid rgba(184,151,148,0.4); display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
+        .drawer-titulo { font-family:'Dancing Script',cursive; font-size:1.8rem; color:var(--marrom); }
+        .drawer-fechar { background:none; border:none; font-size:1.4rem; color:var(--marrom); cursor:pointer; padding:4px 8px; border-radius:50%; transition:background 0.2s; }
+        .drawer-fechar:hover { background:rgba(139,67,97,0.12); }
+        .drawer-nav { flex:1; padding:8px 0; }
+        .drawer-nav ul { list-style:none; margin:0; padding:0; }
+        .drawer-nav li { border-bottom:1px solid rgba(184,151,148,0.12); }
+        .drawer-nav li a {
+            display:block; padding:13px 24px;
+            text-decoration:none; color:var(--marrom);
+            font-size:0.88rem; font-weight:600;
+            font-family:'Montserrat',sans-serif;
+            border-left:3px solid transparent;
+            transition:background 0.2s, border-color 0.2s;
+        }
+        .drawer-nav li a:hover { background:#eededa; border-left-color:var(--vinho); }
+        .sub-toggle {
+            display:flex; align-items:center; justify-content:space-between;
+            padding:13px 24px; cursor:pointer;
+            color:var(--marrom); font-size:0.88rem; font-weight:600;
+            font-family:'Montserrat',sans-serif;
+            border-left:3px solid transparent;
+            transition:background 0.2s, border-color 0.2s;
+        }
+        .sub-toggle:hover { background:#eededa; border-left-color:var(--vinho); }
+        .sub-arrow { font-size:0.8rem; color:var(--borda); transition:transform 0.25s; }
+        .sub-arrow.open { transform:rotate(90deg); }
+        .sub-menu { display:none; list-style:none; background:rgba(184,151,148,0.08); }
+        .sub-menu.open { display:block; }
+        .sub-menu li { border-bottom:1px solid rgba(184,151,148,0.08); }
+        .sub-menu li a {
+            display:block; padding:9px 24px 9px 36px;
+            text-decoration:none; color:var(--marrom);
+            font-size:0.8rem; font-weight:500;
+            font-family:'Montserrat',sans-serif;
+            border-left:3px solid transparent;
+            transition:background 0.2s;
+        }
+        .sub-menu li a:hover { background:rgba(139,67,97,0.07); border-left-color:var(--vinho); }
+        .drawer-sep { height:1px; background:rgba(184,151,148,0.3); margin:4px 18px; }
+        .drawer-sep-item { border:none !important; }
+        .drawer-footer { padding:16px 22px; border-top:1px solid rgba(184,151,148,0.4); font-size:0.72rem; color:#999; text-align:center; font-family:'Montserrat',sans-serif; flex-shrink:0; }
+
+        /* ══ CONTAINER ══ */
+        .container-bingo {
+            background-color: rgba(250, 238, 235, 0.78);
+            backdrop-filter: blur(2px);
+            width: 92%;
+            max-width: 1100px;
+            margin: 4px auto 20px;
+            padding: 24px 32px 28px;
+            border-radius: 18px;
+            border: 1px solid rgba(184, 151, 148, 0.5);
+            flex: 1;
+        }
+
+        /* ══ PRÊMIO ══ */
+        .premio-section {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 18px;
+            background: rgba(250, 238, 235, 0.7);
+            border: 1px solid rgba(184, 151, 148, 0.35);
+            border-radius: 10px;
+            padding: 12px 20px;
+        }
+
+        .premio-label {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.15rem;
+            color: var(--marrom);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .premio-input {
+            flex: 1;
+            border: none;
+            border-bottom: 1px dashed var(--borda);
+            background: transparent;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.85rem;
+            color: var(--marrom);
+            padding: 4px 8px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .premio-input:focus {
+            border-color: var(--vinho);
+        }
+
+        .premio-input::placeholder {
+            color: rgba(99, 53, 53, 0.35);
+            font-style: italic;
+        }
+
+        /* Premio confirmado — aparece como texto estilizado */
+        .premio-confirmado {
+            flex: 1;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.15rem;
+            color: var(--marrom);
+            padding: 4px 8px;
+            cursor: pointer;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s;
+            display: none;
+        }
+
+        .premio-confirmado:hover {
+            border-bottom-color: var(--borda);
+        }
+
+        /* ══ PROGRESSO ══ */
+        .progresso-bingo {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 16px;
+        }
+
+        .progresso-texto-bingo {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1rem;
+            color: var(--vinho);
+            white-space: nowrap;
+        }
+
+        .progresso-texto-bingo strong {
+            color: var(--marrom);
+        }
+
+        .barra-wrap {
+            flex: 1;
+            height: 5px;
+            background: rgba(184, 151, 148, 0.22);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .barra-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--marrom), var(--vinho));
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        /* ══ CARTELA ══ */
+        .cartela-wrap {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 18px;
+        }
+
+        .cartela {
+            border: 1px solid rgba(184, 151, 148, 0.5);
+            border-radius: 8px;
+            overflow: hidden;
+            width: 100%;
+            max-width: 720px;
+            background: rgba(250, 238, 235, 0.4);
+        }
+
+        .cartela-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+        }
+
+        /* ══ CÉLULA ══ */
+        .bingo-cell {
+            border: 1px solid rgba(184, 151, 148, 0.45);
+            min-height: 110px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 10px 8px;
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.15s;
+        }
+
+        .bingo-cell:hover {
+            background: rgba(184, 151, 148, 0.08);
+        }
+
+        /* Célula central */
+        .bingo-cell.central {
+            background: rgba(184, 151, 148, 0.06);
+            cursor: default;
+        }
+
+        .bingo-cell.central img {
+            width: 55px;
+            height: 55px;
+            object-fit: contain;
+            background: rgba(250, 238, 235, 0.8);
+        }
+
+        /* Texto — não editável por padrão, apenas clicável para X */
+        .cell-text {
+            font-size: 0.74rem;
+            text-align: center;
+            color: var(--marrom);
+            line-height: 1.45;
+            width: 100%;
+            word-break: break-word;
+            outline: none;
+            background: transparent;
+            border: none;
+            resize: none;
+            font-family: 'Montserrat', sans-serif;
+            cursor: pointer;
+            pointer-events: none;
+            user-select: none;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Modo edição liberado após concluir o bingo */
+        .modo-edicao .cell-text {
+            pointer-events: auto;
+            cursor: text;
+            user-select: auto;
+        }
+
+        .modo-edicao .bingo-cell:not(.central) {
+            cursor: text;
+        }
+
+        /* ══ X DE CONCLUSÃO ══ */
+        .circulo-svg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: calc(100% - 24px);
+            height: calc(100% - 24px);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.25s;
+        }
+
+        .circulo-svg line {
+            stroke: var(--marrom);
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-dasharray: 200;
+            stroke-dashoffset: 200;
+            transition: stroke-dashoffset 0.4s ease;
+        }
+
+        .circulo-svg line:nth-child(2) {
+            transition-delay: 0.15s;
+        }
+
+        .bingo-cell.concluida .circulo-svg {
+            opacity: 1;
+        }
+
+        .bingo-cell.concluida .circulo-svg line {
+            stroke-dashoffset: 0;
+        }
+
+        .bingo-cell.concluida .cell-text {
+            opacity: 0.35;
+        }
+
+        /* ══ BOTÕES ══ */
+        .acoes-bingo {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+        }
+
+        .btn-acao {
+            padding: 11px 32px;
+            border-radius: 8px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            transition: background 0.2s, transform 0.15s;
+            border: none;
+        }
+
+        .btn-acao:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-concluir-bingo {
+            background: var(--marrom);
+            color: white;
+        }
+
+        .btn-concluir-bingo:hover {
+            background: var(--vinho);
+        }
+
+        .btn-nova-cartela {
+            background: transparent;
+            color: var(--marrom);
+            border: 1px solid var(--marrom) !important;
+        }
+
+        .btn-nova-cartela:hover {
+            background: rgba(99, 53, 53, 0.07);
+        }
+
+        /* ══ HISTÓRICO ══ */
+        .historico-titulo {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.6rem;
+            color: var(--marrom);
+            margin-bottom: 16px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(184, 151, 148, 0.35);
+        }
+
+        .historico-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 18px;
+        }
+
+        .historico-card {
+            background: rgba(250, 238, 235, 0.7);
+            border: 1px solid rgba(184, 151, 148, 0.4);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .historico-card-header {
+            background: rgba(184, 151, 148, 0.15);
+            padding: 10px 14px;
+        }
+
+        .historico-card-titulo {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1rem;
+            color: var(--marrom);
+            margin-bottom: 2px;
+        }
+
+        .historico-card-meta {
+            font-size: 0.68rem;
+            color: var(--borda);
+            font-family: 'Courier Prime', monospace;
+        }
+
+        .historico-card-premio {
+            font-size: 0.72rem;
+            color: var(--vinho);
+            font-style: italic;
+            margin-top: 3px;
+        }
+
+        /* Mini cartela no histórico */
+        .mini-cartela {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1px;
+            background: rgba(184, 151, 148, 0.25);
+        }
+
+        .mini-cell {
+            background: rgba(250, 238, 235, 0.9);
+            min-height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3px 2px;
+            position: relative;
+            font-size: 0.52rem;
+            text-align: center;
+            color: var(--marrom);
+            line-height: 1.3;
+            overflow: hidden;
+        }
+
+        .mini-cell.concluida::after {
+            content: '';
+            position: absolute;
+            inset: 2px;
+            border: 1.5px solid var(--marrom);
+            border-radius: 50%;
+        }
+
+        .mini-cell.concluida span {
+            opacity: 0.4;
+        }
+
+        .mini-cell.central {
+            background: rgba(184, 151, 148, 0.1);
+        }
+
+        .historico-card-footer {
+            padding: 8px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.68rem;
+            color: var(--borda);
+            font-family: 'Courier Prime', monospace;
+        }
+
+        .btn-del-historico {
+            background: none;
+            border: none;
+            color: var(--borda);
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-family: 'Montserrat', sans-serif;
+            padding: 2px 8px;
+            border-radius: 4px;
+            transition: color 0.2s;
+        }
+
+        .btn-del-historico:hover {
+            color: var(--vinho);
+        }
+
+        /* ══ RODAPÉ ══ */
+        .citacao-rodape {
+            text-align: right;
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.8rem;
+            color: var(--marrom);
+            margin-top: 22px;
+            padding-top: 14px;
+            border-top: 1px solid rgba(184, 151, 148, 0.35);
+        }
+
+        footer {
+            text-align: center;
+            padding: 14px;
+            font-size: 0.75rem;
+            color: #777;
+        }
+
+        footer a {
+            color: #777;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: var(--marrom);
+        }
+
+        /* ══ X imagem ══ */
+        .x-img {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 54px; height: 54px;
+            object-fit: contain;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            z-index: 3;
+            mix-blend-mode: multiply;
+        }
+        .bingo-cell.concluida .x-img { opacity: 0.9; }
+        .bingo-cell.concluida .cell-text { opacity: 0.35; }
+
+        /* Sombreamento linha/coluna completa */
+        .bingo-cell.bingo-linha {
+            background: rgba(139,67,97,0.10) !important;
+        }
+    </style>
+</head>
+
+<body>
+
+        <!-- DRAWER -->
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+    <aside class="drawer" id="drawer">
+        <div class="drawer-header">
+            <span class="drawer-titulo">Menu</span>
+            <button class="drawer-fechar" id="drawerFechar">✕</button>
+        </div>
+        <nav class="drawer-nav">
+            <ul>
+                <li><a href="Registro.html">Nova Resenha</a></li>
+
+                <li class="has-sub">
+                    <div class="sub-toggle" onclick="dToggle('dn-leituras')">
+                        <span>Leituras</span><span class="sub-arrow" id="dn-leituras-a">›</span>
+                    </div>
+                    <ul class="sub-menu" id="dn-leituras">
+                        <li><a href="Biblioteca.html">Livros Lidos</a></li>
+                        <li><a href="Estante.html">Minha Estante</a></li>
+                        <li><a href="Leituras.html">Quero Ler</a></li>
+                        <li><a href="Classicos.html">30 Clássicos</a></li>
+                        <li><a href="Memorias.html">Memórias</a></li>
+                    </ul>
+                </li>
+
+                <li class="has-sub">
+                    <div class="sub-toggle" onclick="dToggle('dn-desafios')">
+                        <span>Desafios</span><span class="sub-arrow" id="dn-desafios-a">›</span>
+                    </div>
+                    <ul class="sub-menu" id="dn-desafios">
+                        <li><a href="Bingo.html">Bingo Literário</a></li>
+                        <li><a href="Classicos.html">30 Clássicos</a></li>
+                        <li><a href="Cores.html">Cores</a></li>
+                        <li><a href="Estacoes.html">Estações</a></li>
+                        <li><a href="Calendario.html">Calendário</a></li>
+                    </ul>
+                </li>
+
+                <li class="has-sub">
+                    <div class="sub-toggle" onclick="dToggle('dn-metas')">
+                        <span>Metas</span><span class="sub-arrow" id="dn-metas-a">›</span>
+                    </div>
+                    <ul class="sub-menu" id="dn-metas">
+                        <li><a href="Classicos.html">Meta de Clássicos</a></li>
+                        <li><a href="Leituras.html">Lista de Desejos</a></li>
+                        <li><a href="Estante.html">Livros Pausados</a></li>
+                    </ul>
+                </li>
+
+                <li class="drawer-sep-item"><div class="drawer-sep"></div></li>
+
+                <li><a href="SobreNos.html">Sobre Nós ›</a></li>
+                <li><a href="index.html">Início ›</a></li>
+            </ul>
+        </nav>
+        <div class="drawer-footer">Capítulo 1 © 2026</div>
+    </aside>
+
+    <!-- HEADER -->
+    <header class="page-header">
+        <a href="index.html" class="logo-link" title="Inicio">
+            <img src="imagens/logo01.png" alt="Capitulo 1">
+        </a>
+        <div class="header-titulo">
+            <div class="titulo-linha">
+                <img src="imagens/arabesco1.PNG" alt="" class="arabesco">
+                <span class="titulo-pagina">Bingo Literario</span>
+                <img src="imagens/arabesco2.PNG" alt="" class="arabesco arabesco-dir">
+            </div>
+            <span class="subtitulo-header">Saia da rotina e complete sua cartela</span>
+        </div>
+        <button class="btn-drawer" id="btnDrawer" title="Menu">
+            <img src="imagens/icone.png" alt="Menu">
+        </button>
+    </header>
+
+    <!-- CONTEUDO -->
+    <div class="container-bingo">
+
+        <!-- Premio -->
+        <div class="premio-section">
+            <span class="premio-label">Meu premio ao concluir:</span>
+            <input type="text" class="premio-input" id="inputPremio"
+                placeholder="Escreva aqui o que voce vai se presentear ao completar o bingo...">
+            <span class="premio-confirmado" id="premioConfirmado" title="Clique para editar"></span>
+        </div>
+
+        <!-- Progresso -->
+        <div class="progresso-bingo">
+            <div class="progresso-texto-bingo">
+                <strong id="totalConcluidos">0</strong>/24 desafios concluidos
+            </div>
+            <div class="barra-wrap">
+                <div class="barra-fill" id="barraFill" style="width:0%"></div>
+            </div>
+            <div class="progresso-texto-bingo" id="porcento">0%</div>
+        </div>
+
+        <!-- Cartela -->
+        <div class="cartela-wrap">
+            <div class="cartela">
+                <div class="cartela-grid" id="cartelaGrid"></div>
+            </div>
+        </div>
+
+        <!-- Acoes -->
+        <div class="acoes-bingo">
+            <button class="btn-acao btn-concluir-bingo" id="btnConcluirBingo">Concluir Bingo e Salvar</button>
+            <button class="btn-acao btn-nova-cartela" id="btnNovaCartela">Nova cartela em branco</button>
+        </div>
+
+        <!-- Historico -->
+        <div id="historicoSection" style="display:none;">
+            <div class="historico-titulo">Cartelas Anteriores</div>
+            <div class="historico-grid" id="historicoGrid"></div>
+        </div>
+
+        <div class="citacao-rodape">
+            "Um leitor vive mil vidas antes de morrer..."<br>— George R.R. Martin
+        </div>
+    </div>
+
+    <footer>
+        <p><a href="#">Sobre Nos</a> | <a href="#">Contato</a> | <a href="#">Privacidade</a> | <a href="#">Termos</a>
+        </p>
+    </footer>
+
+    <script>
+        // DRAWER
+        const btnDrawer = document.getElementById('btnDrawer');
+        const drawer = document.getElementById('drawer');
+        const drawerOverlay = document.getElementById('drawerOverlay');
+        const drawerFechar = document.getElementById('drawerFechar');
+        const fecharDrawer = () => { drawer.classList.remove('aberto'); drawerOverlay.classList.remove('aberto'); document.body.style.overflow = ''; };
+        btnDrawer.addEventListener('click', () => { drawer.classList.add('aberto'); drawerOverlay.classList.add('aberto'); document.body.style.overflow = 'hidden'; });
+        drawerFechar.addEventListener('click', fecharDrawer);
+        drawerOverlay.addEventListener('click', fecharDrawer);
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') fecharDrawer(); });
+
+        // ── 12 CARTELAS PREDEFINIDAS ──
+        const CARTELAS = [
+            // Cartela 1 — Clássica
+            ['Um livro que todo mundo ama','Uma bomba literaria','Ler um livro em 1 dia','Um classico da literatura','Um autor que voce nunca leu','Um autor(a) brasileiro(a)','Um livro que virou filme ou serie','Um livro para refletir','Um livro pra chorar','Uma saga','Um livro que voce estava adiando','Um livro premiado',null,'5 estrelas','Um livro com plot twist','Um livro escolhido pela capa','Um romance cliche','Um livro de fantasia','Indicacao do booktok','Um com a capa feia','Uma releitura','Um livro abandonado','Mais de 600 paginas','Escreva 10 resenhas','Uma distopia'],
+            // Cartela 2 — Generos
+            ['Um thriller','Um livro de ficcao cientifica','Um conto de fadas','Uma biografia','Um livro de poesia','Um livro historico','Um livro de terror','Um livro de autoajuda','Um livro infantil','Um mangá ou graphic novel','Um livro em outro idioma','Um livro de cronicas',null,'Um livro de contos','Um livro de aventura','Um livro espiritual','Um livro cientifico','Um livro de viagem','Um livro policial','Um livro de humor','Uma novela','Um livro de filosofia','Um livro satirico','Um livro romantico','Um livro de mitologia'],
+            // Cartela 3 — Desafios de leitura
+            ['Ler 3 livros em um mes','Ler um livro por semana','Ler 500 paginas em 3 dias','Terminar uma saga completa','Ler um livro indicado por amigo','Ler e fazer anotacoes','Ler em voz alta','Reler um favorito','Ler um livro fisico e ebook','Ler no transporte','Ler antes de dormir 7 dias','Ler 1h por dia por uma semana',null,'Escrever resenha de cada livro','Participar de clube do livro','Recomendar um livro','Comprar um livro novo','Ir a uma livraria','Visitar uma biblioteca','Organizar sua estante','Criar uma lista de leituras','Seguir um booktuber','Participar de um readathon','Ler um livro vencedor de premio','Ler um livro de capa desconhecida'],
+            // Cartela 4 — Emocoes
+            ['Um livro que te fez chorar','Um livro que te deu raiva','Um livro que te deixou feliz','Um livro assustador','Um livro melancolico','Um livro esperancoso','Um livro que te deixou ansioso','Um livro reconfortante','Um livro que te surpreendeu','Um livro perturbador','Um livro empoderante','Um livro romantico',null,'Um livro inspirador','Um livro que mudou sua visao','Um livro nostalgico','Um livro misterioso','Um livro que te fez pensar','Um livro que te deixou confuso','Um livro que te deu curiosidade','Um livro engraçado','Um livro triste mas bonito','Um livro intenso','Um livro calmante','Um livro transformador'],
+            // Cartela 5 — Personagens
+            ['Protagonista feminina forte','Protagonista masculino complexo','Vilao com backstory rico','Casal enemies to lovers','Amizade improvavel','Found family','Heroi relutante','Mentora sábia','Traidor inesperado','Personagem com poderes','Anti-heroi','Crianca protagonista',null,'Duo dinamico','Narrador nao confiavel','Amor nao correspondido','Personagem com deficiencia','Personagem LGBT+','Lider carismático','Personagem que evolui muito','Personagem tragico','Duo comico','Guardiao protetor','Rebelde corajoso','Personagem secundario favorito'],
+            // Cartela 6 — Ambientacoes
+            ['Ambientado no Brasil','Ambientado na Europa','Ambientado na Asia','Ambientado em mundo fantastico','Ambientado no futuro','Ambientado no passado medieval','Ambientado em escola ou colegio','Ambientado em cidade pequena','Ambientado em megacidade','Ambientado no deserto','Ambientado no mar','Ambientado em floresta',null,'Ambientado em outro planeta','Ambientado em war setting','Ambientado na decada de 80','Ambientado em castelo','Ambientado em ilha','Ambientado em espaco sideral','Ambientado em mundo pos-apocaliptico','Ambientado em dois tempos','Ambientado em pais que voce nao conhece','Ambientado em universo alternativo','Ambientado na natureza selvagem','Ambientado em hospital ou laboratorio'],
+            // Cartela 7 — Tropes
+            ['Slow burn','Enemies to lovers','Friends to lovers','Chosen one','Found family','Second chance','Forbidden love','Fake dating','Redemption arc','Grumpy x sunshine','Forced proximity','One bed',null,'Love triangle','Miscommunication','Instalove bem feito','Morally grey','Dark romance','Age gap','Sports romance','Small town romance','Office romance','Royal romance','Retelling de classico','Multiplot'],
+            // Cartela 8 — Formatos
+            ['Livro com mais de 700 pags','Livro com menos de 150 pags','Livro em formato epistolar','Livro narrado em 1a pessoa','Livro narrado em 3a pessoa','Livro com capitulos alternativos','Livro com flashbacks','Livro com timeline nao linear','Livro com prologo impactante','Livro com final aberto','Livro com final feliz','Livro com twist no final',null,'Livro de capitulos curtos','Livro de capitulos longos','Livro com mapas internos','Livro com ilustracoes','Livro com playlist do autor','Serie de 2 livros','Serie de 3 livros','Serie de 4+ livros','Livro standalone','Novella','Livro com prefacio especial','Edicao especial ou comemorativa'],
+            // Cartela 9 — Autores
+            ['Autor brasileiro','Autora mulher','Autor nao binario','Autor de pais africano','Autor asiatico','Autor latino-americano','Autor europeu','Autor estreante','Autor classico seculo XIX','Autor classico seculo XX','Autor contemporaneo','Autor que voce ja leu antes',null,'Autor que voce seguia nas redes','Autor indicado por amigo','Autor premiado com Nobel','Autor de fanzine ou indie','Autor que escreveu mais de 20 livros','Autor que virou roteirista','Autor que escreveu serie','Autor revelacao do ano','Autor que ja foi mal compreendido','Autor que escreveu autobiografia','Autor de literatura infantojuvenil','Autor de literatura LGBTQ+'],
+            // Cartela 10 — Temas
+            ['Livro sobre familia','Livro sobre amizade','Livro sobre identidade','Livro sobre guerra','Livro sobre saude mental','Livro sobre racismo','Livro sobre feminismo','Livro sobre religiao','Livro sobre politica','Livro sobre ciencia','Livro sobre arte','Livro sobre musica',null,'Livro sobre esportes','Livro sobre gastronomia','Livro sobre dinheiro','Livro sobre educacao','Livro sobre natureza','Livro sobre tecnologia','Livro sobre morte e luto','Livro sobre superacao','Livro sobre amor proprio','Livro sobre memoria','Livro sobre tempo','Livro sobre solidao'],
+            // Cartela 11 — Leituras rapidas
+            ['Ler um livro em menos de 24h','Ler 100 paginas antes do almoco','Ler no cafe da manha por 30min','Ler durante 1h sem parar','Terminar livro iniciado ha mais de 6 meses','Ler um livro que estava na fila ha 1 ano','Ler um livro comprado impulsivamente','Ler um livro emprestado','Ler um livro em promocao','Ler um livro gratuito','Ler um livro de banca de jornal','Ler um livro da biblioteca',null,'Ler um livro achado em sebos','Ler um livro ganho de presente','Ler um livro de colecao especial','Ler um livro de autor favorito no lancamento','Ler um livro que voce abandonou antes','Ler um livro que todos odiaram','Ler um livro que ninguem conhece','Ler um livro por indicacao de resenha','Ler um livro apos ver o filme','Ler um livro antes de sair o filme','Ler continuacao de serie que parou','Ler livro de genero que nao gosta'],
+            // Cartela 12 — Desafio anual
+            ['12 livros em 12 meses','1 livro por estacao','1 classico por trimestre','1 autor novo por mes','1 genero diferente por mes','Ler toda uma serie','Ler todos livros de um autor','50 livros no ano','Manter sequencia de 30 dias no calendario','Escrever resenha de todo livro lido','Completar o bingo literario','Completar desafio das cores',null,'Participar de 3 readathons','Montar estante organizada','Zerar pilha de comprados','Ler todos livros emprestados','Ler 5 classicos','Ler 5 autores brasileiros','Ler 3 sagas completas','Descobrir 10 autores novos','Ler 1 livro por semana por 4 semanas','Ler em 3 formatos diferentes','Completar lista de 30 classicos','Fazer clube do livro com amigos'],
+        ];
+
+        // ESTADO
+        function carregarEstado() { return JSON.parse(localStorage.getItem('bingo_estado') || 'null'); }
+        function salvarEstado(e) { localStorage.setItem('bingo_estado', JSON.stringify(e)); }
+        function carregarHistorico() { return JSON.parse(localStorage.getItem('bingo_historico') || '[]'); }
+        function salvarHistorico(h) { localStorage.setItem('bingo_historico', JSON.stringify(h)); }
+
+        let estado = carregarEstado() || { desafios: [...CARTELAS[0]], concluidos: [], premio: '', cartela: 0 };
+
+        // Premio
+        const inputPremio = document.getElementById('inputPremio');
+        const premioConfirmado = document.getElementById('premioConfirmado');
+
+        function mostrarPremioConfirmado(v) { inputPremio.style.display='none'; premioConfirmado.textContent=v; premioConfirmado.style.display='block'; }
+        function mostrarPremioInput() { premioConfirmado.style.display='none'; inputPremio.style.display='block'; inputPremio.focus(); }
+
+        if (estado.premio) { inputPremio.value=estado.premio; mostrarPremioConfirmado(estado.premio); }
+        inputPremio.addEventListener('keydown', e => { if(e.key==='Enter'){const v=inputPremio.value.trim();if(!v)return;estado.premio=v;salvarEstado(estado);mostrarPremioConfirmado(v);}});
+        inputPremio.addEventListener('input', () => { estado.premio=inputPremio.value; salvarEstado(estado); });
+        premioConfirmado.addEventListener('click', () => mostrarPremioInput());
+
+        // DETECTA LINHAS E COLUNAS COMPLETAS
+        function verificarBingo() {
+            const conc = estado.concluidos;
+            const linhasCompletas = new Set();
+            // Linhas (5 por linha, 5 linhas)
+            for (let r = 0; r < 5; r++) {
+                const idxs = [r*5, r*5+1, r*5+2, r*5+3, r*5+4];
+                const validos = idxs.filter(i => i !== 12); // ignora central
+                if (validos.every(i => conc.includes(i))) {
+                    idxs.forEach(i => linhasCompletas.add(i));
+                }
+            }
+            // Colunas
+            for (let col = 0; col < 5; col++) {
+                const idxs = [col, col+5, col+10, col+15, col+20];
+                const validos = idxs.filter(i => i !== 12);
+                if (validos.every(i => conc.includes(i))) {
+                    idxs.forEach(i => linhasCompletas.add(i));
+                }
+            }
+            // Diagonais
+            const diag1 = [0,6,12,18,24];
+            const diag2 = [4,8,12,16,20];
+            if (diag1.filter(i=>i!==12).every(i=>conc.includes(i))) diag1.forEach(i=>linhasCompletas.add(i));
+            if (diag2.filter(i=>i!==12).every(i=>conc.includes(i))) diag2.forEach(i=>linhasCompletas.add(i));
+            return linhasCompletas;
+        }
+
+        // RENDERIZA CARTELA
+        function renderCartela() {
+            const grid = document.getElementById('cartelaGrid');
+            grid.innerHTML = '';
+            const bingoSet = verificarBingo();
+
+            estado.desafios.forEach((texto, i) => {
+                const cell = document.createElement('div');
+                const isCentral = i === 12;
+                const isConcluida = estado.concluidos.includes(i);
+                const isBingo = bingoSet.has(i);
+
+                let cls = 'bingo-cell';
+                if (isCentral) cls += ' central';
+                if (isConcluida) cls += ' concluida';
+                if (isBingo) cls += ' bingo-linha';
+                cell.className = cls;
+                cell.dataset.idx = i;
+
+                if (isCentral) {
+                    cell.innerHTML = `<img src="imagens/logo01.png" alt="centro" style="width:55px;height:55px;object-fit:contain;border-radius:50%;border:1px solid rgba(184,151,148,0.5);padding:6px;background:rgba(250,238,235,0.8);">`;
+                } else {
+                    // X como imagem
+                    const xImg = `<img src="imagens/x.png" alt="X" class="x-img">`;
+                    cell.innerHTML = xImg + `<textarea class="cell-text" rows="3" spellcheck="false">${texto || ''}</textarea>`;
+
+                    const ta = cell.querySelector('.cell-text');
+                    ta.addEventListener('blur', () => { estado.desafios[i]=ta.value.trim(); salvarEstado(estado); });
+                    ta.addEventListener('keydown', e => { if(e.key==='Enter'){e.preventDefault();ta.blur();} });
+                    cell.addEventListener('click', () => toggleConcluido(i));
+                }
+                grid.appendChild(cell);
+            });
+            atualizarProgresso();
+        }
+
+        function toggleConcluido(idx) {
+            if (estado.concluidos.includes(idx)) {
+                estado.concluidos = estado.concluidos.filter(x => x !== idx);
+            } else {
+                estado.concluidos.push(idx);
+            }
+            salvarEstado(estado);
+            renderCartela(); // rerenderiza para atualizar sombreamento
+        }
+
+        function atualizarProgresso() {
+            const total = estado.concluidos.length;
+            const pct = Math.round((total/24)*100);
+            document.getElementById('totalConcluidos').textContent = total;
+            document.getElementById('porcento').textContent = pct+'%';
+            document.getElementById('barraFill').style.width = pct+'%';
+        }
+
+        // MODAL DE ESCOLHA DE CARTELA
+        function mostrarModalCartelas(callback) {
+            // Cria overlay
+            const overlay = document.createElement('div');
+            overlay.style.cssText = 'position:fixed;inset:0;background:rgba(30,10,10,0.7);z-index:2000;display:flex;align-items:center;justify-content:center;padding:20px;';
+
+            const box = document.createElement('div');
+            box.style.cssText = 'background:#faeeeb;border-radius:16px;max-width:680px;width:100%;max-height:80vh;overflow-y:auto;padding:28px 32px;box-shadow:0 20px 60px rgba(0,0,0,0.4);';
+
+            box.innerHTML = `<div style="font-family:Dancing Script,cursive;font-size:1.8rem;color:#633535;margin-bottom:6px;">Escolha sua nova cartela</div>
+                <div style="font-size:0.8rem;color:#b89794;margin-bottom:20px;font-style:italic;">Selecione um dos 12 temas para sua próxima cartela</div>
+                <div id="cartelasGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;"></div>
+                <div style="margin-top:20px;text-align:right;">
+                    <button id="btnCancelarModal" style="background:none;border:1px solid #b89794;color:#b89794;padding:8px 20px;border-radius:6px;cursor:pointer;font-family:Montserrat,sans-serif;font-size:0.8rem;">Cancelar</button>
+                </div>`;
+
+            const NOMES = ['Clássica','Gêneros','Desafios de Leitura','Emoções','Personagens','Ambientações','Tropes','Formatos','Autores','Temas','Leituras Rápidas','Desafio Anual'];
+
+            const grid = box.querySelector('#cartelasGrid');
+            CARTELAS.forEach((cartela, idx) => {
+                const card = document.createElement('div');
+                card.style.cssText = 'border:1px solid rgba(184,151,148,0.4);border-radius:10px;padding:14px;cursor:pointer;transition:all 0.2s;background:rgba(255,255,255,0.3);text-align:center;';
+                card.innerHTML = `<div style="font-family:Dancing Script,cursive;font-size:1rem;color:#633535;margin-bottom:4px;">Cartela ${idx+1}</div>
+                    <div style="font-size:0.72rem;color:#8b4361;font-weight:600;">${NOMES[idx]}</div>`;
+                card.addEventListener('mouseenter', () => { card.style.background='#eededa'; card.style.transform='translateY(-2px)'; });
+                card.addEventListener('mouseleave', () => { card.style.background='rgba(255,255,255,0.3)'; card.style.transform='none'; });
+                card.addEventListener('click', () => {
+                    document.body.removeChild(overlay);
+                    callback(idx);
+                });
+                grid.appendChild(card);
+            });
+
+            box.querySelector('#btnCancelarModal').addEventListener('click', () => document.body.removeChild(overlay));
+            overlay.appendChild(box);
+            document.body.appendChild(overlay);
+        }
+
+        // CONCLUIR BINGO
+        document.getElementById('btnConcluirBingo').addEventListener('click', () => {
+            const concluidos = estado.concluidos.length;
+            if (concluidos === 0) { alert('Marque pelo menos um desafio antes de concluir.'); return; }
+            if (!confirm(`Você concluiu ${concluidos}/24 desafios.
+Deseja salvar e escolher uma nova cartela?`)) return;
+
+            const historico = carregarHistorico();
+            historico.unshift({ id:Date.now(), desafios:[...estado.desafios], concluidos:[...estado.concluidos], premio:estado.premio, data:new Date().toISOString(), totalConcluidos:concluidos });
+            salvarHistorico(historico);
+
+            mostrarModalCartelas(idx => {
+                estado = { desafios:[...CARTELAS[idx]], concluidos:[], premio:'', cartela:idx };
+                salvarEstado(estado);
+                inputPremio.value='';
+                mostrarPremioInput();
+                renderCartela();
+                renderHistorico();
+            });
+        });
+
+        // NOVA CARTELA EM BRANCO
+        document.getElementById('btnNovaCartela').addEventListener('click', () => {
+            mostrarModalCartelas(idx => {
+                estado = { desafios:[...CARTELAS[idx]], concluidos:[], premio:'', cartela:idx };
+                salvarEstado(estado);
+                inputPremio.value='';
+                mostrarPremioInput();
+                renderCartela();
+            });
+        });
+
+        // HISTORICO
+        function renderHistorico() {
+            const historico = carregarHistorico();
+            const section = document.getElementById('historicoSection');
+            const grid = document.getElementById('historicoGrid');
+            if (!historico.length) { section.style.display='none'; return; }
+            section.style.display='block';
+            grid.innerHTML='';
+            historico.forEach((cartela, ci) => {
+                const card = document.createElement('div');
+                card.className='historico-card';
+                const data = new Date(cartela.data).toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'});
+                const miniHTML = cartela.desafios.map((t,i)=>{
+                    const isCentral=i===12, isConcluida=cartela.concluidos.includes(i);
+                    const texto=isCentral?'':((t||'').substring(0,18)+((t||'').length>18?'...':''));
+                    return `<div class="mini-cell ${isCentral?'central':''} ${isConcluida?'concluida':''}"><span>${texto}</span></div>`;
+                }).join('');
+                card.innerHTML=`<div class="historico-card-header"><div class="historico-card-titulo">Valendo: ${cartela.premio||'—'}</div><div class="historico-card-meta">${cartela.totalConcluidos}/24 concluidos</div></div><div class="mini-cartela">${miniHTML}</div><div class="historico-card-footer"><span>Salvo em ${data}</span><button class="btn-del-historico" data-ci="${ci}">Excluir</button></div>`;
+                grid.appendChild(card);
+            });
+            grid.querySelectorAll('.btn-del-historico').forEach(btn=>{
+                btn.addEventListener('click',()=>{
+                    const h=carregarHistorico(); h.splice(parseInt(btn.dataset.ci),1); salvarHistorico(h); renderHistorico();
+                });
+            });
+        }
+
+        // INIT
+        renderCartela();
+        renderHistorico();
+    </script>
+
+
+    <script>
+    (function() {
+        var btnDrawer = document.getElementById('btnDrawer');
+        var drawer = document.getElementById('drawer');
+        var overlay = document.getElementById('drawerOverlay');
+        var fechar = document.getElementById('drawerFechar');
+        function open() { drawer.classList.add('aberto'); overlay.classList.add('aberto'); document.body.style.overflow='hidden'; }
+        function close() { drawer.classList.remove('aberto'); overlay.classList.remove('aberto'); document.body.style.overflow=''; }
+        if (btnDrawer) btnDrawer.addEventListener('click', open);
+        if (fechar) fechar.addEventListener('click', close);
+        if (overlay) overlay.addEventListener('click', close);
+        document.addEventListener('keydown', function(e){ if(e.key==='Escape') close(); });
+    })();
+    function dToggle(id) {
+        var sub = document.getElementById(id);
+        var arrow = document.getElementById(id+'-a');
+        var isOpen = sub.classList.contains('open');
+        document.querySelectorAll('.sub-menu').forEach(function(s){ s.classList.remove('open'); });
+        document.querySelectorAll('.sub-arrow').forEach(function(a){ a.classList.remove('open'); });
+        if (!isOpen) { sub.classList.add('open'); if(arrow) arrow.classList.add('open'); }
+    }
+    </script>
+</body>
+
+</html>

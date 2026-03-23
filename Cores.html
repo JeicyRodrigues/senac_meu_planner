@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desafio de Cores - Capítulo 1</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Montserrat:wght@400;600;700&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --marrom: #633535; --vinho: #8b4361; --rosa: #faeeeb; --borda: #b89794;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Montserrat', sans-serif; min-height: 100vh; background-image: url('imagens/backgroud.png'); background-size: cover; background-position: center; background-attachment: fixed; color: var(--marrom); display: flex; flex-direction: column; }
+        
+        /* HEADER IGUAL OS OUTROS */
+        .page-header { display:flex; justify-content:space-between; align-items:center; padding:14px 28px 6px; }
+        .logo-link { display:flex; align-items:center; text-decoration:none; flex-shrink:0; transition:transform 0.3s; }
+        .logo-link:hover { transform:scale(1.05); } .logo-link img { width:250px; height:auto; }
+        .header-titulo { flex:1; display:flex; flex-direction:column; align-items:center; }
+        .titulo-linha { display:flex; align-items:center; justify-content:center; gap:4px; width:100%; }
+        .arabesco { height:54px; width:auto; object-fit:contain; mix-blend-mode:multiply; opacity:0.9; flex-shrink:0; }
+        .arabesco-dir { transform:scaleX(-1); }
+        .titulo-pagina { font-family:'Dancing Script',cursive; font-size:3.5rem; font-weight:700; color:var(--marrom); line-height:1; white-space:nowrap; }
+        .subtitulo-header { font-family:'Dancing Script',cursive; font-size:1.2rem; font-weight:600; color:var(--vinho); }
+
+        .container-cores {
+            background-color: rgba(250,238,235,0.78); backdrop-filter: blur(2px);
+            width: 92%; max-width: 1200px; margin: 4px auto 20px; padding: 24px 32px 28px;
+            border-radius: 18px; border: 1px solid rgba(184,151,148,0.5); flex: 1;
+        }
+
+        .grid-cores { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; }
+        
+        .cor-card {
+            background: rgba(255,255,255,0.4); border-radius: 12px;
+            border: 1px solid rgba(184,151,148,0.3); overflow: hidden;
+            display: flex; flex-direction: column; align-items: center; padding: 12px;
+            transition: transform 0.2s;
+        }
+        .cor-card:hover { transform: translateY(-3px); }
+
+        .cor-header {
+            width: 100%; text-align: center; font-family: 'Dancing Script', cursive;
+            font-size: 1.4rem; font-weight: 700; padding-bottom: 8px; border-bottom: 1px dashed rgba(184,151,148,0.5);
+            margin-bottom: 12px;
+        }
+
+        .livro-capa-wrap { width: 100%; aspect-ratio: 2/3; border-radius: 6px; overflow: hidden; box-shadow: 2px 3px 10px rgba(99,53,53,0.15); }
+        .livro-capa-img { width: 100%; height: 100%; object-fit: cover; }
+        .livro-vazio { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 2rem; opacity: 0.2; }
+        
+        .livro-titulo-mini { font-size: 0.7rem; font-weight: 600; text-align: center; margin-top: 10px; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+    </style>
+</head>
+<body>
+    <header class="page-header">
+        <a href="index.html" class="logo-link"><img src="imagens/logo01.png" alt="Capitulo 1"></a>
+        <div class="header-titulo">
+            <div class="titulo-linha"><img src="imagens/arabesco1.PNG" alt="" class="arabesco"><span class="titulo-pagina">Desafio das Cores</span><img src="imagens/arabesco2.PNG" alt="" class="arabesco arabesco-dir"></div>
+            <span class="subtitulo-header">Um arco-íris de histórias</span>
+        </div>
+    </header>
+
+    <div class="container-cores">
+        <div class="grid-cores" id="gridCores"></div>
+    </div>
+
+    <script>
+        const CORES_DESAFIO = [
+            { nome: 'Rosa', hex: '#e8c4c4' }, { nome: 'Vermelho', hex: '#d9534f' },
+            { nome: 'Laranja', hex: '#f0ad4e' }, { nome: 'Amarelo', hex: '#ffd700' },
+            { nome: 'Verde', hex: '#5cb85c' }, { nome: 'Azul', hex: '#5bc0de' },
+            { nome: 'Roxo', hex: '#9b59b6' }, { nome: 'Preto', hex: '#333333' },
+            { nome: 'Branco', hex: '#ffffff' }, { nome: 'Dourado', hex: '#d4af37' },
+            { nome: 'Cinza', hex: '#95a5a6' }, { nome: 'Marrom', hex: '#8b4513' }
+        ];
+
+        function renderCores() {
+            const livros = JSON.parse(localStorage.getItem('livros_lidos') || '[]');
+            const grid = document.getElementById('gridCores');
+            grid.innerHTML = '';
+
+            CORES_DESAFIO.forEach(cor => {
+                // Procurando se existe algum livro cadastrado com o desafio desta cor
+                const livroDaCor = livros.find(l => l.desafio && l.desafio.includes(`cores:${cor.nome}`));
+                
+                const card = document.createElement('div');
+                card.className = 'cor-card';
+                
+                // Cabeçalho colorido
+                const header = `<div class="cor-header" style="color: ${cor.nome === 'Branco' || cor.nome === 'Amarelo' ? '#633535' : cor.hex}; text-shadow: 1px 1px 2px rgba(0,0,0,0.1)">${cor.nome}</div>`;
+                
+                let corpo = '';
+                if (livroDaCor) {
+                    const img = livroDaCor.imagem_url 
+                        ? `<img src="${livroDaCor.imagem_url}" class="livro-capa-img" onerror="this.style.display='none'">` 
+                        : `<div class="livro-vazio" style="background:${cor.hex}; opacity:0.3">?</div>`;
+                    
+                    corpo = `
+                        <div class="livro-capa-wrap" style="border: 2px solid ${cor.hex}">${img}</div>
+                        <div class="livro-titulo-mini">${livroDaCor.titulo}</div>
+                    `;
+                } else {
+                    corpo = `
+                        <div class="livro-capa-wrap" style="border: 2px dashed ${cor.hex}; background: rgba(255,255,255,0.5);">
+                            <div class="livro-vazio" style="color:${cor.hex}">+</div>
+                        </div>
+                        <div class="livro-titulo-mini" style="opacity: 0.5;">Aguardando livro...</div>
+                    `;
+                }
+
+                card.innerHTML = header + corpo;
+                grid.appendChild(card);
+            });
+        }
+        renderCores();
+    </script>
+</body>
+</html>

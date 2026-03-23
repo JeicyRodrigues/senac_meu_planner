@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>30 Clássicos em 1 Ano - Capítulo 1</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Montserrat:wght@400;600;700&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --marrom: #633535;
+            --vinho: #8b4361;
+            --rosa: #faeeeb;
+            --borda: #b89794;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Courier Prime', monospace;
+            min-height: 100vh;
+            background-image: url('imagens/backgroud.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--marrom);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ══ HEADER ══ */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 28px 6px;
+        }
+
+        .logo-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            flex-shrink: 0;
+            transition: transform 0.3s;
+        }
+        .logo-link:hover { transform: scale(1.05); }
+        .logo-link img { width: 200px; height: auto; }
+
+        .header-titulo {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .titulo-linha {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            width: 100%;
+        }
+
+        .arabesco {
+            height: 54px;
+            width: auto;
+            object-fit: contain;
+            mix-blend-mode: multiply;
+            opacity: 0.9;
+            flex-shrink: 0;
+        }
+        .arabesco-dir { transform: scaleX(-1); }
+
+        .titulo-pagina {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--marrom);
+            line-height: 1;
+            white-space: nowrap;
+        }
+
+        .subtitulo-header {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--vinho);
+            margin-top: 0;
+        }
+
+        .btn-drawer {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            flex-shrink: 0;
+            transition: transform 0.2s;
+        }
+        .btn-drawer:hover { transform: scale(1.1); }
+        .btn-drawer img { width: 52px; height: auto; mix-blend-mode: multiply; }
+
+        /* ══ DRAWER ══ */
+        .drawer-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.35); z-index:1000; }
+        .drawer-overlay.aberto { display:block; }
+        .drawer {
+            position:fixed; top:0; right:-340px; width:300px; height:100vh;
+            background:#faeeeb; border-left:1px solid var(--borda);
+            z-index:1001;
+            transition:right 0.35s cubic-bezier(0.4,0,0.2,1);
+            display:flex; flex-direction:column;
+            box-shadow:-4px 0 20px rgba(99,53,53,0.12);
+            overflow-y:auto;
+        }
+        .drawer.aberto { right:0; }
+        .drawer-header { padding:20px 22px 15px; border-bottom:1px solid rgba(184,151,148,0.4); display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
+        .drawer-titulo { font-family:'Dancing Script',cursive; font-size:1.8rem; color:var(--marrom); }
+        .drawer-fechar { background:none; border:none; font-size:1.4rem; color:var(--marrom); cursor:pointer; padding:4px 8px; border-radius:50%; transition:background 0.2s; }
+        .drawer-fechar:hover { background:rgba(139,67,97,0.12); }
+        .drawer-nav { flex:1; padding:8px 0; }
+        .drawer-nav ul { list-style:none; margin:0; padding:0; }
+        .drawer-nav li { border-bottom:1px solid rgba(184,151,148,0.12); }
+        .drawer-nav li a {
+            display:block; padding:13px 24px;
+            text-decoration:none; color:var(--marrom);
+            font-size:0.88rem; font-weight:600;
+            font-family:'Montserrat',sans-serif;
+            border-left:3px solid transparent;
+            transition:background 0.2s, border-color 0.2s;
+        }
+        .drawer-nav li a:hover { background:#eededa; border-left-color:var(--vinho); }
+        .sub-toggle {
+            display:flex; align-items:center; justify-content:space-between;
+            padding:13px 24px; cursor:pointer;
+            color:var(--marrom); font-size:0.88rem; font-weight:600;
+            font-family:'Montserrat',sans-serif;
+            border-left:3px solid transparent;
+            transition:background 0.2s, border-color 0.2s;
+        }
+        .sub-toggle:hover { background:#eededa; border-left-color:var(--vinho); }
+        .sub-arrow { font-size:0.8rem; color:var(--borda); transition:transform 0.25s; }
+        .sub-arrow.open { transform:rotate(90deg); }
+        .sub-menu { display:none; list-style:none; background:rgba(184,151,148,0.08); }
+        .sub-menu.open { display:block; }
+        .sub-menu li { border-bottom:1px solid rgba(184,151,148,0.08); }
+        .sub-menu li a {
+            display:block; padding:9px 24px 9px 36px;
+            text-decoration:none; color:var(--marrom);
+            font-size:0.8rem; font-weight:500;
+            font-family:'Montserrat',sans-serif;
+            border-left:3px solid transparent;
+            transition:background 0.2s;
+        }
+        .sub-menu li a:hover { background:rgba(139,67,97,0.07); border-left-color:var(--vinho); }
+        .drawer-sep { height:1px; background:rgba(184,151,148,0.3); margin:4px 18px; }
+        .drawer-sep-item { border:none !important; }
+        .drawer-footer { padding:16px 22px; border-top:1px solid rgba(184,151,148,0.4); font-size:0.72rem; color:#999; text-align:center; font-family:'Montserrat',sans-serif; flex-shrink:0; }
+
+        /* ══ CONTAINER ══ */
+        .container-classicos {
+            background-color: rgba(250,238,235,0.72);
+            backdrop-filter: blur(2px);
+            width: 92%;
+            max-width: 1200px;
+            margin: 4px auto 20px;
+            padding: 28px 40px 24px;
+            border-radius: 18px;
+            border: 1px solid rgba(184,151,148,0.5);
+            flex: 1;
+        }
+
+        /* Barra de progresso */
+        .progresso-bar {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+        }
+
+        .progresso-texto {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.1rem;
+            color: var(--vinho);
+            white-space: nowrap;
+        }
+        .progresso-texto strong { color: var(--marrom); font-size: 1.3rem; }
+
+        .barra-wrap {
+            flex: 1;
+            min-width: 200px;
+            height: 8px;
+            background: rgba(184,151,148,0.25);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .barra-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--marrom), var(--vinho));
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        /* ══ GRID 2 COLUNAS ══ */
+        .classicos-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0 60px;
+        }
+
+        /* ══ ITEM DA LISTA ══ */
+        .classico-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 9px 0;
+            border-bottom: 1px solid rgba(184,151,148,0.15);
+            cursor: pointer;
+            transition: background 0.15s;
+            border-radius: 4px;
+        }
+        .classico-item:hover { background: rgba(184,151,148,0.07); }
+
+        /* Checkbox estilizado */
+        .classico-item input[type="checkbox"] {
+            display: none;
+        }
+
+        .check-circulo {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 1.5px solid var(--borda);
+            flex-shrink: 0;
+            margin-top: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: border-color 0.2s, background 0.2s;
+            position: relative;
+        }
+
+        .check-circulo::after {
+            content: '✓';
+            font-size: 0.75rem;
+            color: white;
+            opacity: 0;
+            transition: opacity 0.2s;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+        }
+
+        .classico-item input:checked + .check-circulo {
+            border-color: var(--marrom);
+            background: var(--marrom);
+        }
+        .classico-item input:checked + .check-circulo::after {
+            opacity: 1;
+        }
+
+        .classico-texto {
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.88rem;
+            line-height: 1.5;
+            color: var(--marrom);
+            transition: opacity 0.2s, text-decoration 0.2s;
+        }
+
+        /* Riscado quando marcado */
+        .classico-item.lido .classico-texto {
+            opacity: 0.45;
+            text-decoration: line-through;
+        }
+
+        /* ══ RODAPÉ ══ */
+        .citacao-rodape {
+            text-align: right;
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.8rem;
+            color: var(--marrom);
+            margin-top: 24px;
+            padding-top: 14px;
+            border-top: 1px solid rgba(184,151,148,0.35);
+        }
+
+        footer { text-align:center; padding:14px; font-size:0.75rem; color:#777; font-family:'Montserrat',sans-serif; }
+        footer a { color:#777; text-decoration:none; }
+        footer a:hover { color:var(--marrom); }
+    </style>
+</head>
+<body>
+
+        <!-- DRAWER -->
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+    <aside class="drawer" id="drawer">
+        <div class="drawer-header">
+            <span class="drawer-titulo">Menu</span>
+            <button class="drawer-fechar" id="drawerFechar">✕</button>
+        </div>
+        <nav class="drawer-nav">
+            <ul>
+                <li><a href="Registro.html">Nova Resenha</a></li>
+
+                <li class="has-sub">
+                    <div class="sub-toggle" onclick="dToggle('dn-leituras')">
+                        <span>Leituras</span><span class="sub-arrow" id="dn-leituras-a">›</span>
+                    </div>
+                    <ul class="sub-menu" id="dn-leituras">
+                        <li><a href="Biblioteca.html">Livros Lidos</a></li>
+                        <li><a href="Estante.html">Minha Estante</a></li>
+                        <li><a href="Leituras.html">Quero Ler</a></li>
+                        <li><a href="Classicos.html">30 Clássicos</a></li>
+                        <li><a href="Memorias.html">Memórias</a></li>
+                    </ul>
+                </li>
+
+                <li class="has-sub">
+                    <div class="sub-toggle" onclick="dToggle('dn-desafios')">
+                        <span>Desafios</span><span class="sub-arrow" id="dn-desafios-a">›</span>
+                    </div>
+                    <ul class="sub-menu" id="dn-desafios">
+                        <li><a href="Bingo.html">Bingo Literário</a></li>
+                        <li><a href="Classicos.html">30 Clássicos</a></li>
+                        <li><a href="Cores.html">Cores</a></li>
+                        <li><a href="Estacoes.html">Estações</a></li>
+                        <li><a href="Calendario.html">Calendário</a></li>
+                    </ul>
+                </li>
+
+                <li class="has-sub">
+                    <div class="sub-toggle" onclick="dToggle('dn-metas')">
+                        <span>Metas</span><span class="sub-arrow" id="dn-metas-a">›</span>
+                    </div>
+                    <ul class="sub-menu" id="dn-metas">
+                        <li><a href="Classicos.html">Meta de Clássicos</a></li>
+                        <li><a href="Leituras.html">Lista de Desejos</a></li>
+                        <li><a href="Estante.html">Livros Pausados</a></li>
+                    </ul>
+                </li>
+
+                <li class="drawer-sep-item"><div class="drawer-sep"></div></li>
+
+                <li><a href="SobreNos.html">Sobre Nós ›</a></li>
+                <li><a href="index.html">Início ›</a></li>
+            </ul>
+        </nav>
+        <div class="drawer-footer">Capítulo 1 © 2026</div>
+    </aside>
+
+    <!-- HEADER -->
+    <header class="page-header">
+        <a href="index.html" class="logo-link" title="Início">
+            <img src="imagens/logo01.png" alt="Capítulo 1">
+        </a>
+        <div class="header-titulo">
+            <div class="titulo-linha">
+                <img src="imagens/arabesco1.PNG" alt="" class="arabesco">
+                <span class="titulo-pagina">30 Clássicos em 1 Ano</span>
+                <img src="imagens/arabesco2.PNG" alt="" class="arabesco arabesco-dir">
+            </div>
+            <span class="subtitulo-header">histórias que atravessaram o tempo.</span>
+        </div>
+        <button class="btn-drawer" id="btnDrawer" title="Menu">
+            <img src="imagens/icone.png" alt="Menu">
+        </button>
+    </header>
+
+    <!-- CONTEÚDO -->
+    <div class="container-classicos">
+
+        <!-- Barra de progresso -->
+        <div class="progresso-bar">
+            <div class="progresso-texto">
+                <strong id="totalLidos">0</strong> de 30 clássicos lidos
+            </div>
+            <div class="barra-wrap">
+                <div class="barra-fill" id="barraFill" style="width:0%"></div>
+            </div>
+            <div class="progresso-texto" id="porcento">0%</div>
+        </div>
+
+        <!-- Lista em 2 colunas -->
+        <div class="classicos-grid" id="classicosGrid"></div>
+
+        <div class="citacao-rodape">
+            "Ler é sonhar pela mão de outrem."<br>— Fernando Pessoa
+        </div>
+    </div>
+
+    <footer>
+        <p><a href="#">Sobre Nós</a> | <a href="#">Contato</a> | <a href="#">Privacidade</a> | <a href="#">Termos</a></p>
+    </footer>
+
+    <script>
+        // ── DRAWER ──
+        const btnDrawer = document.getElementById('btnDrawer');
+        const drawer = document.getElementById('drawer');
+        const drawerOverlay = document.getElementById('drawerOverlay');
+        const drawerFechar = document.getElementById('drawerFechar');
+        const fecharDrawer = () => { drawer.classList.remove('aberto'); drawerOverlay.classList.remove('aberto'); document.body.style.overflow = ''; };
+        btnDrawer.addEventListener('click', () => { drawer.classList.add('aberto'); drawerOverlay.classList.add('aberto'); document.body.style.overflow = 'hidden'; });
+        drawerFechar.addEventListener('click', fecharDrawer);
+        drawerOverlay.addEventListener('click', fecharDrawer);
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') fecharDrawer(); });
+
+        // ── LISTA DE CLÁSSICOS ──
+        const CLASSICOS = [
+            // Coluna esquerda (1–15)
+            { n: 1,  titulo: 'A Metamorfose',                        autor: 'Franz Kafka' },
+            { n: 2,  titulo: 'O Estrangeiro',                        autor: 'Albert Camus' },
+            { n: 3,  titulo: 'Noites Brancas',                       autor: 'Fiódor Dostoiévski' },
+            { n: 4,  titulo: 'A Morte de Ivan Ilitch',               autor: 'Liev Tolstói' },
+            { n: 5,  titulo: 'O Velho e o Mar',                      autor: 'Ernest Hemingway' },
+            { n: 6,  titulo: 'O Médico e o Monstro',                 autor: 'Robert Louis Stevenson' },
+            { n: 7,  titulo: 'Bartleby, o Escriturário',             autor: 'Herman Melville' },
+            { n: 8,  titulo: 'Cândido, ou o Otimismo',               autor: 'Voltaire' },
+            { n: 9,  titulo: 'Dom Casmurro',                         autor: 'Machado de Assis' },
+            { n: 10, titulo: 'Memórias Póstumas de Brás Cubas',      autor: 'Machado de Assis' },
+            { n: 11, titulo: 'O Cortiço',                            autor: 'Aluísio Azevedo' },
+            { n: 12, titulo: 'Vidas Secas',                          autor: 'Graciliano Ramos' },
+            { n: 13, titulo: 'A Hora da Estrela',                    autor: 'Clarice Lispector' },
+            { n: 14, titulo: 'Orgulho e Preconceito',                autor: 'Jane Austen' },
+            { n: 15, titulo: 'Jane Eyre',                            autor: 'Charlotte Brontë' },
+            // Coluna direita (16–30)
+            { n: 16, titulo: 'O Morro dos Ventos Uivantes',          autor: 'Emily Brontë' },
+            { n: 17, titulo: 'Madame Bovary',                        autor: 'Gustave Flaubert' },
+            { n: 18, titulo: 'Os Sofrimentos do Jovem Werther',      autor: 'Goethe' },
+            { n: 19, titulo: '1984',                                 autor: 'George Orwell' },
+            { n: 20, titulo: 'Admirável Mundo Novo',                 autor: 'Aldous Huxley' },
+            { n: 21, titulo: 'Fahrenheit 451',                       autor: 'Ray Bradbury' },
+            { n: 22, titulo: 'O Processo',                           autor: 'Franz Kafka' },
+            { n: 23, titulo: 'Crime e Castigo',                      autor: 'Fiódor Dostoiévski' },
+            { n: 24, titulo: 'O Conde de Monte Cristo',              autor: 'Alexandre Dumas' },
+            { n: 25, titulo: 'Drácula',                              autor: 'Bram Stoker' },
+            { n: 26, titulo: 'Frankenstein',                         autor: 'Mary Shelley' },
+            { n: 27, titulo: 'As Aventuras de Tom Sawyer',           autor: 'Mark Twain' },
+            { n: 28, titulo: 'O Retrato de Dorian Gray',             autor: 'Oscar Wilde' },
+            { n: 29, titulo: 'Os Miseráveis',                        autor: 'Victor Hugo' },
+            { n: 30, titulo: 'O Apanhador no Campo de Centeio',      autor: 'J.D. Salinger' },
+        ];
+
+        // ── ESTADO ──
+        let lidos = JSON.parse(localStorage.getItem('classicos_lidos') || '[]');
+
+        function salvar() {
+            localStorage.setItem('classicos_lidos', JSON.stringify(lidos));
+        }
+
+        function atualizarProgresso() {
+            const total = lidos.length;
+            const pct = Math.round((total / 30) * 100);
+            document.getElementById('totalLidos').textContent = total;
+            document.getElementById('porcento').textContent = pct + '%';
+            document.getElementById('barraFill').style.width = pct + '%';
+        }
+
+        // ── RENDERIZA ──
+        function renderClassicos() {
+            const grid = document.getElementById('classicosGrid');
+            grid.innerHTML = '';
+
+            // Monta coluna esquerda (1–15) e direita (16–30) intercaladas no grid
+            const col1 = CLASSICOS.slice(0, 15);
+            const col2 = CLASSICOS.slice(15, 30);
+
+            // Cria as duas colunas como divs dentro do grid
+            const divCol1 = document.createElement('div');
+            const divCol2 = document.createElement('div');
+
+            col1.forEach(c => divCol1.appendChild(criarItem(c)));
+            col2.forEach(c => divCol2.appendChild(criarItem(c)));
+
+            grid.appendChild(divCol1);
+            grid.appendChild(divCol2);
+
+            atualizarProgresso();
+        }
+
+        function criarItem(c) {
+            const div = document.createElement('div');
+            div.className = 'classico-item' + (lidos.includes(c.n) ? ' lido' : '');
+
+            const id = `cl-${c.n}`;
+            div.innerHTML = `
+                <input type="checkbox" id="${id}" data-n="${c.n}" ${lidos.includes(c.n) ? 'checked' : ''}>
+                <label class="check-circulo" for="${id}"></label>
+                <label class="classico-texto" for="${id}">
+                    ${c.n}.${c.titulo} – ${c.autor}
+                </label>`;
+
+            div.querySelector('input').addEventListener('change', function() {
+                const n = parseInt(this.dataset.n);
+                if (this.checked) {
+                    if (!lidos.includes(n)) lidos.push(n);
+                    div.classList.add('lido');
+                } else {
+                    lidos = lidos.filter(x => x !== n);
+                    div.classList.remove('lido');
+                }
+                salvar();
+                atualizarProgresso();
+            });
+
+            return div;
+        }
+
+        // ── INIT ──
+        renderClassicos();
+
+        // ── DRAWER ──
+        // (já definido acima)
+    </script>
+
+
+    <script>
+    (function() {
+        var btnDrawer = document.getElementById('btnDrawer');
+        var drawer = document.getElementById('drawer');
+        var overlay = document.getElementById('drawerOverlay');
+        var fechar = document.getElementById('drawerFechar');
+        function open() { drawer.classList.add('aberto'); overlay.classList.add('aberto'); document.body.style.overflow='hidden'; }
+        function close() { drawer.classList.remove('aberto'); overlay.classList.remove('aberto'); document.body.style.overflow=''; }
+        if (btnDrawer) btnDrawer.addEventListener('click', open);
+        if (fechar) fechar.addEventListener('click', close);
+        if (overlay) overlay.addEventListener('click', close);
+        document.addEventListener('keydown', function(e){ if(e.key==='Escape') close(); });
+    })();
+    function dToggle(id) {
+        var sub = document.getElementById(id);
+        var arrow = document.getElementById(id+'-a');
+        var isOpen = sub.classList.contains('open');
+        document.querySelectorAll('.sub-menu').forEach(function(s){ s.classList.remove('open'); });
+        document.querySelectorAll('.sub-arrow').forEach(function(a){ a.classList.remove('open'); });
+        if (!isOpen) { sub.classList.add('open'); if(arrow) arrow.classList.add('open'); }
+    }
+    </script>
+</body>
+</html>

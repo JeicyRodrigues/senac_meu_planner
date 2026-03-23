@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capítulo 1 - Dashboard Literário</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Courier+Prime:wght@400;700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* ── CARROSSEL DE RESENHAS ── */
+        .res-slide { display: none; animation: fadeRes 0.4s ease; }
+        .res-slide.ativo { display: flex; align-items: flex-start; gap: 25px; }
+        @keyframes fadeRes { from{opacity:0;transform:translateX(12px)} to{opacity:1;transform:none} }
+
+        .res-capa {
+            width: 130px; flex-shrink: 0;
+            border-radius: 5px;
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.2);
+            object-fit: cover; aspect-ratio: 2/3;
+        }
+        .res-info { flex: 1; }
+        .res-titulo {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.35rem; color: #633535;
+            margin-bottom: 5px;
+        }
+        .res-autor { font-size: 0.76rem; color: #8b4361; margin-bottom: 8px; font-weight: 600; }
+        .res-estrelas { font-size: 1.1rem; color: #633535; letter-spacing: 2px; margin-bottom: 10px; }
+        .res-trecho {
+            font-size: 0.83rem; line-height: 1.8;
+            color: #633535;
+        }
+        .res-link {
+            display: inline-block; margin-top: 14px;
+            font-size: 0.8rem; font-weight: 700;
+            color: #8b4361; text-decoration: none;
+            letter-spacing: 0.5px;
+            transition: letter-spacing 0.2s;
+        }
+        .res-link:hover { letter-spacing: 1.5px; }
+
+        .res-vazio {
+            width: 100%; text-align: center; padding: 40px 20px;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.1rem; color: #b89794;
+        }
+
+        .res-dots {
+            display: flex; gap: 6px; justify-content: center;
+            margin-top: 14px;
+        }
+        .res-dot {
+            width: 7px; height: 7px; border-radius: 50%;
+            background: rgba(184,151,148,0.4); cursor: pointer;
+            transition: background 0.2s;
+        }
+        .res-dot.ativo { background: #633535; }
+
+        /* ── GALERIA ── */
+        .galeria-section {
+            margin-top: 22px;
+            background: #faeeeb;
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255,182,193,0.3);
+        }
+        .galeria-titulo-wrap {
+            display: flex; align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+        .galeria-titulo-wrap span {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.1rem; color: #633535;
+        }
+        .galeria-ver {
+            font-size: 0.72rem; font-weight: 600;
+            color: #8b4361; text-decoration: none;
+            transition: letter-spacing 0.2s;
+        }
+        .galeria-ver:hover { letter-spacing: 0.5px; }
+        .galeria-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+        .galeria-item {
+            aspect-ratio: 1; border-radius: 10px;
+            overflow: hidden; cursor: pointer;
+            box-shadow: 0 2px 8px rgba(99,53,53,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            background: rgba(184,151,148,0.12);
+            position: relative;
+        }
+        .galeria-item:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(99,53,53,0.18); }
+        .galeria-item img { width:100%;height:100%;object-fit:cover;display:block; }
+        .galeria-leg {
+            position: absolute; bottom:0; left:0; right:0;
+            background: linear-gradient(transparent, rgba(99,53,53,0.6));
+            color: white; font-size: 0.62rem;
+            padding: 18px 8px 6px; opacity: 0;
+            transition: opacity 0.2s;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .galeria-item:hover .galeria-leg { opacity: 1; }
+        .galeria-vazia {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1rem; color: #b89794;
+            text-align: center; padding: 20px;
+            grid-column: 1/-1;
+        }
+
+        /* ── STATS CARD DIAS ── */
+        .stat-card h3 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.1rem; color: #633535;
+        }
+        .dias-seq { font-family:'Dancing Script',cursive; font-size:0.75rem; color:#b89794; text-align:center; margin-top:4px; }
+        .dias-msg {
+            font-family: 'Dancing Script', cursive;
+            font-size: 0.8rem; color: #b89794;
+            text-align: center; margin-top: 6px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="wrapper">
+        <header class="header">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="imagens/capitulo1.png" alt="Capítulo 1" class="logo-img">
+                </a>
+            </div>
+            <nav class="user-menu">
+                <a href="#" id="btn-login-topo"><span>LOGIN</span></a>
+                <a href="#" id="btn-cadastro-topo"><span>CADASTRO</span></a>
+            </nav>
+        </header>
+
+        <div class="main-container">
+            <aside class="sidebar">
+                <nav>
+                    <ul class="menu-list">
+                        <li><a href="Registro.html">Nova Resenha <span class="arrow"></span></a></li>
+                        <li><a href="Biblioteca.html">Lidos <span class="arrow"></span></a></li>
+                        <li><a href="Estante.html">Minha Estante <span class="arrow"></span></a></li>
+                        <li><a href="Leituras.html">Quero Ler <span class="arrow"></span></a></li>
+                        <li><a href="Calendario.html">Calendário <span class="arrow"></span></a></li>
+                        <li><a href="Memorias.html">Memórias <span class="arrow"></span></a></li>
+                        <li><a href="Bingo.html">Bingo Literário <span class="arrow"></span></a></li>
+                        <li><a href="Classicos.html">30 Clássicos <span class="arrow"></span></a></li>
+                        <li><a href="Cores.html">Desafio das Cores <span class="arrow"></span></a></li>
+                        <li><a href="Estacoes.html">Desafio Estações <span class="arrow"></span></a></li>
+                    </ul>
+                </nav>
+            </aside>
+            <main class="content">
+
+                <section class="banner-citacao">
+                    <div class="citacao-conteudo">
+                        <p class="texto-citacao">"Sempre imaginei que o paraíso fosse uma espécie de biblioteca."</p>
+                        <p class="autor-citacao">— Jorge Luis Borges</p>
+                    </div>
+                </section>
+
+                <section class="featured-book">
+                    <div id="resSlides"></div>
+                    <div class="res-dots" id="resDots"></div>
+                </section>
+
+                <section class="stats-grid">
+
+                    <div class="stat-card card-conquistas">
+                        <h3>Conquistas</h3>
+                        <ul class="stats-list">
+                            <li><span>Livros Lidos</span><span id="val-lidos" class="count">0</span></li>
+                            <li><span>Resenhas Escritas</span><span id="val-resenhas" class="count">0</span></li>
+                            <li><span>Clássicos Lidos</span><span id="val-classicos" class="count">0</span></li>
+                            <li><span>Desafios Ativos</span><span id="val-desafios" class="count">0</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="stat-card card-estacoes">
+                        <h3>Progresso dos Desafios</h3>
+                        <div style="font-size:0.72rem;color:#8b4361;margin:10px 0 3px;">Bingo Literário</div>
+                        <div class="progress-container">
+                            <div id="barra-bingo" class="progress-fill" style="width:0%"></div>
+                        </div>
+                        <div class="estacao-info" style="margin-bottom:10px;">
+                            <span id="txt-bingo" style="font-size:0.76rem;">0/24 desafios</span>
+                        </div>
+                        <div style="font-size:0.72rem;color:#8b4361;margin-bottom:3px;">30 Clássicos</div>
+                        <div class="progress-container">
+                            <div id="barra-classicos" class="progress-fill" style="width:0%;background:#8b4361;"></div>
+                        </div>
+                        <div class="estacao-info">
+                            <span id="txt-classicos" style="font-size:0.76rem;">0/30 lidos</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card card-dias">
+                        <h3>Dias Seguidos</h3>
+                        <div class="circle-container">
+                            <svg viewBox="0 0 32 28" width="80" height="80" style="display:block;margin:10px auto 4px; overflow:visible;">
+                                <path d="M16 26 C16 26 1 16 1 8.5 C1 4.4 4.4 1 8.5 1 C11.2 1 13.6 2.5 16 5.5 C18.4 2.5 20.8 1 23.5 1 C27.6 1 31 4.4 31 8.5 C31 16 16 26 16 26Z" 
+                                      fill="none" stroke="#e8d9e5" stroke-width="1.5" stroke-linejoin="round"/>
+                                
+                                <path id="heart-arc" 
+                                      d="M16 26 C16 26 1 16 1 8.5 C1 4.4 4.4 1 8.5 1 C11.2 1 13.6 2.5 16 5.5 C18.4 2.5 20.8 1 23.5 1 C27.6 1 31 4.4 31 8.5 C31 16 16 26 16 26Z" 
+                                      fill="none" stroke="#633535" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                      pathLength="100" stroke-dasharray="100" stroke-dashoffset="100" 
+                                      style="transition: stroke-dashoffset 1.5s ease-out;"/>
+                                
+                                <text x="16" y="14" dy=".3em" text-anchor="middle" font-family="Montserrat,sans-serif" font-size="7" font-weight="700" fill="#633535" id="val-dias">0</text>
+                            </svg>
+                        </div>
+                        <p class="record-text">Record: <span id="val-record">0</span> dias</p>
+                        <p class="dias-seq" id="msg-seq" style="font-family:Dancing Script,cursive;font-size:0.75rem;color:#b89794;text-align:center;margin-top:4px;"></p>
+                    </div>
+
+                </section>
+
+                <section class="galeria-section">
+                    <div class="galeria-titulo-wrap">
+                        <span>Galeria do Leitor</span>
+                        <a href="Memorias.html" class="galeria-ver">Ver todas →</a>
+                    </div>
+                    <div class="galeria-grid" id="galeriaHome"></div>
+                </section>
+
+            </main>
+        </div>
+    </div>
+
+    <section id="modal-cadastro" class="modal-overlay">
+        <div class="modal-content">
+            <span id="fechar-modal" class="btn-fechar">&times;</span>
+            <div class="modal-header">
+                <img src="imagens/flor_decorativa.png" alt="" class="modal-icon">
+                <h2>Crie sua conta</h2>
+                <p>Comece sua jornada literária</p>
+            </div>
+            <form class="modal-form">
+                <input type="text" placeholder="Seu nome de usuário" required>
+                <input type="email" placeholder="E-mail" required>
+                <input type="password" placeholder="Senha" required>
+                <input type="password" placeholder="Confirme a senha" required>
+                <div class="checkbox-container">
+                    <input type="checkbox" id="termos-cb">
+                    <label for="termos-cb">Li e concordo com os <a href="Termos.html" style="color:#8b4361;">termos</a></label>
+                </div>
+                <button type="submit" class="btn-cadastrar">CADASTRAR</button>
+            </form>
+            <a href="#" class="login-link" id="ir-para-login">- LOGIN -</a>
+        </div>
+    </section>
+
+    <section id="modal-login" class="modal-overlay">
+        <div class="modal-content">
+            <span id="fechar-login" class="btn-fechar">&times;</span>
+            <div class="modal-header">
+                <img src="imagens/flor_decorativa.png" alt="" class="modal-icon">
+                <h2>Acesse sua conta</h2>
+                <p>Bem-vindo de volta!</p>
+            </div>
+            <form class="modal-form">
+                <input type="email" placeholder="E-mail" required>
+                <input type="password" placeholder="Senha" required>
+                <div class="login-options">
+                    <label class="remember-me"><input type="checkbox"> Lembrar-me</label>
+                    <a href="#" class="forgot-password">Esqueceu a senha?</a>
+                </div>
+                <button type="submit" class="btn-cadastrar">ENTRAR</button>
+            </form>
+            <a href="#" class="login-link" id="trocar-para-cadastro">- CADASTRE-SE -</a>
+        </div>
+    </section>
+
+    <section id="modal-esqueci" class="modal-overlay">
+        <div class="modal-content">
+            <span id="fechar-esqueci" class="btn-fechar">&times;</span>
+            <div class="modal-header">
+                <img src="imagens/flor_decorativa.png" alt="" class="modal-icon">
+                <h2>Esqueci minha senha</h2>
+            </div>
+            <form class="modal-form">
+                <input type="email" placeholder="E-mail" required>
+                <button type="submit" class="btn-cadastrar">ENVIAR E-MAIL</button>
+            </form>
+            <a href="#" class="login-link" id="voltar-para-cadastro">- NOVO CADASTRO -</a>
+        </div>
+    </section>
+
+    <footer>
+        <p>
+            <a href="SobreNos.html" style="color:#777;text-decoration:none;">Sobre Nós</a> |
+            <a href="Contato.html" style="color:#777;text-decoration:none;">Contato</a> |
+            <a href="Privacidade.html" style="color:#777;text-decoration:none;">Privacidade</a> |
+            <a href="Termos.html" style="color:#777;text-decoration:none;">Termos</a>
+        </p>
+        <p>&copy; 2026 Capítulo 1. Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+    // ── CARROSSEL DE RESENHAS ──
+    (function() {
+        var livros = [];
+        try { livros = JSON.parse(localStorage.getItem('livros_lidos') || '[]'); } catch(e){}
+        var recentes = livros.slice().sort(function(a,b){ return (b.id||0)-(a.id||0); }).slice(0,6);
+
+        var slidesWrap = document.getElementById('resSlides');
+        var dotsWrap   = document.getElementById('resDots');
+        var cur = 0, timer = null;
+
+        if (!recentes.length) {
+            slidesWrap.innerHTML = '<div class="res-slide ativo"><div class="res-vazio">Suas resenhas aparecerão aqui.<br><a href="Registro.html" style="font-family:Montserrat,sans-serif;font-size:0.8rem;font-weight:700;color:#633535;">+ Registrar primeiro livro</a></div></div>';
+            return;
+        }
+
+        recentes.forEach(function(l, i) {
+            var nota = parseInt(l.nota||0);
+            var s = document.createElement('div');
+            s.className = 'res-slide' + (i===0?' ativo':'');
+            var cap = l.imagem_url && l.imagem_url.trim() ? '<img class="res-capa" src="'+l.imagem_url.trim()+'" alt="'+l.titulo+'" onerror="this.style.display=\'none\'">' : '';
+            s.innerHTML = cap + '<div class="res-info">' +
+                '<div class="res-titulo">'+l.titulo+'</div>' +
+                (l.autor ? '<div class="res-autor">'+l.autor+'</div>' : '') +
+                (nota ? '<div class="res-estrelas">'+'★'.repeat(nota)+'☆'.repeat(5-nota)+'</div>' : '') +
+                '<div class="res-trecho">'+(l.resenha||l.momentos||'')+'</div>' +
+                '<a href="Resenha.html?id='+l.id+'" class="res-link">VER RESENHA</a>' +
+                '</div>';
+            slidesWrap.appendChild(s);
+
+            var dot = document.createElement('div');
+            dot.className = 'res-dot'+(i===0?' ativo':'');
+            dot.addEventListener('click', function(){ ir(i); });
+            dotsWrap.appendChild(dot);
+        });
+
+        if (recentes.length > 1) {
+            timer = setInterval(function(){ ir((cur+1)%recentes.length); }, 5000);
+        }
+
+        function ir(idx) {
+            slidesWrap.querySelectorAll('.res-slide').forEach(function(s,i){ s.classList.toggle('ativo',i===idx); });
+            dotsWrap.querySelectorAll('.res-dot').forEach(function(d,i){ d.classList.toggle('ativo',i===idx); });
+            cur = idx;
+        }
+    })();
+
+    // ── CONTADORES ──
+    (function() {
+        var livros = [];
+        try { livros = JSON.parse(localStorage.getItem('livros_lidos')||'[]'); } catch(e){}
+        var classicos = [];
+        try { classicos = JSON.parse(localStorage.getItem('classicos_lidos')||'[]'); } catch(e){}
+        var bingo = {};
+        try { bingo = JSON.parse(localStorage.getItem('bingo_estado')||'{}'); } catch(e){}
+
+        var bingoCon = (bingo.concluidos||[]).length;
+        var cores    = livros.filter(function(l){ return l.desafio && l.desafio.split('||').some(function(d){ return d.trim().startsWith('cores:'); }); }).length;
+        var estacoes = livros.filter(function(l){ return l.desafio && l.desafio.split('||').some(function(d){ return d.trim().toLowerCase().includes('esta'); }); }).length;
+
+        var desafios = 0;
+        if (bingoCon > 0) desafios++;
+        if (classicos.length > 0) desafios++;
+        if (cores > 0) desafios++;
+        if (estacoes > 0) desafios++;
+
+        document.getElementById('val-lidos').textContent    = livros.length;
+        document.getElementById('val-resenhas').textContent = livros.filter(function(l){ return l.resenha && l.resenha.trim(); }).length;
+        document.getElementById('val-classicos').textContent= classicos.length;
+        document.getElementById('val-desafios').textContent = desafios;
+
+        document.getElementById('barra-bingo').style.width     = Math.round(bingoCon/24*100)+'%';
+        document.getElementById('txt-bingo').textContent       = bingoCon+'/24 desafios';
+        document.getElementById('barra-classicos').style.width = Math.round(classicos.length/30*100)+'%';
+        document.getElementById('txt-classicos').textContent   = classicos.length+'/30 lidos';
+    })();
+
+    // ── CALENDÁRIO DE LEITURA (AGORA CONSIDERA HISTÓRICO E FUSO) ──
+    (function() {
+        try {
+            var allLidos = new Set();
+
+            // 1. Puxa todos os dias lidos gravados no sistema
+            for (var i = 0; i < localStorage.length; i++) {
+                var key = localStorage.key(i);
+                if (key && key.startsWith('calendario_')) {
+                    try {
+                        var obj = JSON.parse(localStorage.getItem(key)||'{}');
+                        var lArr = Array.isArray(obj) ? obj : (obj.lidos||[]);
+                        lArr.forEach(function(d){ allLidos.add(d); });
+                    } catch(e2){}
+                }
+            }
+
+            function formatYMD(dt) {
+                return dt.getFullYear() + '-' +
+                    String(dt.getMonth()+1).padStart(2,'0') + '-' +
+                    String(dt.getDate()).padStart(2,'0');
+            }
+
+            // 2. Calcula o Maior Recorde Histórico de toda a vida
+            var sortedDates = Array.from(allLidos).sort();
+            var maxSeq = 0;
+            var tempSeq = 0;
+            var lastDate = null;
+
+            for (var j = 0; j < sortedDates.length; j++) {
+                var parts = sortedDates[j].split('-');
+                var currDate = new Date(parts[0], parts[1]-1, parts[2]);
+
+                if (!lastDate) {
+                    tempSeq = 1;
+                } else {
+                    var diffDays = Math.round((currDate - lastDate) / (1000 * 60 * 60 * 24));
+                    if (diffDays === 1) {
+                        tempSeq++;
+                    } else if (diffDays > 1) {
+                        tempSeq = 1; // quebrou a sequência
+                    }
+                }
+                if (tempSeq > maxSeq) {
+                    maxSeq = tempSeq;
+                }
+                lastDate = currDate;
+            }
+
+            // 3. Calcula a Sequência Atual (terminando hoje ou ontem)
+            var hoje = new Date();
+            var cursor = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
+            var seq = 0;
+
+            // Se ainda não leu hoje, recua um dia para checar se a sequência de ontem continua válida
+            if (!allLidos.has(formatYMD(cursor))) {
+                cursor.setDate(cursor.getDate() - 1);
+            }
+
+            for (var n = 0; n < 3650; n++) {
+                if (allLidos.has(formatYMD(cursor))) {
+                    seq++;
+                    cursor.setDate(cursor.getDate() - 1);
+                } else {
+                    break;
+                }
+            }
+
+            // O recorde verdadeiro é o maior entre a varredura histórica e a sequência atual
+            var savedRec = parseInt(localStorage.getItem('dias_recorde')||'0');
+            var rec = Math.max(maxSeq, savedRec, seq);
+            localStorage.setItem('dias_recorde', String(rec));
+
+            // 4. Animação do Coração
+            var arc = document.getElementById('heart-arc');
+            if (arc) {
+                // Calcula porcentagem do progresso. (Se o recorde for zero, deixa em 0%)
+                var pct = rec > 0 ? Math.min(seq / rec, 1) : 0;
+                var offset = 100 - (pct * 100);
+                
+                // Força fechar o coração se bateu o recorde
+                if (seq === rec && seq > 0) { offset = 0; }
+                
+                setTimeout(function() {
+                    arc.setAttribute('stroke-dashoffset', offset);
+                    
+                    // RECOMPENSA: Preenche o coração com rosa se bater o recorde!
+                    if (seq === rec && seq > 0) {
+                        arc.style.fill = "rgba(139,67,97,0.15)"; // Preenchimento rosinha/vinho claro
+                        arc.style.transition = "stroke-dashoffset 1.5s ease-out, fill 0.6s ease 1s";
+                    }
+                }, 100);
+            }
+
+            // Atualiza os textos
+            document.getElementById('val-dias').textContent   = seq;
+            document.getElementById('val-record').textContent = rec;
+            document.getElementById('msg-seq').textContent    =
+                seq === 0 ? 'Marque um dia no calendário!' :
+                seq === 1 ? 'Boa! Continue amanhã!' :
+                seq + ' dias consecutivos!';
+
+        } catch(err){ console.error('dias:', err); }
+    })();
+
+    // ── GALERIA ──
+    (function() {
+        var fotos = [];
+        try { fotos = JSON.parse(localStorage.getItem('memorias_fotos')||'[]'); } catch(e){}
+        var grid = document.getElementById('galeriaHome');
+        var recentes = fotos.slice(0, 6); // Pega as 6 mais recentes
+
+        if (!recentes.length) {
+            grid.innerHTML = '<div class="galeria-vazia">Suas fotos aparecerão aqui.<br><a href="Memorias.html" style="font-family:Montserrat,sans-serif;font-size:0.78rem;font-weight:700;color:#633535;">+ Adicionar memórias</a></div>';
+            return;
+        }
+        recentes.forEach(function(foto) {
+            var src = foto.base64 || foto.src || '';
+            if (!src) return;
+            var item = document.createElement('div');
+            item.className = 'galeria-item';
+            item.onclick = function(){ window.location.href='Memorias.html'; };
+            item.innerHTML = '<img src="'+src+'" alt="Memória" loading="lazy">' +
+                (foto.legenda ? '<div class="galeria-leg">'+foto.legenda+'</div>' : '');
+            grid.appendChild(item);
+        });
+    })();
+    </script>
+</body>
+</html>

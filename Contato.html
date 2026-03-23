@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contato - Capítulo 1</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Montserrat:wght@400;600;700&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --marrom:#633535; --vinho:#8b4361; --rosa:#faeeeb; --borda:#b89794; }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Montserrat',sans-serif; min-height:100vh; background-image:url('imagens/backgroud.png'); background-size:cover; background-position:center; background-attachment:fixed; color:var(--marrom); display:flex; flex-direction:column; }
+
+        .page-header { display:flex; justify-content:space-between; align-items:center; padding:14px 28px 6px; }
+        .logo-link { display:flex; align-items:center; text-decoration:none; flex-shrink:0; transition:transform 0.3s; }
+        .logo-link:hover { transform:scale(1.05); }
+        .logo-link img { width:250px; height:auto; }
+        .header-titulo { flex:1; display:flex; flex-direction:column; align-items:center; }
+        .titulo-linha { display:flex; align-items:center; justify-content:center; gap:4px; width:100%; }
+        .arabesco { height:54px; width:auto; object-fit:contain; mix-blend-mode:multiply; opacity:0.9; flex-shrink:0; }
+        .arabesco-dir { transform:scaleX(-1); }
+        .titulo-pagina { font-family:'Dancing Script',cursive; font-size:3.5rem; font-weight:700; color:var(--marrom); line-height:1; white-space:nowrap; }
+        .subtitulo-header { font-family:'Dancing Script',cursive; font-size:1.2rem; font-weight:600; color:var(--vinho); }
+        .btn-drawer { background:none; border:none; cursor:pointer; padding:4px; flex-shrink:0; transition:transform 0.2s; }
+        .btn-drawer:hover { transform:scale(1.1); }
+        .btn-drawer img { width:52px; height:auto; mix-blend-mode:multiply; }
+
+        .drawer-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.35); z-index:1000; }
+        .drawer-overlay.aberto { display:block; }
+        .drawer { position:fixed; top:0; left:-320px; width:300px; height:100vh; background:#faeeeb; border-right:1px solid var(--borda); z-index:1001; transition:left 0.35s cubic-bezier(0.4,0,0.2,1); display:flex; flex-direction:column; box-shadow:4px 0 20px rgba(99,53,53,0.12); }
+        .drawer.aberto { left:0; }
+        .drawer-header { padding:20px 22px 15px; border-bottom:1px solid rgba(184,151,148,0.4); display:flex; align-items:center; justify-content:space-between; }
+        .drawer-titulo { font-family:'Dancing Script',cursive; font-size:1.8rem; color:var(--marrom); }
+        .drawer-fechar { background:none; border:none; font-size:1.4rem; color:var(--marrom); cursor:pointer; padding:4px 8px; border-radius:50%; transition:background 0.2s; }
+        .drawer-fechar:hover { background:rgba(139,67,97,0.12); }
+        .drawer-nav { flex:1; padding:15px 0; overflow-y:auto; }
+        .drawer-nav ul { list-style:none; }
+        .drawer-nav li a { display:flex; justify-content:space-between; align-items:center; padding:13px 24px; text-decoration:none; color:var(--marrom); font-size:0.88rem; font-weight:600; border-left:3px solid transparent; transition:background 0.2s,border-color 0.2s; }
+        .drawer-nav li a:hover { background:#eededa; border-left-color:var(--vinho); }
+        .drawer-sep { height:1px; background:rgba(184,151,148,0.3); margin:8px 20px; }
+        .drawer-footer { padding:18px 22px; border-top:1px solid rgba(184,151,148,0.4); font-size:0.75rem; color:#999; text-align:center; }
+
+        .container {
+            background-color:rgba(250,238,235,0.78);
+            backdrop-filter:blur(2px);
+            width:92%; max-width:900px;
+            margin:4px auto 20px;
+            padding:32px 40px 36px;
+            border-radius:18px;
+            border:1px solid rgba(184,151,148,0.5);
+            flex:1;
+        }
+
+        /* Layout */
+        .contato-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        /* Info */
+        .info-secao { display:flex; flex-direction:column; gap:20px; }
+        .info-titulo { font-family:'Dancing Script',cursive; font-size:1.4rem; color:var(--marrom); margin-bottom:4px; }
+        .info-item { display:flex; flex-direction:column; gap:3px; }
+        .info-label { font-size:0.7rem; font-weight:700; color:var(--borda); text-transform:uppercase; letter-spacing:1px; }
+        .info-valor { font-size:0.84rem; color:var(--marrom); line-height:1.6; }
+        .info-valor a { color:var(--vinho); text-decoration:none; }
+        .info-valor a:hover { text-decoration:underline; }
+
+        .separador { height:1px; background:rgba(184,151,148,0.35); margin:4px 0; }
+
+        /* Formulário */
+        .form-titulo { font-family:'Dancing Script',cursive; font-size:1.4rem; color:var(--marrom); margin-bottom:18px; }
+        .form-grupo { display:flex; flex-direction:column; gap:5px; margin-bottom:14px; }
+        .form-label { font-size:0.76rem; font-weight:600; color:var(--marrom); }
+        .form-input, .form-textarea {
+            width:100%; padding:10px 16px;
+            border:1px solid var(--marrom); border-radius:25px;
+            background:rgba(255,255,255,0.2);
+            font-family:'Montserrat',sans-serif;
+            color:var(--marrom); font-size:0.82rem;
+            outline:none; transition:border-color 0.2s, background 0.2s;
+        }
+        .form-input:focus, .form-textarea:focus { border-color:var(--vinho); background:rgba(255,255,255,0.4); }
+        .form-input::placeholder, .form-textarea::placeholder { color:rgba(99,53,53,0.4); font-style:italic; }
+        .form-textarea { border-radius:12px; resize:none; }
+
+        .btn-enviar {
+            background:var(--marrom); color:white; border:none;
+            padding:12px 36px; border-radius:8px;
+            font-family:'Montserrat',sans-serif; font-size:0.85rem;
+            font-weight:700; letter-spacing:1px; cursor:pointer;
+            transition:background 0.2s, transform 0.15s;
+        }
+        .btn-enviar:hover { background:var(--vinho); transform:translateY(-1px); }
+
+        .msg-sucesso {
+            display:none; margin-top:12px;
+            font-family:'Dancing Script',cursive; font-size:1.05rem;
+            color:var(--vinho); text-align:center;
+        }
+
+        .citacao-rodape { text-align:right; font-family:'Courier Prime',monospace; font-size:0.8rem; color:var(--marrom); margin-top:28px; padding-top:14px; border-top:1px solid rgba(184,151,148,0.35); }
+        footer { text-align:center; padding:14px; font-size:0.75rem; color:#777; }
+        footer a { color:#777; text-decoration:none; }
+        footer a:hover { color:var(--marrom); }
+    </style>
+</head>
+<body>
+
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+    <aside class="drawer" id="drawer">
+        <div class="drawer-header"><span class="drawer-titulo">Menu</span><button class="drawer-fechar" id="drawerFechar">✕</button></div>
+                                <nav class="drawer-nav">
+            <ul>
+                <li><a href="Registro.html" style="display:flex;justify-content:space-between;align-items:center;padding:13px 24px;text-decoration:none;color:var(--marrom);font-size:0.88rem;font-weight:600;border-left:3px solid transparent;transition:background 0.2s,border-color 0.2s;"><span>Nova Resenha</span></a></li>
+                <li>
+                    <div onclick="dToggle('dl-leituras',this)" style="display:flex;justify-content:space-between;align-items:center;padding:13px 24px;cursor:pointer;color:var(--marrom);font-size:0.88rem;font-weight:600;border-left:3px solid transparent;transition:background 0.2s,border-color 0.2s;">
+                        <span>Leituras</span><span id="dl-leituras-seta" style="font-size:0.8rem;color:var(--borda);transition:transform 0.25s;">›</span>
+                    </div>
+                    <ul id="dl-leituras" style="display:none;list-style:none;background:rgba(184,151,148,0.07);">
+                        <li><a href="Biblioteca.html" style="display:flex;justify-content:space-between;padding:9px 24px 9px 34px;text-decoration:none;color:var(--marrom);font-size:0.8rem;"><span>Livros Lidos</span><span style="color:var(--borda);">›</span></a></li>
+                        <li><a href="Estante.html" style="display:flex;justify-content:space-between;padding:9px 24px 9px 34px;text-decoration:none;color:var(--marrom);font-size:0.8rem;"><span>Minha Estante</span><span style="color:var(--borda);">›</span></a></li>
+                        <li><a href="Leituras.html" style="display:flex;justify-content:space-between;padding:9px 24px 9px 34px;text-decoration:none;color:var(--marrom);font-size:0.8rem;"><span>Quero Ler</span><span style="color:var(--borda);">›</span></a></li>
+                        <li><a href="Classicos.html" style="display:flex;justify-content:space-between;padding:9px 24px 9px 34px;text-decoration:none;color:var(--marrom);font-size:0.8rem;"><span>30 Clássicos</span><span style="color:var(--borda);">›</span></a></li>
+                        <li><a href="Memorias.html" style="display:flex;justify-content:space-between;padding:9px 24px 9px 34px;text-decoration:none;color:var(--marrom);font-size:0.8rem;"><span>Memórias</span><span style="color:var(--borda);">›</span></a></li>
+                    </ul>
+                </li>
+                <li>
+                    <div onclick="dToggle('dl-desafios',this)" style="display:flex;justify-content:space-between;align-items:center;padding:13px 24px;cursor:pointer;color:var(--marrom);font-size:0.88rem;font-weight:600;border-left:3px solid transparent;transition:background 0.2s,border-color 0.2s;">
+                        <span>Desafios</span><span id="dl-desafios-seta" style="font-size:0.8rem;color:var(--borda);transition:transform 0.25s;">›</span>
+                    </div>
+                    <ul id="dl-desafios" style="display:none;list-style:none;background:rgba(184,151,148,0.07);">
+                        <li><a href="Bingo.html" style="display:flex;justify-content:space-between;padding:9px 24px 9px 34px;text-decoration:none;color:var(--marrom);font-size:0.8rem;"><span>Bingo Literário</span><span style="color:var(--borda);">›</span></a></li>
+                        <li><a href="Classicos.html" style="display:flex;justify-content:space-between;padding:9px 24px 9px 34px;text-decoration:none;color:var(--marrom);font-size:0.8rem;"><span>30 Clássicos</span><span style="color:var(--borda);">›</span></a></li>
+                        <li><a href="Cores.html" style="display:flex;justify-content:space-between;padding:9px 24px 9px 34px;text-decoration:none;color:var(--marrom);font-size:0.8rem;"><span>Cores</span><span style="color:var(--borda);">›</span></a></li>
+                        <li><a href="Estacoes.html" style="display:flex;justify-content:space-between;padding:9px 24px 9px 34px;text-decoration:none;color:var(--marrom);font-size:0.8rem;"><span>Estações</span><span style="color:var(--borda);">›</span></a></li>
+                        <li><a href="Calendario.html" style="display:flex;justify-content:space-between;padding:9px 24px 9px 34px;text-decoration:none;color:var(--marrom);font-size:0.8rem;"><span>Calendário</span><span style="color:var(--borda);">›</span></a></li>
+                    </ul>
+                </li>
+                <li>
+                    <div onclick="dToggle('dl-metas',this)" style="display:flex;justify-content:space-between;align-items:center;padding:13px 24px;cursor:pointer;color:var(--marrom);font-size:0.88rem;font-weight:600;border-left:3px solid transparent;transition:background 0.2s,border-color 0.2s;">
+                        <span>Metas</span><span id="dl-metas-seta" style="font-size:0.8rem;color:var(--borda);transition:transform 0.25s;">›</span>
+                    </div>
+                    <ul id="dl-metas" style="display:none;list-style:none;background:rgba(184,151,148,0.07);">
+                        <li><a href="Classicos.html" style="display:flex;justify-content:space-between;padding:9px 24px 9px 34px;text-decoration:none;color:var(--marrom);font-size:0.8rem;"><span>Meta de Clássicos</span><span style="color:var(--borda);">›</span></a></li>
+                        <li><a href="Leituras.html" style="display:flex;justify-content:space-between;padding:9px 24px 9px 34px;text-decoration:none;color:var(--marrom);font-size:0.8rem;"><span>Lista de Desejos</span><span style="color:var(--borda);">›</span></a></li>
+                        <li><a href="Estante.html" style="display:flex;justify-content:space-between;padding:9px 24px 9px 34px;text-decoration:none;color:var(--marrom);font-size:0.8rem;"><span>Livros Pausados</span><span style="color:var(--borda);">›</span></a></li>
+                    </ul>
+                </li>
+                <div class="drawer-sep"></div>
+                <li><a href="SobreNos.html" style="display:flex;justify-content:space-between;align-items:center;padding:13px 24px;text-decoration:none;color:var(--marrom);font-size:0.88rem;font-weight:600;border-left:3px solid transparent;transition:background 0.2s,border-color 0.2s;"><span>Sobre Nós</span><span style="color:var(--borda);">›</span></a></li>
+                <li><a href="index.html" style="display:flex;justify-content:space-between;align-items:center;padding:13px 24px;text-decoration:none;color:var(--marrom);font-size:0.88rem;font-weight:600;border-left:3px solid transparent;transition:background 0.2s,border-color 0.2s;"><span>Início</span><span style="color:var(--borda);">›</span></a></li>
+            </ul>
+        </nav>
+        <div class="drawer-footer">Capitulo 1 © 2026</div>
+    </aside>
+
+    <header class="page-header">
+        <a href="index.html" class="logo-link"><img src="imagens/logo01.png" alt="Capitulo 1"></a>
+        <div class="header-titulo">
+            <div class="titulo-linha">
+                <img src="imagens/arabesco1.PNG" alt="" class="arabesco">
+                <span class="titulo-pagina">Contato</span>
+                <img src="imagens/arabesco2.PNG" alt="" class="arabesco arabesco-dir">
+            </div>
+            <span class="subtitulo-header">Adoramos ouvir você</span>
+        </div>
+        <button class="btn-drawer" id="btnDrawer"><img src="imagens/icone.png" alt="Menu"></button>
+    </header>
+
+    <div class="container">
+        <div class="contato-grid">
+
+            <!-- Info -->
+            <div class="info-secao">
+                <div>
+                    <div class="info-titulo">Fale conosco</div>
+                    <p style="font-size:0.82rem; line-height:1.8; color:var(--marrom);">
+                        Tem uma sugestão, dúvida ou só quer trocar uma ideia sobre livros? Adoramos receber mensagens! Responderemos em até 3 dias úteis.
+                    </p>
+                </div>
+
+                <div class="separador"></div>
+
+                <div class="info-item">
+                    <span class="info-label">E-mail</span>
+                    <span class="info-valor"><a href="/cdn-cgi/l/email-protection#97f4f8f9e3f6e3f8d7f4f6e7fee3e2fbf8a6b9f4f8fab9f5e5"><span class="__cf_email__" data-cfemail="bcdfd3d2c8ddc8d3fcdfddccd5c8c9d0d38d92dfd3d192dece">[email&#160;protected]</span></a></span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Instagram</span>
+                    <span class="info-valor"><a href="#">@capitulo1.leituras</a></span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Horário de atendimento</span>
+                    <span class="info-valor">Segunda a sexta, das 9h às 18h</span>
+                </div>
+
+                <div class="separador"></div>
+
+                <div class="info-item">
+                    <span class="info-label">Sede</span>
+                    <span class="info-valor">Rua das Letras, 42 — Jardim Literário<br>São Paulo, SP — CEP 01310-000</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">CNPJ</span>
+                    <span class="info-valor">12.345.678/0001-90</span>
+                </div>
+            </div>
+
+            <!-- Formulário -->
+            <div>
+                <div class="form-titulo">Envie uma mensagem</div>
+                <form id="formContato">
+                    <div class="form-grupo">
+                        <label class="form-label">Seu nome</label>
+                        <input type="text" class="form-input" placeholder="Como devemos te chamar?" required>
+                    </div>
+                    <div class="form-grupo">
+                        <label class="form-label">E-mail</label>
+                        <input type="email" class="form-input" placeholder="seu@email.com" required>
+                    </div>
+                    <div class="form-grupo">
+                        <label class="form-label">Assunto</label>
+                        <input type="text" class="form-input" placeholder="Sobre o que é?">
+                    </div>
+                    <div class="form-grupo">
+                        <label class="form-label">Mensagem</label>
+                        <textarea class="form-textarea" rows="5" placeholder="Escreva sua mensagem aqui..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn-enviar">ENVIAR</button>
+                    <div class="msg-sucesso" id="msgSucesso">Mensagem enviada com sucesso! Obrigada pelo contato.</div>
+                </form>
+            </div>
+        </div>
+
+        <div class="citacao-rodape">
+            "Não existe um navio que possa nos fazer viajar como um livro."<br>— Emily Dickinson
+        </div>
+    </div>
+
+    <footer>
+        <p><a href="SobreNos.html">Sobre Nós</a> | <a href="Contato.html">Contato</a> | <a href="Privacidade.html">Privacidade</a> | <a href="Termos.html">Termos</a></p>
+    </footer>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+        const btnDrawer = document.getElementById('btnDrawer');
+        const drawer = document.getElementById('drawer');
+        const drawerOverlay = document.getElementById('drawerOverlay');
+        const drawerFechar = document.getElementById('drawerFechar');
+        btnDrawer.addEventListener('click', () => { drawer.classList.add('aberto'); drawerOverlay.classList.add('aberto'); document.body.style.overflow='hidden'; });
+        const fechar = () => { drawer.classList.remove('aberto'); drawerOverlay.classList.remove('aberto'); document.body.style.overflow=''; };
+        drawerFechar.addEventListener('click', fechar);
+        drawerOverlay.addEventListener('click', fechar);
+        document.addEventListener('keydown', e => { if(e.key==='Escape') fechar(); });
+
+        document.getElementById('formContato').addEventListener('submit', e => {
+            e.preventDefault(

@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sobre Nós - Capítulo 1</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Montserrat:wght@400;600;700&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --marrom: #633535;
+            --vinho: #8b4361;
+            --rosa: #faeeeb;
+            --borda: #b89794;
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            min-height: 100vh;
+            background-image: url('imagens/backgroud.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--marrom);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ══ HEADER ══ */
+        .page-header { display:flex; justify-content:space-between; align-items:center; padding:14px 28px 6px; }
+        .logo-link { display:flex; align-items:center; text-decoration:none; flex-shrink:0; transition:transform 0.3s; }
+        .logo-link:hover { transform:scale(1.05); }
+        .logo-link img { width:250px; height:auto; }
+        .header-titulo { flex:1; display:flex; flex-direction:column; align-items:center; }
+        .titulo-linha { display:flex; align-items:center; justify-content:center; gap:4px; width:100%; }
+        .arabesco { height:54px; width:auto; object-fit:contain; mix-blend-mode:multiply; opacity:0.9; flex-shrink:0; }
+        .arabesco-dir { transform:scaleX(-1); }
+        .titulo-pagina { font-family:'Dancing Script',cursive; font-size:3.5rem; font-weight:700; color:var(--marrom); line-height:1; white-space:nowrap; }
+        .subtitulo-header { font-family:'Dancing Script',cursive; font-size:1.2rem; font-weight:600; color:var(--vinho); }
+        .btn-drawer { background:none; border:none; cursor:pointer; padding:4px; flex-shrink:0; transition:transform 0.2s; }
+        .btn-drawer:hover { transform:scale(1.1); }
+        .btn-drawer img { width:52px; height:auto; mix-blend-mode:multiply; }
+
+        /* ══ DRAWER ══ */
+        .drawer-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.35); z-index:1000; }
+        .drawer-overlay.aberto { display:block; }
+        .drawer {
+            position:fixed; top:0; right:-340px; width:300px; height:100vh;
+            background:#faeeeb; border-left:1px solid var(--borda);
+            z-index:1001;
+            transition:right 0.35s cubic-bezier(0.4,0,0.2,1);
+            display:flex; flex-direction:column;
+            box-shadow:-4px 0 20px rgba(99,53,53,0.12);
+            overflow-y:auto;
+        }
+        .drawer.aberto { right:0; }
+        .drawer-header { padding:20px 22px 15px; border-bottom:1px solid rgba(184,151,148,0.4); display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
+        .drawer-titulo { font-family:'Dancing Script',cursive; font-size:1.8rem; color:var(--marrom); }
+        .drawer-fechar { background:none; border:none; font-size:1.4rem; color:var(--marrom); cursor:pointer; padding:4px 8px; border-radius:50%; transition:background 0.2s; }
+        .drawer-fechar:hover { background:rgba(139,67,97,0.12); }
+        .drawer-nav { flex:1; padding:8px 0; }
+        .drawer-nav ul { list-style:none; margin:0; padding:0; }
+        .drawer-nav li { border-bottom:1px solid rgba(184,151,148,0.12); }
+        .drawer-nav li a {
+            display:block; padding:13px 24px;
+            text-decoration:none; color:var(--marrom);
+            font-size:0.88rem; font-weight:600;
+            font-family:'Montserrat',sans-serif;
+            border-left:3px solid transparent;
+            transition:background 0.2s, border-color 0.2s;
+        }
+        .drawer-nav li a:hover { background:#eededa; border-left-color:var(--vinho); }
+        .sub-toggle {
+            display:flex; align-items:center; justify-content:space-between;
+            padding:13px 24px; cursor:pointer;
+            color:var(--marrom); font-size:0.88rem; font-weight:600;
+            font-family:'Montserrat',sans-serif;
+            border-left:3px solid transparent;
+            transition:background 0.2s, border-color 0.2s;
+        }
+        .sub-toggle:hover { background:#eededa; border-left-color:var(--vinho); }
+        .sub-arrow { font-size:0.8rem; color:var(--borda); transition:transform 0.25s; }
+        .sub-arrow.open { transform:rotate(90deg); }
+        .sub-menu { display:none; list-style:none; background:rgba(184,151,148,0.08); }
+        .sub-menu.open { display:block; }
+        .sub-menu li { border-bottom:1px solid rgba(184,151,148,0.08); }
+        .sub-menu li a {
+            display:block; padding:9px 24px 9px 36px;
+            text-decoration:none; color:var(--marrom);
+            font-size:0.8rem; font-weight:500;
+            font-family:'Montserrat',sans-serif;
+            border-left:3px solid transparent;
+            transition:background 0.2s;
+        }
+        .sub-menu li a:hover { background:rgba(139,67,97,0.07); border-left-color:var(--vinho); }
+        .drawer-sep { height:1px; background:rgba(184,151,148,0.3); margin:4px 18px; }
+        .drawer-sep-item { border:none !important; }
+        .drawer-footer { padding:16px 22px; border-top:1px solid rgba(184,151,148,0.4); font-size:0.72rem; color:#999; text-align:center; font-family:'Montserrat',sans-serif; flex-shrink:0; }
+
+        /* ══ CONTAINER ══ */
+        .container-sobre {
+            background-color: rgba(250,238,235,0.78);
+            backdrop-filter: blur(2px);
+            width: 92%; max-width: 1200px;
+            margin: 4px auto 20px;
+            padding: 28px 36px 28px;
+            border-radius: 18px;
+            border: 1px solid rgba(184,151,148,0.5);
+            flex: 1;
+        }
+
+        /* ══ LAYOUT: esquerda (foto+livros) + direita (texto) ══ */
+        .sobre-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 36px;
+            align-items: start;
+        }
+
+        /* ══ COLUNA ESQUERDA ══ */
+        .col-esquerda {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* Foto circular */
+        .foto-wrap {
+            position: relative;
+            width: 220px;
+            height: 220px;
+        }
+
+        .foto-circulo {
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            object-fit: cover;
+            object-position: top;
+            border: 4px solid rgba(184,151,148,0.5);
+            box-shadow: 0 8px 24px rgba(99,53,53,0.2);
+            display: block;
+        }
+
+        /* Placeholder circular quando não há foto */
+        .foto-placeholder {
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: rgba(184,151,148,0.15);
+            border: 3px dashed var(--borda);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .foto-placeholder:hover { background: rgba(184,151,148,0.25); }
+        .foto-placeholder input { display: none; }
+        .foto-placeholder span { font-size: 0.72rem; color: var(--borda); text-align: center; pointer-events: none; }
+        .foto-placeholder svg { pointer-events: none; }
+
+        /* Input oculto para trocar foto */
+        .btn-trocar-foto {
+            font-size: 0.72rem;
+            color: var(--borda);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            text-decoration: underline;
+            transition: color 0.2s;
+        }
+        .btn-trocar-foto:hover { color: var(--vinho); }
+        #inputFotoPerfil { display: none; }
+
+        /* Título "Meus Livros" */
+        .meus-livros-titulo {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.5rem;
+            color: var(--marrom);
+            text-align: center;
+        }
+
+        /* Mini carrossel de capas dos livros lidos */
+        .carrossel-livros {
+            width: 100%;
+            position: relative;
+        }
+
+        .carrossel-livros-track {
+            width: 160px;
+            height: 200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .capa-carrossel {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 4px;
+            box-shadow: 4px 6px 16px rgba(99,53,53,0.25);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        .capa-carrossel.ativa { opacity: 1; }
+
+        /* Placeholder quando não há livros */
+        .capa-placeholder {
+            width: 160px;
+            height: 200px;
+            margin: 0 auto;
+            background: rgba(184,151,148,0.12);
+            border: 1px dashed var(--borda);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: var(--borda);
+            text-align: center;
+            padding: 12px;
+        }
+
+        .carrossel-nav {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 10px;
+        }
+        .btn-capa-nav {
+            background: none; border: none;
+            color: var(--marrom); font-size: 1.1rem;
+            cursor: pointer; padding: 4px 8px;
+            border-radius: 6px;
+            transition: background 0.2s;
+            font-weight: 700;
+        }
+        .btn-capa-nav:hover { background: rgba(99,53,53,0.1); }
+
+        .carrossel-dots-livros {
+            display: flex;
+            gap: 5px;
+        }
+        .dot-livro {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: rgba(184,151,148,0.4);
+            transition: background 0.25s;
+        }
+        .dot-livro.ativo { background: var(--marrom); }
+
+        /* ══ COLUNA DIREITA — TEXTO ══ */
+        .col-direita {
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+        }
+
+        .texto-secao { }
+
+        .texto-titulo {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.35rem;
+            color: var(--marrom);
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .texto-corpo {
+            font-size: 0.83rem;
+            line-height: 1.9;
+            color: var(--marrom);
+            text-align: justify;
+        }
+
+        .texto-corpo p { margin-bottom: 8px; }
+        .texto-corpo ul { margin-left: 20px; margin-top: 4px; }
+        .texto-corpo li { margin-bottom: 4px; }
+
+        /* Campo editável do texto */
+        .texto-editavel {
+            font-size: 0.83rem;
+            line-height: 1.9;
+            color: var(--marrom);
+            text-align: justify;
+            outline: none;
+            background: transparent;
+            border: none;
+            width: 100%;
+            font-family: 'Montserrat', sans-serif;
+            resize: none;
+            cursor: text;
+            min-height: 80px;
+        }
+        .texto-editavel:focus {
+            background: rgba(255,255,255,0.25);
+            border-radius: 6px;
+            padding: 6px;
+        }
+
+        /* Dica de edição */
+        .dica-edicao {
+            font-size: 0.65rem;
+            color: var(--borda);
+            font-style: italic;
+            margin-top: 4px;
+        }
+
+        /* ══ RODAPÉ ══ */
+        .citacao-rodape {
+            text-align: right;
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.8rem;
+            color: var(--marrom);
+            margin-top: 24px;
+            padding-top: 14px;
+            border-top: 1px solid rgba(184,151,148,0.35);
+        }
+
+        footer { text-align:center; padding:14px; font-size:0.75rem; color:#777; }
+        footer a { color:#777; text-decoration:none; }
+        footer a:hover { color:var(--marrom); }
+    </style>
+</head>
+<body>
+
+        <!-- DRAWER -->
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+    <aside class="drawer" id="drawer">
+        <div class="drawer-header">
+            <span class="drawer-titulo">Menu</span>
+            <button class="drawer-fechar" id="drawerFechar">✕</button>
+        </div>
+        <nav class="drawer-nav">
+            <ul>
+                <li><a href="Registro.html">Nova Resenha</a></li>
+
+                <li class="has-sub">
+                    <div class="sub-toggle" onclick="dToggle('dn-leituras')">
+                        <span>Leituras</span><span class="sub-arrow" id="dn-leituras-a">›</span>
+                    </div>
+                    <ul class="sub-menu" id="dn-leituras">
+                        <li><a href="Biblioteca.html">Livros Lidos</a></li>
+                        <li><a href="Estante.html">Minha Estante</a></li>
+                        <li><a href="Leituras.html">Quero Ler</a></li>
+                        <li><a href="Classicos.html">30 Clássicos</a></li>
+                        <li><a href="Memorias.html">Memórias</a></li>
+                    </ul>
+                </li>
+
+                <li class="has-sub">
+                    <div class="sub-toggle" onclick="dToggle('dn-desafios')">
+                        <span>Desafios</span><span class="sub-arrow" id="dn-desafios-a">›</span>
+                    </div>
+                    <ul class="sub-menu" id="dn-desafios">
+                        <li><a href="Bingo.html">Bingo Literário</a></li>
+                        <li><a href="Classicos.html">30 Clássicos</a></li>
+                        <li><a href="Cores.html">Cores</a></li>
+                        <li><a href="Estacoes.html">Estações</a></li>
+                        <li><a href="Calendario.html">Calendário</a></li>
+                    </ul>
+                </li>
+
+                <li class="has-sub">
+                    <div class="sub-toggle" onclick="dToggle('dn-metas')">
+                        <span>Metas</span><span class="sub-arrow" id="dn-metas-a">›</span>
+                    </div>
+                    <ul class="sub-menu" id="dn-metas">
+                        <li><a href="Classicos.html">Meta de Clássicos</a></li>
+                        <li><a href="Leituras.html">Lista de Desejos</a></li>
+                        <li><a href="Estante.html">Livros Pausados</a></li>
+                    </ul>
+                </li>
+
+                <li class="drawer-sep-item"><div class="drawer-sep"></div></li>
+
+                <li><a href="SobreNos.html">Sobre Nós ›</a></li>
+                <li><a href="index.html">Início ›</a></li>
+            </ul>
+        </nav>
+        <div class="drawer-footer">Capítulo 1 © 2026</div>
+    </aside>
+
+    <!-- HEADER -->
+    <header class="page-header">
+        <a href="index.html" class="logo-link">
+            <img src="imagens/logo01.png" alt="Capitulo 1">
+        </a>
+        <div class="header-titulo">
+            <div class="titulo-linha">
+                <img src="imagens/arabesco1.PNG" alt="" class="arabesco">
+                <span class="titulo-pagina">Sobre Nós</span>
+                <img src="imagens/arabesco2.PNG" alt="" class="arabesco arabesco-dir">
+            </div>
+            <span class="subtitulo-header">Nosso projeto e sonho</span>
+        </div>
+        <button class="btn-drawer" id="btnDrawer">
+            <img src="imagens/icone.png" alt="Menu">
+        </button>
+    </header>
+
+    <!-- CONTEÚDO -->
+    <div class="container-sobre">
+        <div class="sobre-layout">
+
+            <!-- COL ESQUERDA -->
+            <div class="col-esquerda">
+
+                <!-- Foto circular -->
+                <div class="foto-wrap" id="fotoWrap">
+                    <!-- Preenchido pelo JS -->
+                </div>
+                <button class="btn-trocar-foto" id="btnTrocarFoto">Trocar foto</button>
+                <input type="file" id="inputFotoPerfil" accept="image/*">
+
+                <!-- Meus Livros -->
+                <div class="meus-livros-titulo">Meus Livros</div>
+
+                <div class="carrossel-livros" id="carrosselLivros">
+                    <!-- Preenchido pelo JS -->
+                </div>
+
+            </div>
+
+            <!-- COL DIREITA -->
+            <div class="col-direita">
+
+                <div class="texto-secao">
+                    <div class="texto-titulo" id="titulo1" contenteditable="true" spellcheck="false">O Refúgio entre Páginas e Pixels</div>
+                    <textarea class="texto-editavel" id="texto1" rows="6" spellcheck="false"></textarea>
+                    <div class="dica-edicao">Clique para editar</div>
+                </div>
+
+                <div class="texto-secao">
+                    <div class="texto-titulo" id="titulo2" contenteditable="true" spellcheck="false">A Jornada Literária</div>
+                    <textarea class="texto-editavel" id="texto2" rows="5" spellcheck="false"></textarea>
+                    <div class="dica-edicao">Clique para editar</div>
+                </div>
+
+                <div class="texto-secao">
+                    <div class="texto-titulo" id="titulo3" contenteditable="true" spellcheck="false">Por que este site?</div>
+                    <textarea class="texto-editavel" id="texto3" rows="7" spellcheck="false"></textarea>
+                    <div class="dica-edicao">Clique para editar</div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="citacao-rodape">
+            "O livro é um mudo que fala, um surdo que responde, um cego que guia, um morto que vive."<br>— Padre Antônio Vieira
+        </div>
+    </div>
+
+    <footer>
+        <p>
+            <a href="SobreNos.html">Sobre Nós</a> |
+            <a href="#">Contato</a> |
+            <a href="#">Privacidade</a> |
+            <a href="#">Termos</a>
+        </p>
+    </footer>
+
+    <script>
+        // DRAWER
+        const btnDrawer = document.getElementById('btnDrawer');
+        const drawer = document.getElementById('drawer');
+        const drawerOverlay = document.getElementById('drawerOverlay');
+        const drawerFechar = document.getElementById('drawerFechar');
+        const fecharDrawer = () => { drawer.classList.remove('aberto'); drawerOverlay.classList.remove('aberto'); document.body.style.overflow=''; };
+        btnDrawer.addEventListener('click', () => { drawer.classList.add('aberto'); drawerOverlay.classList.add('aberto'); document.body.style.overflow='hidden'; });
+        drawerFechar.addEventListener('click', fecharDrawer);
+        drawerOverlay.addEventListener('click', fecharDrawer);
+        document.addEventListener('keydown', e => { if(e.key==='Escape') fecharDrawer(); });
+
+        // ── FOTO DE PERFIL ──
+        const fotoWrap = document.getElementById('fotoWrap');
+        const inputFoto = document.getElementById('inputFotoPerfil');
+        const btnTrocar = document.getElementById('btnTrocarFoto');
+
+        function renderFoto() {
+            const saved = localStorage.getItem('sobre_foto');
+            fotoWrap.innerHTML = '';
+            if (saved) {
+                const img = document.createElement('img');
+                img.src = saved;
+                img.className = 'foto-circulo';
+                img.alt = 'Foto de perfil';
+                fotoWrap.appendChild(img);
+                btnTrocar.style.display = 'block';
+            } else {
+                fotoWrap.innerHTML = `
+                    <label class="foto-placeholder" for="inputFotoPerfil">
+                        <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                            <circle cx="20" cy="14" r="7" stroke="#b89794" stroke-width="1.5"/>
+                            <path d="M6 34 C6 26 34 26 34 34" stroke="#b89794" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                        </svg>
+                        <span>Clique para adicionar sua foto</span>
+                    </label>`;
+                btnTrocar.style.display = 'none';
+            }
+        }
+
+        inputFoto.addEventListener('change', e => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = ev => {
+                localStorage.setItem('sobre_foto', ev.target.result);
+                renderFoto();
+            };
+            reader.readAsDataURL(file);
+        });
+
+        btnTrocar.addEventListener('click', () => inputFoto.click());
+        // Permite clicar no placeholder também
+        fotoWrap.addEventListener('click', e => {
+            if (e.target.closest('.foto-placeholder')) inputFoto.click();
+        });
+
+        // ── TEXTOS EDITÁVEIS ──
+        const TEXTOS_PADRAO = {
+            titulo1: 'O Refúgio entre Páginas e Pixels',
+            texto1: 'Sempre acreditei que as histórias não pertencem apenas ao papel; elas vivem no espaço entre quem escreve e quem lê.\n\nMinha jornada com as palavras começou muito antes do meu primeiro contrato editorial. Lembro-me vividamente de uma tarde de chuva na casa da minha avó, quando eu tinha apenas sete anos. Encontrei uma máquina de escrever antiga e, em vez de brincar lá fora, passei horas tentando entender como aqueles tipos de metal transformavam meus pensamentos em algo físico. Naquele dia, escrevi meu primeiro "conto": a história de uma montanha que queria viajar pelo mundo.\n\nDesde então, nunca mais parei.',
+            titulo2: 'A Jornada Literária',
+            texto2: 'Hoje, após o lançamento de obras que tocaram tantos corações, senti que precisava de um novo lar. Um lugar onde eu pudesse olhar nos olhos dos meus leitores sem as limitações das redes sociais.',
+            titulo3: 'Por que este site?',
+            texto3: 'Para tirar esse sonho do papel, não trabalhei sozinha. Eu queria que este site fosse mais do que um portfólio; queria que fosse uma comunidade.\n\nAqui, você encontrará seções pensadas para quem ama o universo literário tanto quanto eu:\n  • Resenhas Sinceras: Onde compartilho minhas leituras atuais, sem filtros.\n  • Desafios Literários: Projetos para nos tirar da zona de conforto e explorar novos gêneros juntos.\n  • Listas Curadas: Desde "livros para ler num dia de sol" até "clássicos que mudaram minha vida".\n\nEste site é o meu escritório aberto, minha biblioteca particular e o ponto de encontro para todos vocês. Fiquem à vontade, a casa é nossa.\n\nCom carinho,',
+        };
+
+        function carregarTextos() {
+            ['titulo1','texto1','titulo2','texto2','titulo3','texto3'].forEach(id => {
+                const el = document.getElementById(id);
+                const saved = localStorage.getItem('sobre_' + id);
+                if (el.tagName === 'TEXTAREA') {
+                    el.value = saved !== null ? saved : TEXTOS_PADRAO[id] || '';
+                } else {
+                    el.textContent = saved !== null ? saved : TEXTOS_PADRAO[id] || '';
+                }
+            });
+        }
+
+        function salvarTextos() {
+            ['titulo1','texto1','titulo2','texto2','titulo3','texto3'].forEach(id => {
+                const el = document.getElementById(id);
+                const val = el.tagName === 'TEXTAREA' ? el.value : el.textContent;
+                localStorage.setItem('sobre_' + id, val);
+            });
+        }
+
+        // Auto-save ao sair do campo
+        ['titulo1','titulo2','titulo3'].forEach(id => {
+            document.getElementById(id).addEventListener('blur', salvarTextos);
+        });
+        ['texto1','texto2','texto3'].forEach(id => {
+            document.getElementById(id).addEventListener('input', salvarTextos);
+        });
+
+        // ── CARROSSEL DE LIVROS ──
+        let capaAtual = 0;
+        let capaTimer = null;
+
+        function renderCarrosselLivros() {
+            const livros = JSON.parse(localStorage.getItem('livros_lidos') || '[]')
+                .filter(l => l.imagem_url && l.imagem_url.trim());
+
+            const wrap = document.getElementById('carrosselLivros');
+
+            if (livros.length === 0) {
+                wrap.innerHTML = `
+                    <div class="capa-placeholder">Seus livros lidos aparecerão aqui</div>`;
+                return;
+            }
+
+            const track = document.createElement('div');
+            track.className = 'carrossel-livros-track';
+
+            livros.forEach((livro, i) => {
+                const img = document.createElement('img');
+                img.className = 'capa-carrossel' + (i === 0 ? ' ativa' : '');
+                img.src = livro.imagem_url.trim();
+                img.alt = livro.titulo;
+                img.onerror = () => img.style.display = 'none';
+                track.appendChild(img);
+            });
+
+            // Dots
+            const dotsWrap = document.createElement('div');
+            dotsWrap.className = 'carrossel-dots-livros';
+            livros.forEach((_, i) => {
+                const d = document.createElement('div');
+                d.className = 'dot-livro' + (i === 0 ? ' ativo' : '');
+                d.addEventListener('click', () => irParaCapa(i));
+                dotsWrap.appendChild(d);
+            });
+
+            const nav = document.createElement('div');
+            nav.className = 'carrossel-nav';
+
+            if (livros.length > 1) {
+                const btnPrev = document.createElement('button');
+                btnPrev.className = 'btn-capa-nav';
+                btnPrev.textContent = '‹';
+                btnPrev.addEventListener('click', () => moverCapa(-1, livros.length));
+
+                const btnNext = document.createElement('button');
+                btnNext.className = 'btn-capa-nav';
+                btnNext.textContent = '›';
+                btnNext.addEventListener('click', () => moverCapa(1, livros.length));
+
+                nav.appendChild(btnPrev);
+                nav.appendChild(dotsWrap);
+                nav.appendChild(btnNext);
+            }
+
+            wrap.innerHTML = '';
+            wrap.appendChild(track);
+            if (livros.length > 1) wrap.appendChild(nav);
+
+            iniciarAutoplay(livros.length);
+        }
+
+        function irParaCapa(idx) {
+            const capas = document.querySelectorAll('.capa-carrossel');
+            const dots = document.querySelectorAll('.dot-livro');
+            capas.forEach((c, i) => c.classList.toggle('ativa', i === idx));
+            dots.forEach((d, i) => d.classList.toggle('ativo', i === idx));
+            capaAtual = idx;
+        }
+
+        function moverCapa(dir, total) {
+            capaAtual = (capaAtual + dir + total) % total;
+            irParaCapa(capaAtual);
+            reiniciarAutoplay(total);
+        }
+
+        function iniciarAutoplay(total) {
+            if (total <= 1) return;
+            clearInterval(capaTimer);
+            capaTimer = setInterval(() => moverCapa(1, total), 3500);
+        }
+
+        function reiniciarAutoplay(total) {
+            clearInterval(capaTimer);
+            iniciarAutoplay(total);
+        }
+
+        // ── INIT ──
+        renderFoto();
+        carregarTextos();
+        renderCarrosselLivros();
+    </script>
+
+
+    <script>
+    (function() {
+        var btnDrawer = document.getElementById('btnDrawer');
+        var drawer = document.getElementById('drawer');
+        var overlay = document.getElementById('drawerOverlay');
+        var fechar = document.getElementById('drawerFechar');
+        function open() { drawer.classList.add('aberto'); overlay.classList.add('aberto'); document.body.style.overflow='hidden'; }
+        function close() { drawer.classList.remove('aberto'); overlay.classList.remove('aberto'); document.body.style.overflow=''; }
+        if (btnDrawer) btnDrawer.addEventListener('click', open);
+        if (fechar) fechar.addEventListener('click', close);
+        if (overlay) overlay.addEventListener('click', close);
+        document.addEventListener('keydown', function(e){ if(e.key==='Escape') close(); });
+    })();
+    function dToggle(id) {
+        var sub = document.getElementById(id);
+        var arrow = document.getElementById(id+'-a');
+        var isOpen = sub.classList.contains('open');
+        document.querySelectorAll('.sub-menu').forEach(function(s){ s.classList.remove('open'); });
+        document.querySelectorAll('.sub-arrow').forEach(function(a){ a.classList.remove('open'); });
+        if (!isOpen) { sub.classList.add('open'); if(arrow) arrow.classList.add('open'); }
+    }
+    </script>
+</body>
+</html>

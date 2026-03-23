@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desafio das Estações - Capítulo 1</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Montserrat:wght@400;600;700&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --marrom: #633535;
+            --vinho: #8b4361;
+            --rosa: #faeeeb;
+            --borda: #b89794;
+
+            /* Cores das estações — delicadas */
+            --verao-cor:     #e8c4a0;
+            --outono-cor:    #c9906a;
+            --inverno-cor:   #a8bfd4;
+            --primavera-cor: #b8d4a8;
+
+            --verao-bg:     rgba(232,196,160,0.10);
+            --outono-bg:    rgba(201,144,106,0.09);
+            --inverno-bg:   rgba(168,191,212,0.10);
+            --primavera-bg: rgba(184,212,168,0.10);
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            min-height: 100vh;
+            background-image: url('imagens/backgroud.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--marrom);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ══ HEADER ══ */
+        .page-header { display:flex; justify-content:space-between; align-items:center; padding:14px 28px 6px; }
+        .logo-link { display:flex; align-items:center; text-decoration:none; flex-shrink:0; transition:transform 0.3s; }
+        .logo-link:hover { transform:scale(1.05); }
+        .logo-link img { width:250px; height:auto; }
+        .header-titulo { flex:1; display:flex; flex-direction:column; align-items:center; }
+        .titulo-linha { display:flex; align-items:center; justify-content:center; gap:4px; width:100%; }
+        .arabesco { height:54px; width:auto; object-fit:contain; mix-blend-mode:multiply; opacity:0.9; flex-shrink:0; }
+        .arabesco-dir { transform:scaleX(-1); }
+        .titulo-pagina { font-family:'Dancing Script',cursive; font-size:3.5rem; font-weight:700; color:var(--marrom); line-height:1; white-space:nowrap; }
+        .subtitulo-header { font-family:'Dancing Script',cursive; font-size:1.2rem; font-weight:600; color:var(--vinho); }
+        .btn-drawer { background:none; border:none; cursor:pointer; padding:4px; flex-shrink:0; transition:transform 0.2s; }
+        .btn-drawer:hover { transform:scale(1.1); }
+        .btn-drawer img { width:52px; height:auto; mix-blend-mode:multiply; }
+
+        /* ══ DRAWER ══ */
+        .drawer-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.35); z-index:1000; }
+        .drawer-overlay.aberto { display:block; }
+        .drawer {
+            position:fixed; top:0; right:-340px; width:300px; height:100vh;
+            background:#faeeeb; border-left:1px solid var(--borda);
+            z-index:1001;
+            transition:right 0.35s cubic-bezier(0.4,0,0.2,1);
+            display:flex; flex-direction:column;
+            box-shadow:-4px 0 20px rgba(99,53,53,0.12);
+            overflow-y:auto;
+        }
+        .drawer.aberto { right:0; }
+        .drawer-header { padding:20px 22px 15px; border-bottom:1px solid rgba(184,151,148,0.4); display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
+        .drawer-titulo { font-family:'Dancing Script',cursive; font-size:1.8rem; color:var(--marrom); }
+        .drawer-fechar { background:none; border:none; font-size:1.4rem; color:var(--marrom); cursor:pointer; padding:4px 8px; border-radius:50%; transition:background 0.2s; }
+        .drawer-fechar:hover { background:rgba(139,67,97,0.12); }
+        .drawer-nav { flex:1; padding:8px 0; }
+        .drawer-nav ul { list-style:none; margin:0; padding:0; }
+        .drawer-nav li { border-bottom:1px solid rgba(184,151,148,0.12); }
+        .drawer-nav li a {
+            display:block; padding:13px 24px;
+            text-decoration:none; color:var(--marrom);
+            font-size:0.88rem; font-weight:600;
+            font-family:'Montserrat',sans-serif;
+            border-left:3px solid transparent;
+            transition:background 0.2s, border-color 0.2s;
+        }
+        .drawer-nav li a:hover { background:#eededa; border-left-color:var(--vinho); }
+        .sub-toggle {
+            display:flex; align-items:center; justify-content:space-between;
+            padding:13px 24px; cursor:pointer;
+            color:var(--marrom); font-size:0.88rem; font-weight:600;
+            font-family:'Montserrat',sans-serif;
+            border-left:3px solid transparent;
+            transition:background 0.2s, border-color 0.2s;
+        }
+        .sub-toggle:hover { background:#eededa; border-left-color:var(--vinho); }
+        .sub-arrow { font-size:0.8rem; color:var(--borda); transition:transform 0.25s; }
+        .sub-arrow.open { transform:rotate(90deg); }
+        .sub-menu { display:none; list-style:none; background:rgba(184,151,148,0.08); }
+        .sub-menu.open { display:block; }
+        .sub-menu li { border-bottom:1px solid rgba(184,151,148,0.08); }
+        .sub-menu li a {
+            display:block; padding:9px 24px 9px 36px;
+            text-decoration:none; color:var(--marrom);
+            font-size:0.8rem; font-weight:500;
+            font-family:'Montserrat',sans-serif;
+            border-left:3px solid transparent;
+            transition:background 0.2s;
+        }
+        .sub-menu li a:hover { background:rgba(139,67,97,0.07); border-left-color:var(--vinho); }
+        .drawer-sep { height:1px; background:rgba(184,151,148,0.3); margin:4px 18px; }
+        .drawer-sep-item { border:none !important; }
+        .drawer-footer { padding:16px 22px; border-top:1px solid rgba(184,151,148,0.4); font-size:0.72rem; color:#999; text-align:center; font-family:'Montserrat',sans-serif; flex-shrink:0; }
+
+        /* ══ CONTAINER ══ */
+        .container-estacoes {
+            background-color: rgba(250,238,235,0.78);
+            backdrop-filter: blur(2px);
+            width: 92%; max-width: 1200px;
+            margin: 4px auto 20px;
+            padding: 24px 32px 28px;
+            border-radius: 18px;
+            border: 1px solid rgba(184,151,148,0.5);
+            flex: 1;
+        }
+
+        /* ══ GRADE DAS 4 ESTAÇÕES ══ */
+        .estacoes-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        /* ══ CARD DE ESTAÇÃO ══ */
+        .estacao-card {
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(184,151,148,0.35);
+        }
+
+        /* Header da estação com gradiente e ícone decorativo */
+        .estacao-header {
+            padding: 20px 24px 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .estacao-header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            opacity: 0.15;
+        }
+
+        /* Decoração de cada estação */
+        .estacao-deco {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 3.5rem;
+            opacity: 0.18;
+            pointer-events: none;
+            line-height: 1;
+        }
+
+        .estacao-titulo {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.8rem;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+        }
+
+        .estacao-subtitulo {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            position: relative;
+            z-index: 1;
+            margin-top: 2px;
+            opacity: 0.7;
+        }
+
+        .estacao-progresso-wrap {
+            position: relative;
+            z-index: 1;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .estacao-barra {
+            flex: 1;
+            height: 5px;
+            background: rgba(99,53,53,0.15);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .estacao-barra-fill {
+            height: 100%;
+            border-radius: 3px;
+            background: rgba(99,53,53,0.35);
+            transition: width 0.5s ease;
+        }
+        .estacao-num {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--marrom);
+            opacity: 0.7;
+            white-space: nowrap;
+        }
+
+        /* Cores por estação */
+        .card-verao    .estacao-header { background: linear-gradient(135deg, #e8c4a0, #d9ad86); color: var(--marrom); }
+        .card-outono   .estacao-header { background: linear-gradient(135deg, #d4a080, #c08060); color: var(--marrom); }
+        .card-inverno  .estacao-header { background: linear-gradient(135deg, #b8cede, #9ab4cc); color: var(--marrom); }
+        .card-primavera .estacao-header { background: linear-gradient(135deg, #c4dab8, #a8c898); color: var(--marrom); }
+
+
+
+        /* Corpo do card */
+        .estacao-body {
+            padding: 18px 20px;
+        }
+
+        .card-verao    .estacao-body { background: var(--verao-bg); }
+        .card-outono   .estacao-body { background: var(--outono-bg); }
+        .card-inverno  .estacao-body { background: var(--inverno-bg); }
+        .card-primavera .estacao-body { background: var(--primavera-bg); }
+
+        /* Grade dos 4 livros */
+        .livros-estacao {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            align-items: start;
+        }
+
+        /* Slot de livro */
+        .livro-slot {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .livro-slot:hover { transform: translateY(-3px); }
+        .livro-slot:hover .btn-lixeira-hover { opacity: 1; }
+        .livro-slot.vazio { cursor: default; }
+        .livro-slot.vazio:hover { transform: none; }
+
+        .livro-capa-wrap {
+            width: 100%;
+            aspect-ratio: 2/3;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 3px 4px 12px rgba(99,53,53,0.2);
+            position: relative;
+        }
+
+        .livro-capa-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Placeholder vazio */
+        .livro-capa-vazio {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(184,151,148,0.15);
+            border: 1px dashed var(--borda);
+            border-radius: 6px;
+        }
+
+        .card-verao    .livro-capa-vazio { background: rgba(232,168,124,0.1); border-color: var(--verao-cor); }
+        .card-outono   .livro-capa-vazio { background: rgba(192,96,42,0.08); border-color: var(--outono-cor); }
+        .card-inverno  .livro-capa-vazio { background: rgba(123,158,200,0.1); border-color: var(--inverno-cor); }
+        .card-primavera .livro-capa-vazio { background: rgba(126,170,109,0.08); border-color: var(--primavera-cor); }
+
+        .livro-num-vazio {
+            font-size: 1.4rem;
+            font-family: 'Dancing Script', cursive;
+            color: var(--borda);
+            opacity: 0.5;
+        }
+
+        .livro-titulo-mini {
+            font-size: 0.62rem;
+            text-align: center;
+            color: var(--marrom);
+            line-height: 1.3;
+            max-width: 100%;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        /* Lightbox */
+        .lightbox-overlay { display:none; position:fixed; inset:0; background:rgba(30,10,10,0.85); z-index:2000; align-items:center; justify-content:center; padding:20px; }
+        .lightbox-overlay.aberto { display:flex; }
+        .lightbox-content { background:rgba(250,238,235,0.97); border-radius:16px; max-width:500px; width:100%; position:relative; box-shadow:0 20px 60px rgba(0,0,0,0.5); overflow:hidden; }
+        .lb-fechar { position:absolute; top:12px; right:16px; background:none; border:none; font-size:1.5rem; cursor:pointer; color:var(--marrom); z-index:1; }
+        .lb-corpo { padding:24px; display:flex; gap:20px; align-items:flex-start; }
+        .lb-capa { width:110px; flex-shrink:0; border-radius:6px; box-shadow:4px 6px 16px rgba(99,53,53,0.25); }
+        .lb-info { flex:1; }
+        .lb-titulo { font-family:'Dancing Script',cursive; font-size:1.4rem; color:var(--marrom); margin-bottom:8px; }
+        .lb-detalhe { font-size:0.78rem; color:var(--marrom); line-height:1.85; }
+        .lb-detalhe strong { font-weight:700; }
+        .lb-estrelas { font-size:1.1rem; color:var(--marrom); letter-spacing:2px; }
+
+        /* ══ RODAPÉ ══ */
+        .citacao-rodape { text-align:right; font-family:'Courier Prime',monospace; font-size:0.8rem; color:var(--marrom); margin-top:22px; padding-top:14px; border-top:1px solid rgba(184,151,148,0.35); }
+        footer { text-align:center; padding:14px; font-size:0.75rem; color:#777; }
+        footer a { color:#777; text-decoration:none; }
+        footer a:hover { color:var(--marrom); }
+
+        /* ── Lixeira hover ── */
+        .btn-lixeira-hover {
+            position: absolute;
+            top: 7px; right: 7px;
+            width: 28px; height: 28px;
+            background: rgba(99,53,53,0.82);
+            border: none; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.2s, background 0.2s, transform 0.15s;
+            z-index: 20;
+        }
+        .btn-lixeira-hover:hover { background: #8b4361; transform: scale(1.12); }
+        .btn-lixeira-hover svg { pointer-events: none; }
+    </style>
+</head>
+<body>
+
+        <!-- DRAWER -->
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+    <aside class="drawer" id="drawer">
+        <div class="drawer-header">
+            <span class="drawer-titulo">Menu</span>
+            <button class="drawer-fechar" id="drawerFechar">✕</button>
+        </div>
+        <nav class="drawer-nav">
+            <ul>
+                <li><a href="Registro.html">Nova Resenha</a></li>
+
+                <li class="has-sub">
+                    <div class="sub-toggle" onclick="dToggle('dn-leituras')">
+                        <span>Leituras</span><span class="sub-arrow" id="dn-leituras-a">›</span>
+                    </div>
+                    <ul class="sub-menu" id="dn-leituras">
+                        <li><a href="Biblioteca.html">Livros Lidos</a></li>
+                        <li><a href="Estante.html">Minha Estante</a></li>
+                        <li><a href="Leituras.html">Quero Ler</a></li>
+                        <li><a href="Classicos.html">30 Clássicos</a></li>
+                        <li><a href="Memorias.html">Memórias</a></li>
+                    </ul>
+                </li>
+
+                <li class="has-sub">
+                    <div class="sub-toggle" onclick="dToggle('dn-desafios')">
+                        <span>Desafios</span><span class="sub-arrow" id="dn-desafios-a">›</span>
+                    </div>
+                    <ul class="sub-menu" id="dn-desafios">
+                        <li><a href="Bingo.html">Bingo Literário</a></li>
+                        <li><a href="Classicos.html">30 Clássicos</a></li>
+                        <li><a href="Cores.html">Cores</a></li>
+                        <li><a href="Estacoes.html">Estações</a></li>
+                        <li><a href="Calendario.html">Calendário</a></li>
+                    </ul>
+                </li>
+
+                <li class="has-sub">
+                    <div class="sub-toggle" onclick="dToggle('dn-metas')">
+                        <span>Metas</span><span class="sub-arrow" id="dn-metas-a">›</span>
+                    </div>
+                    <ul class="sub-menu" id="dn-metas">
+                        <li><a href="Classicos.html">Meta de Clássicos</a></li>
+                        <li><a href="Leituras.html">Lista de Desejos</a></li>
+                        <li><a href="Estante.html">Livros Pausados</a></li>
+                    </ul>
+                </li>
+
+                <li class="drawer-sep-item"><div class="drawer-sep"></div></li>
+
+                <li><a href="SobreNos.html">Sobre Nós ›</a></li>
+                <li><a href="index.html">Início ›</a></li>
+            </ul>
+        </nav>
+        <div class="drawer-footer">Capítulo 1 © 2026</div>
+    </aside>
+
+    <!-- LIGHTBOX -->
+    <div class="lightbox-overlay" id="lightboxOverlay">
+        <div class="lightbox-content">
+            <button class="lb-fechar" id="lbFechar">✕</button>
+            <div class="lb-corpo">
+                <img class="lb-capa" id="lbCapa" src="" alt="">
+                <div class="lb-info">
+                    <div class="lb-titulo" id="lbTitulo"></div>
+                    <div class="lb-detalhe" id="lbDetalhe"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HEADER -->
+    <header class="page-header">
+        <a href="index.html" class="logo-link">
+            <img src="imagens/logo01.png" alt="Capitulo 1">
+        </a>
+        <div class="header-titulo">
+            <div class="titulo-linha">
+                <img src="imagens/arabesco1.PNG" alt="" class="arabesco">
+                <span class="titulo-pagina">Desafio das Estações</span>
+                <img src="imagens/arabesco2.PNG" alt="" class="arabesco arabesco-dir">
+            </div>
+            <span class="subtitulo-header">Uma leitura para cada tempo</span>
+        </div>
+        <button class="btn-drawer" id="btnDrawer">
+            <img src="imagens/icone.png" alt="Menu">
+        </button>
+    </header>
+
+    <!-- CONTEÚDO -->
+    <div class="container-estacoes">
+        <div class="estacoes-grid" id="estacoesGrid"></div>
+
+        <div class="citacao-rodape">
+            "Há um tempo para cada coisa, e uma estação para cada propósito debaixo do céu."<br>— Eclesiastes 3:1
+        </div>
+    </div>
+
+    <footer>
+        <p>
+            <a href="SobreNos.html">Sobre Nós</a> |
+            <a href="Contato.html">Contato</a> |
+            <a href="Privacidade.html">Privacidade</a> |
+            <a href="Termos.html">Termos</a>
+        </p>
+    </footer>
+
+    <script>
+        // DRAWER
+        const btnDrawer = document.getElementById('btnDrawer');
+        const drawer = document.getElementById('drawer');
+        const drawerOverlay = document.getElementById('drawerOverlay');
+        const drawerFechar = document.getElementById('drawerFechar');
+        const fecharDrawer = () => { drawer.classList.remove('aberto'); drawerOverlay.classList.remove('aberto'); document.body.style.overflow=''; };
+        btnDrawer.addEventListener('click', () => { drawer.classList.add('aberto'); drawerOverlay.classList.add('aberto'); document.body.style.overflow='hidden'; });
+        drawerFechar.addEventListener('click', fecharDrawer);
+        drawerOverlay.addEventListener('click', fecharDrawer);
+        document.addEventListener('keydown', e => { if(e.key==='Escape') { fecharDrawer(); fecharLightbox(); } });
+
+        // LIGHTBOX
+        function abrirLightbox(livro) {
+            const fmt = { fisico:'Físico', ebook:'E-book', audio:'Áudio' };
+            const nota = parseInt(livro.nota || 0);
+            document.getElementById('lbCapa').src = livro.imagem_url || '';
+            document.getElementById('lbCapa').style.display = livro.imagem_url ? 'block' : 'none';
+            document.getElementById('lbTitulo').textContent = livro.titulo;
+            document.getElementById('lbDetalhe').innerHTML = `
+                ${livro.autor   ? `<div><strong>Autor:</strong> ${livro.autor}</div>` : ''}
+                ${livro.genero  ? `<div><strong>Gênero:</strong> ${livro.genero}</div>` : ''}
+                ${livro.editora ? `<div><strong>Editora:</strong> ${livro.editora}</div>` : ''}
+                ${nota          ? `<div class="lb-estrelas">${'★'.repeat(nota)}${'☆'.repeat(5-nota)}</div>` : ''}
+                ${livro.data_fim ? `<div><strong>Concluído:</strong> ${formatarData(livro.data_fim)}</div>` : ''}
+                ${livro.desafio ? `<div><strong>Estação:</strong> ${livro.desafio.split('||').map(d=>d.trim().replace('Desafio das Estações - ','')).join(', ')}</div>` : ''}
+                ${livro.resenha ? `<div style="margin-top:8px; font-style:italic; font-size:0.75rem; border-top:1px solid rgba(184,151,148,0.3); padding-top:8px;">${livro.resenha.substring(0,180)}${livro.resenha.length>180?'…':''}</div>` : ''}
+            `;
+            document.getElementById('lightboxOverlay').classList.add('aberto');
+            document.body.style.overflow = 'hidden';
+        }
+        function fecharLightbox() {
+            document.getElementById('lightboxOverlay').classList.remove('aberto');
+            document.body.style.overflow = '';
+        }
+        document.getElementById('lbFechar').addEventListener('click', fecharLightbox);
+        document.getElementById('lightboxOverlay').addEventListener('click', e => {
+            if (e.target === document.getElementById('lightboxOverlay')) fecharLightbox();
+        });
+
+        function formatarData(str) {
+            if (!str) return '';
+            const [y,m,d] = str.split('-');
+            return `${d}/${m}/${y}`;
+        }
+
+        // CONFIGURAÇÃO DAS ESTAÇÕES
+        const ESTACOES = [
+            {
+                id:       'verao',
+                nome:     'Verão',
+                classe:   'card-verao',
+                deco:     '☀️',
+                meses:    'Dezembro · Janeiro · Fevereiro',
+                chave:    'Desafio das Estações - Verão',
+            },
+            {
+                id:       'outono',
+                nome:     'Outono',
+                classe:   'card-outono',
+                deco:     '🍂',
+                meses:    'Março · Abril · Maio',
+                chave:    'Desafio das Estações - Outono',
+            },
+            {
+                id:       'inverno',
+                nome:     'Inverno',
+                classe:   'card-inverno',
+                deco:     '❄️',
+                meses:    'Junho · Julho · Agosto',
+                chave:    'Desafio das Estações - Inverno',
+            },
+            {
+                id:       'primavera',
+                nome:     'Primavera',
+                classe:   'card-primavera',
+                deco:     '🌸',
+                meses:    'Setembro · Outubro · Novembro',
+                chave:    'Desafio das Estações - Primavera',
+            },
+        ];
+
+        // RENDERIZA
+        function render() {
+            const livros = JSON.parse(localStorage.getItem('livros_lidos') || '[]');
+            const grid = document.getElementById('estacoesGrid');
+            grid.innerHTML = '';
+
+            ESTACOES.forEach(estacao => {
+                // Filtra livros desta estação (aceita variações como "Estações - Inverno")
+                const livrosDaEstacao = livros.filter(l =>
+                    l.desafio && l.desafio.split('||').some(d => d.trim().toLowerCase().includes(estacao.nome.toLowerCase()))
+                ).slice(0, 3); // máximo 3 livros
+
+                const concluidos = livrosDaEstacao.length;
+
+                const card = document.createElement('div');
+                card.className = `estacao-card ${estacao.classe}`;
+
+                // Header
+                const barraWidth = Math.round((concluidos / 3) * 100);
+                card.innerHTML = `
+                    <div class="estacao-header">
+                        <div class="estacao-deco">${estacao.deco}</div>
+                        <div class="estacao-titulo">${estacao.nome}</div>
+                        <div class="estacao-subtitulo">${estacao.meses}</div>
+                        <div class="estacao-progresso-wrap">
+                            <div class="estacao-barra">
+                                <div class="estacao-barra-fill" style="width:${barraWidth}%"></div>
+                            </div>
+                            <div class="estacao-num">${concluidos}/3</div>
+                        </div>
+                    </div>`;
+
+                // Body com 4 slots
+                const body = document.createElement('div');
+                body.className = 'estacao-body';
+
+                const grade = document.createElement('div');
+                grade.className = 'livros-estacao';
+
+                for (let i = 0; i < 3; i++) {
+                    const slot = document.createElement('div');
+                    const livro = livrosDaEstacao[i];
+
+                    if (livro) {
+                        // Slot preenchido
+                        slot.className = 'livro-slot';
+                        slot.title = livro.titulo;
+
+                        const capaWrap = document.createElement('div');
+                        capaWrap.className = 'livro-capa-wrap';
+
+                        if (livro.imagem_url && livro.imagem_url.trim()) {
+                            const img = document.createElement('img');
+                            img.className = 'livro-capa-img';
+                            img.src = livro.imagem_url.trim();
+                            img.alt = livro.titulo;
+                            img.onerror = () => {
+                                img.style.display = 'none';
+                                const ph = document.createElement('div');
+                                ph.className = 'livro-capa-vazio';
+                                ph.innerHTML = `<span class="livro-num-vazio">${i+1}</span>`;
+                                capaWrap.appendChild(ph);
+                            };
+                            capaWrap.appendChild(img);
+                        } else {
+                            capaWrap.innerHTML = `<div class="livro-capa-vazio"><span class="livro-num-vazio">${i+1}</span></div>`;
+                        }
+
+                        slot.appendChild(capaWrap);
+                        slot.innerHTML += `<div class="livro-titulo-mini">${livro.titulo}</div>`;
+                        slot.addEventListener('click', () => abrirLightbox(livro));
+
+                    } else {
+                        // Slot vazio
+                        slot.className = 'livro-slot vazio';
+                        slot.innerHTML = `
+                            <div class="livro-capa-wrap">
+                                <div class="livro-capa-vazio">
+                                    <span class="livro-num-vazio">${i+1}</span>
+                                </div>
+                            </div>
+                            <div class="livro-titulo-mini" style="opacity:0.35;">Livro ${i+1}</div>`;
+                    }
+
+                    grade.appendChild(slot);
+                }
+
+                body.appendChild(grade);
+                card.appendChild(body);
+                grid.appendChild(card);
+            });
+        }
+
+        render();
+    </script>
+
+
+    <script>
+    (function() {
+        var btnDrawer = document.getElementById('btnDrawer');
+        var drawer = document.getElementById('drawer');
+        var overlay = document.getElementById('drawerOverlay');
+        var fechar = document.getElementById('drawerFechar');
+        function open() { drawer.classList.add('aberto'); overlay.classList.add('aberto'); document.body.style.overflow='hidden'; }
+        function close() { drawer.classList.remove('aberto'); overlay.classList.remove('aberto'); document.body.style.overflow=''; }
+        if (btnDrawer) btnDrawer.addEventListener('click', open);
+        if (fechar) fechar.addEventListener('click', close);
+        if (overlay) overlay.addEventListener('click', close);
+        document.addEventListener('keydown', function(e){ if(e.key==='Escape') close(); });
+    })();
+    function dToggle(id) {
+        var sub = document.getElementById(id);
+        var arrow = document.getElementById(id+'-a');
+        var isOpen = sub.classList.contains('open');
+        document.querySelectorAll('.sub-menu').forEach(function(s){ s.classList.remove('open'); });
+        document.querySelectorAll('.sub-arrow').forEach(function(a){ a.classList.remove('open'); });
+        if (!isOpen) { sub.classList.add('open'); if(arrow) arrow.classList.add('open'); }
+    }
+    </script>
+</body>
+</html>
