@@ -507,14 +507,14 @@
                     <input type="text" name="editora">
                 </div>
 
-                <div>
+                <!-- <div>
                     <label class="campo-label">Status da Leitura</label>
                     <select name="status" id="statusSelect" required>
                         <option value="lido">Lido (Resenha final)</option>
                         <option value="pausado">Pausado / Abandonado</option>
                         <option value="quero_ler">Quero Ler</option>
                     </select>
-                </div>
+                </div> -->
 
                 <div>
                     <label class="campo-label">Link da imagem</label>
@@ -716,10 +716,7 @@
                         <label class="check-desafio"><input type="checkbox" name="desafio" value="cores:Dourado"> Dourado</label>
                         <label class="check-desafio"><input type="checkbox" name="desafio" value="cores:Cinza"> Cinza</label>
                         <label class="check-desafio"><input type="checkbox" name="desafio" value="cores:Marrom"> Marrom</label>
-                        <div class="desafio-group-label">Outros</div>
-                        <label class="check-desafio"><input type="checkbox" name="desafio" value="Leitura do Mês"> Leitura do Mês</label>
-                        <label class="check-desafio"><input type="checkbox" name="desafio" value="Maratona Literária"> Maratona Literária</label>
-                        <label class="check-desafio"><input type="checkbox" name="desafio" value="100 Livros no Ano"> 100 Livros no Ano</label>
+                        
                     </div>
                 </div>
 
@@ -739,160 +736,168 @@
     </footer>
 
     <script>
-        // ── DRAWER ──
-        const btnDrawer = document.getElementById('btnDrawer');
-        const drawer = document.getElementById('drawer');
-        const drawerOverlay = document.getElementById('drawerOverlay');
-        const drawerFechar = document.getElementById('drawerFechar');
+    // ── DRAWER ──
+    const btnDrawer = document.getElementById('btnDrawer');
+    const drawer = document.getElementById('drawer');
+    const drawerOverlay = document.getElementById('drawerOverlay');
+    const drawerFechar = document.getElementById('drawerFechar');
 
-        const abrirDrawer = () => {
-            drawer.classList.add('aberto');
-            drawerOverlay.classList.add('aberto');
-            document.body.style.overflow = 'hidden';
-        };
-        const fecharDrawer = () => {
-            drawer.classList.remove('aberto');
-            drawerOverlay.classList.remove('aberto');
-            document.body.style.overflow = '';
-        };
+    const abrirDrawer = () => {
+        drawer.classList.add('aberto');
+        drawerOverlay.classList.add('aberto');
+        document.body.style.overflow = 'hidden';
+    };
+    const fecharDrawer = () => {
+        drawer.classList.remove('aberto');
+        drawerOverlay.classList.remove('aberto');
+        document.body.style.overflow = '';
+    };
 
-        btnDrawer.addEventListener('click', abrirDrawer);
-        drawerFechar.addEventListener('click', fecharDrawer);
-        drawerOverlay.addEventListener('click', fecharDrawer);
-        document.addEventListener('keydown', e => { if (e.key === 'Escape') fecharDrawer(); });
+    btnDrawer.addEventListener('click', abrirDrawer);
+    drawerFechar.addEventListener('click', fecharDrawer);
+    drawerOverlay.addEventListener('click', fecharDrawer);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') fecharDrawer(); });
 
-        // ── PERSONAGENS COM CHIPS ──
-        const personagensBox = document.getElementById('personagens-box');
-        const inputPersonagem = document.getElementById('input-personagem');
-        const personagensHidden = document.getElementById('personagens-hidden');
-        let personagens = [];
+    // ── PERSONAGENS COM CHIPS ──
+    const personagensBox = document.getElementById('personagens-box');
+    const inputPersonagem = document.getElementById('input-personagem');
+    const personagensHidden = document.getElementById('personagens-hidden');
+    let personagens = [];
 
-        function atualizarHidden() { personagensHidden.value = personagens.join(', '); }
+    function atualizarHidden() { personagensHidden.value = personagens.join(', '); }
 
-        function adicionarPersonagem(nome) {
-            nome = nome.trim();
-            if (!nome || personagens.includes(nome)) return;
-            personagens.push(nome);
-            const chip = document.createElement('div');
-            chip.className = 'chip';
-            chip.innerHTML = `${nome} <span class="chip-x" data-nome="${nome}">×</span>`;
-            personagensBox.insertBefore(chip, inputPersonagem);
-            chip.querySelector('.chip-x').addEventListener('click', function () {
-                personagens = personagens.filter(p => p !== this.dataset.nome);
-                chip.remove();
-                atualizarHidden();
-            });
-            inputPersonagem.value = '';
+    function adicionarPersonagem(nome) {
+        nome = nome.trim();
+        if (!nome || personagens.includes(nome)) return;
+
+        personagens.push(nome);
+
+        const chip = document.createElement('div');
+        chip.className = 'chip';
+        chip.innerHTML = `${nome} <span class="chip-x" data-nome="${nome}">×</span>`;
+
+        personagensBox.insertBefore(chip, inputPersonagem);
+
+        chip.querySelector('.chip-x').addEventListener('click', function () {
+            personagens = personagens.filter(p => p !== this.dataset.nome);
+            chip.remove();
             atualizarHidden();
-        }
-
-        inputPersonagem.addEventListener('keydown', e => {
-            if (e.key === 'Enter' || e.key === ',') { e.preventDefault(); adicionarPersonagem(inputPersonagem.value); }
         });
-        inputPersonagem.addEventListener('blur', () => { if (inputPersonagem.value.trim()) adicionarPersonagem(inputPersonagem.value); });
-        personagensBox.addEventListener('click', () => inputPersonagem.focus());
 
-        // ── ENVIO ──
-        document.getElementById('formLeitura').addEventListener('submit', function (e) {
+        inputPersonagem.value = '';
+        atualizarHidden();
+    }
+
+    inputPersonagem.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ',') {
             e.preventDefault();
+            adicionarPersonagem(inputPersonagem.value);
+        }
+    });
 
-            const imagemUrl = document.getElementById('input-imagem-url').value.trim();
-            const playlistUrl = document.getElementById('input-playlist-url').value.trim();
-            const notaSel = document.querySelector('input[name="nota"]:checked');
+    inputPersonagem.addEventListener('blur', () => {
+        if (inputPersonagem.value.trim()) {
+            adicionarPersonagem(inputPersonagem.value);
+        }
+    });
 
-            const dados = {
-                id: Date.now(),
-                titulo: this.titulo.value,
-                autor: this.autor.value,
-                editora: this.editora.value,
-                imagem_url: imagemUrl,
-                data_inicio: this.data_inicio.value,
-                data_fim: this.data_fim.value,
-                genero: this.genero.value,
-                tropes: this.tropes.value,
-                pagLidas: this.paginas.value, // Nomeado como pagLidas para bater com a Estante
-                pagTotal: this.paginas.value,
-                capitulos: this.capitulos.value,
-                playlist: playlistUrl,
-                formato: document.querySelector('input[name="formato"]:checked')?.value || '',
-                emocao: Array.from(document.querySelectorAll('input[name="emocao"]:checked')).map(el => el.value).join(','),
-                nota: notaSel ? notaSel.value : '',
-                personagens: personagensHidden.value,
-                momentos: this.momentos.value,
-                citacoes: this.citacoes.value,
-                resenha: this.resenha.value, // A resenha serve como nota_pausa na Estante
-                desafio: Array.from(document.querySelectorAll('input[name="desafio"]:checked')).map(cb => cb.value).join('||'),
-                status: document.getElementById('statusSelect').value, // NOVO CAMPO SALVO AQUI
-                lidoNaEstante: false
-            };
+    personagensBox.addEventListener('click', () => inputPersonagem.focus());
 
-            let livros = JSON.parse(localStorage.getItem('livros_lidos') || '[]');
-            livros.push(dados);
-            localStorage.setItem('livros_lidos', JSON.stringify(livros));
+    // ── ENVIO (CORRIGIDO) ──
+    document.getElementById('formLeitura').addEventListener('submit', function (e) {
+        e.preventDefault();
 
-            // Reseta o formulário completamente
-            this.reset();
-            personagens = [];
-            document.querySelectorAll('.chip').forEach(c => c.remove());
-            document.querySelectorAll('input[name="emocao"]').forEach(cb => cb.checked = false);
-            document.querySelectorAll('input[name="desafio"]').forEach(cb => cb.checked = false);
-            document.getElementById('desafioTrigger').textContent = 'Complete o desafio';
-            document.getElementById('desafioTrigger').classList.remove('filled');
+        const imagemUrl = document.getElementById('input-imagem-url').value.trim();
+        const playlistUrl = document.getElementById('input-playlist-url').value.trim();
+        const notaSel = document.querySelector('input[name="nota"]:checked');
 
-            const ir = confirm(`✅ "${dados.titulo}" registrado como ${dados.status.toUpperCase()}!\n\nClique OK para continuar.`);
-            if (ir) {
-                // Aqui você pode redirecionar para a biblioteca se quiser:
-                // window.location.href = `Biblioteca.html`;
-            }
+        const dados = {
+            id: Date.now(),
+            titulo: this.titulo.value,
+            autor: this.autor.value,
+            editora: this.editora.value,
+            imagem_url: imagemUrl,
+            data_inicio: this.data_inicio.value,
+            data_fim: this.data_fim.value,
+            genero: this.genero.value,
+            tropes: this.tropes.value,
+            pagTotal: this.paginas.value,
+            capitulos: this.capitulos.value,
+            playlist: playlistUrl,
+            formato: document.querySelector('input[name="formato"]:checked')?.value || '',
+            emocao: Array.from(document.querySelectorAll('input[name="emocao"]:checked')).map(el => el.value).join(','),
+            nota: notaSel ? notaSel.value : '',
+            personagens: personagensHidden.value,
+            momentos: this.momentos.value,
+            citacoes: this.citacoes.value,
+            resenha: this.resenha.value,
+            desafio: Array.from(document.querySelectorAll('input[name="desafio"]:checked')).map(cb => cb.value).join('||')
+        };
+
+        // 🔥 SALVAR
+        let livros = JSON.parse(localStorage.getItem('livros_lidos')) || [];
+        livros.push(dados);
+        localStorage.setItem('livros_lidos', JSON.stringify(livros));
+
+        // ✅ Feedback
+        alert(`✨ "${dados.titulo}" foi salvo na sua Biblioteca!`);
+
+        // 🔥 REDIRECIONAR
+        window.location.href = "Biblioteca.html";
+    });
+
+    // ── SUBMENU DRAWER ──
+    function dToggle(id) {
+        var sub = document.getElementById(id);
+        var arrow = document.getElementById(id + '-a');
+        var isOpen = sub.style.display === 'block';
+
+        ['dn-leituras','dn-desafios','dn-metas'].forEach(function(k){
+            var el = document.getElementById(k);
+            if(el) el.style.display = 'none';
+            var a = document.getElementById(k+'-a');
+            if (a) a.style.transform = '';
         });
 
-        // ── SUBMENU DRAWER ──
-        function dToggle(id) {
-            var sub = document.getElementById(id);
-            var arrow = document.getElementById(id + '-a');
-            var isOpen = sub.style.display === 'block';
-            ['dn-leituras','dn-desafios','dn-metas'].forEach(function(k){
-                var el = document.getElementById(k);
-                if(el) el.style.display = 'none';
-                var a = document.getElementById(k+'-a');
-                if (a) a.style.transform = '';
-            });
-            if (!isOpen) {
-                sub.style.display = 'block';
-                if (arrow) arrow.style.transform = 'rotate(90deg)';
-            }
+        if (!isOpen) {
+            sub.style.display = 'block';
+            if (arrow) arrow.style.transform = 'rotate(90deg)';
         }
+    }
 
-        // ── DROPDOWN DESAFIOS ──
-        function toggleDesafioDD() {
-            document.getElementById('desafioDropdown').classList.toggle('aberto');
-        }
-        document.addEventListener('change', function(e) {
-            if (e.target && e.target.name === 'desafio') {
-                var checked = Array.from(document.querySelectorAll('input[name="desafio"]:checked'));
-                var trigger = document.getElementById('desafioTrigger');
-                if (checked.length === 0) {
-                    trigger.textContent = 'Complete o desafio';
-                    trigger.classList.remove('filled');
-                } else {
-                    var nomes = checked.map(function(cb) {
-                        var v = cb.value;
-                        if (v.startsWith('cores:')) return v.replace('cores:','');
-                        if (v.startsWith('Desafio das Estações - ')) return v.replace('Desafio das Estações - ','');
-                        return v;
-                    });
-                    trigger.textContent = nomes.join(', ');
-                    trigger.classList.add('filled');
-                }
-            }
-        });
-        document.addEventListener('click', function(e) {
+    // ── DROPDOWN DESAFIOS ──
+    function toggleDesafioDD() {
+        document.getElementById('desafioDropdown').classList.toggle('aberto');
+    }
+
+    document.addEventListener('change', function(e) {
+        if (e.target && e.target.name === 'desafio') {
+            var checked = Array.from(document.querySelectorAll('input[name="desafio"]:checked'));
             var trigger = document.getElementById('desafioTrigger');
-            var dd = document.getElementById('desafioDropdown');
-            if (dd && trigger && !trigger.contains(e.target) && !dd.contains(e.target)) {
-                dd.classList.remove('aberto');
+
+            if (checked.length === 0) {
+                trigger.textContent = 'Complete o desafio';
+                trigger.classList.remove('filled');
+            } else {
+                var nomes = checked.map(function(cb) {
+                    var v = cb.value;
+                    if (v.startsWith('cores:')) return v.replace('cores:','');
+                    if (v.startsWith('Desafio das Estações - ')) return v.replace('Desafio das Estações - ','');
+                    return v;
+                });
+
+                trigger.textContent = nomes.join(', ');
+                trigger.classList.add('filled');
             }
-        });
-    </script>
-</body>
-</html>
+        }
+    });
+
+    document.addEventListener('click', function(e) {
+        var trigger = document.getElementById('desafioTrigger');
+        var dd = document.getElementById('desafioDropdown');
+
+        if (dd && trigger && !trigger.contains(e.target) && !dd.contains(e.target)) {
+            dd.classList.remove('aberto');
+        }
+    });
+</script>

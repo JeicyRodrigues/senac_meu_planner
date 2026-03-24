@@ -116,11 +116,7 @@
             font-size: 1.1rem; color: #633535;
         }
         .dias-seq { font-family:'Dancing Script',cursive; font-size:0.75rem; color:#b89794; text-align:center; margin-top:4px; }
-        .dias-msg {
-            font-family: 'Dancing Script', cursive;
-            font-size: 0.8rem; color: #b89794;
-            text-align: center; margin-top: 6px;
-        }
+        .record-text { font-size: 0.75rem; text-align: center; color: #633535; font-weight: bold; margin-top: 5px; }
 
     </style>
 </head>
@@ -177,7 +173,6 @@
                         <ul class="stats-list">
                             <li><span>Livros Lidos</span><span id="val-lidos" class="count">0</span></li>
                             <li><span>Resenhas Escritas</span><span id="val-resenhas" class="count">0</span></li>
-                            <li><span>Clássicos Lidos</span><span id="val-classicos" class="count">0</span></li>
                             <li><span>Desafios Ativos</span><span id="val-desafios" class="count">0</span></li>
                         </ul>
                     </div>
@@ -191,12 +186,13 @@
                         <div class="estacao-info" style="margin-bottom:10px;">
                             <span id="txt-bingo" style="font-size:0.76rem;">0/24 desafios</span>
                         </div>
-                        <div style="font-size:0.72rem;color:#8b4361;margin-bottom:3px;">30 Clássicos</div>
+
+                        <div style="font-size:0.72rem;color:#8b4361;margin-bottom:3px;">Desafio das Cores</div>
                         <div class="progress-container">
-                            <div id="barra-classicos" class="progress-fill" style="width:0%;background:#8b4361;"></div>
+                            <div id="barra-cores" class="progress-fill" style="width:0%;background:#8b4361;"></div>
                         </div>
                         <div class="estacao-info">
-                            <span id="txt-classicos" style="font-size:0.76rem;">0/30 lidos</span>
+                            <span id="txt-cores" style="font-size:0.76rem;">0/12 lidos</span>
                         </div>
                     </div>
 
@@ -216,8 +212,8 @@
                                 <text x="16" y="14" dy=".3em" text-anchor="middle" font-family="Montserrat,sans-serif" font-size="7" font-weight="700" fill="#633535" id="val-dias">0</text>
                             </svg>
                         </div>
-                        <p class="record-text">Record: <span id="val-record">0</span> dias</p>
-                        <p class="dias-seq" id="msg-seq" style="font-family:Dancing Script,cursive;font-size:0.75rem;color:#b89794;text-align:center;margin-top:4px;"></p>
+                        <p class="record-text">Recorde: <span id="val-record">0</span> dias</p>
+                        <p class="dias-seq" id="msg-seq"></p>
                     </div>
 
                 </section>
@@ -233,75 +229,6 @@
             </main>
         </div>
     </div>
-
-    <section id="modal-cadastro" class="modal-overlay">
-        <div class="modal-content">
-            <span id="fechar-modal" class="btn-fechar">&times;</span>
-            <div class="modal-header">
-                <img src="imagens/flor_decorativa.png" alt="" class="modal-icon">
-                <h2>Crie sua conta</h2>
-                <p>Comece sua jornada literária</p>
-            </div>
-            <form class="modal-form">
-                <input type="text" placeholder="Seu nome de usuário" required>
-                <input type="email" placeholder="E-mail" required>
-                <input type="password" placeholder="Senha" required>
-                <input type="password" placeholder="Confirme a senha" required>
-                <div class="checkbox-container">
-                    <input type="checkbox" id="termos-cb">
-                    <label for="termos-cb">Li e concordo com os <a href="Termos.html" style="color:#8b4361;">termos</a></label>
-                </div>
-                <button type="submit" class="btn-cadastrar">CADASTRAR</button>
-            </form>
-            <a href="#" class="login-link" id="ir-para-login">- LOGIN -</a>
-        </div>
-    </section>
-
-    <section id="modal-login" class="modal-overlay">
-        <div class="modal-content">
-            <span id="fechar-login" class="btn-fechar">&times;</span>
-            <div class="modal-header">
-                <img src="imagens/flor_decorativa.png" alt="" class="modal-icon">
-                <h2>Acesse sua conta</h2>
-                <p>Bem-vindo de volta!</p>
-            </div>
-            <form class="modal-form">
-                <input type="email" placeholder="E-mail" required>
-                <input type="password" placeholder="Senha" required>
-                <div class="login-options">
-                    <label class="remember-me"><input type="checkbox"> Lembrar-me</label>
-                    <a href="#" class="forgot-password">Esqueceu a senha?</a>
-                </div>
-                <button type="submit" class="btn-cadastrar">ENTRAR</button>
-            </form>
-            <a href="#" class="login-link" id="trocar-para-cadastro">- CADASTRE-SE -</a>
-        </div>
-    </section>
-
-    <section id="modal-esqueci" class="modal-overlay">
-        <div class="modal-content">
-            <span id="fechar-esqueci" class="btn-fechar">&times;</span>
-            <div class="modal-header">
-                <img src="imagens/flor_decorativa.png" alt="" class="modal-icon">
-                <h2>Esqueci minha senha</h2>
-            </div>
-            <form class="modal-form">
-                <input type="email" placeholder="E-mail" required>
-                <button type="submit" class="btn-cadastrar">ENVIAR E-MAIL</button>
-            </form>
-            <a href="#" class="login-link" id="voltar-para-cadastro">- NOVO CADASTRO -</a>
-        </div>
-    </section>
-
-    <footer>
-        <p>
-            <a href="SobreNos.html" style="color:#777;text-decoration:none;">Sobre Nós</a> |
-            <a href="Contato.html" style="color:#777;text-decoration:none;">Contato</a> |
-            <a href="Privacidade.html" style="color:#777;text-decoration:none;">Privacidade</a> |
-            <a href="Termos.html" style="color:#777;text-decoration:none;">Termos</a>
-        </p>
-        <p>&copy; 2026 Capítulo 1. Todos os direitos reservados.</p>
-    </footer>
 
     <script src="script.js"></script>
     <script>
@@ -351,42 +278,44 @@
         }
     })();
 
-    // ── CONTADORES ──
+    // ── CONTADORES (COM DESAFIO DAS CORES) ──
     (function() {
         var livros = [];
         try { livros = JSON.parse(localStorage.getItem('livros_lidos')||'[]'); } catch(e){}
-        var classicos = [];
-        try { classicos = JSON.parse(localStorage.getItem('classicos_lidos')||'[]'); } catch(e){}
         var bingo = {};
         try { bingo = JSON.parse(localStorage.getItem('bingo_estado')||'{}'); } catch(e){}
 
-        var bingoCon = (bingo.concluidos||[]).length;
-        var cores    = livros.filter(function(l){ return l.desafio && l.desafio.split('||').some(function(d){ return d.trim().startsWith('cores:'); }); }).length;
-        var estacoes = livros.filter(function(l){ return l.desafio && l.desafio.split('||').some(function(d){ return d.trim().toLowerCase().includes('esta'); }); }).length;
+        // Filtra livros do desafio das cores (etiqueta 'cores:')
+        var coresLidas = livros.filter(function(l){ 
+            return l.desafio && l.desafio.split('||').some(function(d){ 
+                return d.trim().toLowerCase().startsWith('cores:'); 
+            }); 
+        }).length;
 
-        var desafios = 0;
-        if (bingoCon > 0) desafios++;
-        if (classicos.length > 0) desafios++;
-        if (cores > 0) desafios++;
-        if (estacoes > 0) desafios++;
+        var bingoCon = (bingo.concluidos||[]).length;
+        var desafiosAtivos = 0;
+        if (bingoCon > 0) desafiosAtivos++;
+        if (coresLidas > 0) desafiosAtivos++;
 
         document.getElementById('val-lidos').textContent    = livros.length;
         document.getElementById('val-resenhas').textContent = livros.filter(function(l){ return l.resenha && l.resenha.trim(); }).length;
-        document.getElementById('val-classicos').textContent= classicos.length;
-        document.getElementById('val-desafios').textContent = desafios;
+        document.getElementById('val-desafios').textContent = desafiosAtivos;
 
-        document.getElementById('barra-bingo').style.width     = Math.round(bingoCon/24*100)+'%';
-        document.getElementById('txt-bingo').textContent       = bingoCon+'/24 desafios';
-        document.getElementById('barra-classicos').style.width = Math.round(classicos.length/30*100)+'%';
-        document.getElementById('txt-classicos').textContent   = classicos.length+'/30 lidos';
+        // Progresso Bingo
+        document.getElementById('barra-bingo').style.width = Math.round(bingoCon/24*100)+'%';
+        document.getElementById('txt-bingo').textContent   = bingoCon+'/24 desafios';
+
+        // Progresso Cores (Meta de 12 livros)
+        var metaCores = 12;
+        var pctCores = Math.min(Math.round(coresLidas / metaCores * 100), 100);
+        document.getElementById('barra-cores').style.width = pctCores + '%';
+        document.getElementById('txt-cores').textContent   = coresLidas + '/' + metaCores + ' lidos';
     })();
 
-    // ── CALENDÁRIO DE LEITURA (AGORA CONSIDERA HISTÓRICO E FUSO) ──
+    // ── CALENDÁRIO DE LEITURA (LÓGICA RESILIENTE CORRIGIDA) ──
     (function() {
         try {
             var allLidos = new Set();
-
-            // 1. Puxa todos os dias lidos gravados no sistema
             for (var i = 0; i < localStorage.length; i++) {
                 var key = localStorage.key(i);
                 if (key && key.startsWith('calendario_')) {
@@ -404,86 +333,65 @@
                     String(dt.getDate()).padStart(2,'0');
             }
 
-            // 2. Calcula o Maior Recorde Histórico de toda a vida
+            // 1. Calcula o Recorde Máximo em toda a história
             var sortedDates = Array.from(allLidos).sort();
-            var maxSeq = 0;
-            var tempSeq = 0;
-            var lastDate = null;
+            var maxRecord = 0, tempSeq = 0, lastDate = null;
 
-            for (var j = 0; j < sortedDates.length; j++) {
-                var parts = sortedDates[j].split('-');
+            sortedDates.forEach(function(dateStr) {
+                var parts = dateStr.split('-');
                 var currDate = new Date(parts[0], parts[1]-1, parts[2]);
-
-                if (!lastDate) {
+                if (lastDate) {
+                    var diff = Math.round((currDate - lastDate) / (1000 * 60 * 60 * 24));
+                    tempSeq = (diff === 1) ? tempSeq + 1 : 1;
+                } else {
                     tempSeq = 1;
-                } else {
-                    var diffDays = Math.round((currDate - lastDate) / (1000 * 60 * 60 * 24));
-                    if (diffDays === 1) {
-                        tempSeq++;
-                    } else if (diffDays > 1) {
-                        tempSeq = 1; // quebrou a sequência
-                    }
                 }
-                if (tempSeq > maxSeq) {
-                    maxSeq = tempSeq;
-                }
+                if (tempSeq > maxRecord) maxRecord = tempSeq;
                 lastDate = currDate;
-            }
+            });
 
-            // 3. Calcula a Sequência Atual (terminando hoje ou ontem)
+            // 2. Calcula a Sequência Atual ( Streak )
             var hoje = new Date();
-            var cursor = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
-            var seq = 0;
+            var hojeStr = formatYMD(hoje);
+            var ontem = new Date(); ontem.setDate(hoje.getDate() - 1);
+            var ontemStr = formatYMD(ontem);
 
-            // Se ainda não leu hoje, recua um dia para checar se a sequência de ontem continua válida
-            if (!allLidos.has(formatYMD(cursor))) {
-                cursor.setDate(cursor.getDate() - 1);
-            }
-
-            for (var n = 0; n < 3650; n++) {
-                if (allLidos.has(formatYMD(cursor))) {
-                    seq++;
-                    cursor.setDate(cursor.getDate() - 1);
-                } else {
-                    break;
+            var currentStreak = 0;
+            // Se leu hoje ou ontem, a sequência ainda é válida
+            if (allLidos.has(hojeStr) || allLidos.has(ontemStr)) {
+                var cursor = allLidos.has(hojeStr) ? hoje : ontem;
+                var check = new Date(cursor.getTime());
+                while (allLidos.has(formatYMD(check))) {
+                    currentStreak++;
+                    check.setDate(check.getDate() - 1);
                 }
             }
 
-            // O recorde verdadeiro é o maior entre a varredura histórica e a sequência atual
+            // Sincroniza recorde histórico
             var savedRec = parseInt(localStorage.getItem('dias_recorde')||'0');
-            var rec = Math.max(maxSeq, savedRec, seq);
-            localStorage.setItem('dias_recorde', String(rec));
+            maxRecord = Math.max(maxRecord, currentStreak, savedRec);
+            localStorage.setItem('dias_recorde', String(maxRecord));
 
-            // 4. Animação do Coração
+            // Interface
+            document.getElementById('val-dias').textContent   = currentStreak;
+            document.getElementById('val-record').textContent = maxRecord;
+            document.getElementById('msg-seq').textContent    =
+                currentStreak === 0 ? 'Marque um dia no calendário!' :
+                currentStreak + ' dias seguidos!';
+
+            // Coração
             var arc = document.getElementById('heart-arc');
             if (arc) {
-                // Calcula porcentagem do progresso. (Se o recorde for zero, deixa em 0%)
-                var pct = rec > 0 ? Math.min(seq / rec, 1) : 0;
+                var pct = maxRecord > 0 ? Math.min(currentStreak / maxRecord, 1) : 0;
                 var offset = 100 - (pct * 100);
-                
-                // Força fechar o coração se bateu o recorde
-                if (seq === rec && seq > 0) { offset = 0; }
-                
                 setTimeout(function() {
                     arc.setAttribute('stroke-dashoffset', offset);
-                    
-                    // RECOMPENSA: Preenche o coração com rosa se bater o recorde!
-                    if (seq === rec && seq > 0) {
-                        arc.style.fill = "rgba(139,67,97,0.15)"; // Preenchimento rosinha/vinho claro
-                        arc.style.transition = "stroke-dashoffset 1.5s ease-out, fill 0.6s ease 1s";
+                    if (currentStreak >= maxRecord && currentStreak > 0) {
+                        arc.style.fill = "rgba(139,67,97,0.15)";
                     }
                 }, 100);
             }
-
-            // Atualiza os textos
-            document.getElementById('val-dias').textContent   = seq;
-            document.getElementById('val-record').textContent = rec;
-            document.getElementById('msg-seq').textContent    =
-                seq === 0 ? 'Marque um dia no calendário!' :
-                seq === 1 ? 'Boa! Continue amanhã!' :
-                seq + ' dias consecutivos!';
-
-        } catch(err){ console.error('dias:', err); }
+        } catch(err){ console.error(err); }
     })();
 
     // ── GALERIA ──
@@ -491,10 +399,9 @@
         var fotos = [];
         try { fotos = JSON.parse(localStorage.getItem('memorias_fotos')||'[]'); } catch(e){}
         var grid = document.getElementById('galeriaHome');
-        var recentes = fotos.slice(0, 6); // Pega as 6 mais recentes
-
+        var recentes = fotos.slice(0, 6);
         if (!recentes.length) {
-            grid.innerHTML = '<div class="galeria-vazia">Suas fotos aparecerão aqui.<br><a href="Memorias.html" style="font-family:Montserrat,sans-serif;font-size:0.78rem;font-weight:700;color:#633535;">+ Adicionar memórias</a></div>';
+            grid.innerHTML = '<div class="galeria-vazia">Suas fotos aparecerão aqui.</div>';
             return;
         }
         recentes.forEach(function(foto) {
