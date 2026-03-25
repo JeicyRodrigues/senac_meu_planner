@@ -4,134 +4,649 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Capítulo 1 - Dashboard Literário</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+/* RESET E CONFIGURAÇÕES GERAIS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-image: url('imagens/backgroud.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    min-height: 100vh;
+    color: #4a4a4a;
+    font-family: "Montserrat", sans-serif;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+/* HEADER */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 40px;
+}
+
+.logo-img {
+    height: 300px; /* Ajustado para melhor proporção */
+}
+
+.user-menu {
+    display: flex;
+    gap: 15px;
+}
+
+.user-menu a {
+    text-decoration: none;
+    color: #632925;
+    font-weight: bold;
+    font-size: 0.9rem;
+    padding: 10px 20px;
+    position: relative;
+    transition: all 0.3s;
+    display: inline-block;
+}
+
+.user-menu a span {
+    transition: all 0.3s;
+    position: relative;
+    z-index: 2;
+}
+
+.user-menu a::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    opacity: 0;
+    transition: all 0.3s;
+    border-top: 1px solid #632925;
+    border-bottom: 1px solid #632925;
+    transform: scale(0.1, 1);
+}
+
+.user-menu a:hover span {
+    letter-spacing: 2px;
+}
+
+.user-menu a:hover::before {
+    opacity: 0.5;
+    transform: scale(1, 1);
+}
+
+.user-menu a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    transition: all 0.1s;
+    background-color: rgba(139, 67, 97, 0.05);
+}
+
+.user-menu a:hover::after {
+    opacity: 0;
+    transform: scale(0.1, 1);
+}
+
+
+.main-container {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 30px;
+    padding: 0 40px 40px 40px;
+}
+
+
+.sidebar {
+    background-color: #faeeeb;
+    border-radius: 15px;
+    border: 1px solid rgba(255, 182, 193, 0.3);
+    padding: 20px;
+    align-self: start;
+}
+
+.menu-list {
+    list-style: none;
+}
+
+.menu-list li {
+    margin-bottom: 10px;
+}
+
+.menu-list a {
+    text-decoration: none;
+    color: black;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 15px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+}
+
+.menu-list a:hover, .menu-list a:active {
+    background-color: #eededa;
+    color: black;
+}
+
+
+.banner-citacao {
+    background-image: url('imagens/fundoAlter.png');
+    background-size: cover;
+    background-position: center;
+    min-height: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
+    padding: 40px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.citacao-conteudo {
+    text-align: center;
+    font-family: "Courier Prime", monospace;
+    background-color: rgba(255, 255, 255, 0.3);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.featured-book {
+    padding: 30px;
+    background-image: url('imagens/fundo_container.png');
+    background-size: cover;
+    background-position: center;
+    border-radius: 15px;
+    min-height: 350px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.book-flex {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.book-cover {
+    width: 130px;
+    border-radius: 5px;
+    box-shadow: 5px 5px 15px rgba(0,0,0,0.2);
+}
+
+.btn-continue {
+    display: inline-block;
+    margin-top: 15px;
+    color: #8b4361;
+    font-weight: bold;
+}
+
+/* GRID DE ESTATÍSTICAS */
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.stat-card {
+    background-color: #faeeeb;
+    border-radius: 15px;
+    padding: 20px;
+    border: 1px solid rgba(255, 182, 193, 0.3);
+}
+
+.stats-list {
+    list-style: none;
+    margin-top: 15px;
+}
+
+.stats-list li {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+}
+
+.count {
+    color: #8b4361; 
+    font-weight: bold;
+}
+
+.progress-container {
+    background-color: #e0e0e0; 
+    border-radius: 10px;
+    height: 12px;
+    margin: 20px 0;
+    overflow: hidden; 
+}
+
+.progress-fill {
+    background-color: #634a42;
+    height: 100%;
+    transition: width 0.5s ease-in-out; 
+}
+
+.estacao-info {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.circle-bg {
+    width: 70px;
+    height: 70px;
+    border: 3px solid #e8d9e5; 
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 15px auto;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.record-text {
+    font-size: 0.8rem;
+    color: #777;
+    text-align: center;
+}
+.modal-icon {
+    display: block;    
+    margin: 0 auto 15px; 
+    width: 90px;        
+    height: auto;      
+    opacity: 0.8;        
+}
+
+
+.modal-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.modal-content {
+    background-color: #faeeeb;
+    padding: 40px;
+    border-radius: 20px;
+    width: 500px;
+    position: relative;
+    text-align: center;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+    gap: 10px;
+    margin: 15px 0;
+    font-size: 0.9rem;
+    width: 100%;
+}
+
+.checkbox-container input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+}
+
+.btn-fechar {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+.modal-form input {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    border: 1px solid #633535;
+    border-radius: 25px;
+    background-color: transparent;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.btn-cadastrar {
+    background-color: #633535;
+    color: white;
+    border: none;
+    padding: 15px;
+    width: 100%;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+
+.login-link {
+    display: block;
+    margin-top: 15px;
+    text-decoration: none;
+    color: #633535; /* Cor marrom do seu site */
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+/* Efeito Hover: quando passa o mouse */
+.login-link:hover {
+    color: #8b4361; /* Tom de vinho da sua cartela */
+    letter-spacing: 1px; /* Um leve efeito de expansão para combinar com o topo */
+}
+
+/* Efeito Active: quando clica */
+.login-link:active {
+    color: #5d4291; /* O roxo da sua identidade */
+    transform: scale(0.95);
+}
+
+
+/* Container das opções de login */
+.login-options {
+    display: flex;
+    justify-content: space-between; /* Empurra um para cada lado */
+    align-items: center;
+    width: 100%;
+    margin: 10px 0 20px;
+    font-size: 0.85rem;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    white-space: nowrap
+}
+
+.remember-me input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+}
+
+.forgot-password {
+    text-decoration: none;
+    color: #8b4361; /* Cor de destaque da sua paleta */
+    transition: opacity 0.3s;
+}
+
+.forgot-password:hover {
+    opacity: 0.7;
+    text-decoration: underline;
+}
+
+
+footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 0.8rem;
+    color: #777;
+}
+</style>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Courier+Prime:wght@400;700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* ── CARROSSEL DE RESENHAS ── */
-        .res-slide { display: none; animation: fadeRes 0.4s ease; }
-        .res-slide.ativo { display: flex; align-items: flex-start; gap: 25px; }
-        @keyframes fadeRes { from{opacity:0;transform:translateX(12px)} to{opacity:1;transform:none} }
+        .logo-img { height: 250px !important; }
 
-        .res-capa {
-            width: 130px; flex-shrink: 0;
-            border-radius: 5px;
-            box-shadow: 5px 5px 15px rgba(0,0,0,0.2);
-            object-fit: cover; aspect-ratio: 2/3;
-        }
-        .res-info { flex: 1; }
-        .res-titulo {
-            font-family: 'Dancing Script', cursive;
-            font-size: 1.35rem; color: #633535;
-            margin-bottom: 5px;
-        }
-        .res-autor { font-size: 0.76rem; color: #8b4361; margin-bottom: 8px; font-weight: 600; }
-        .res-estrelas { font-size: 1.1rem; color: #633535; letter-spacing: 2px; margin-bottom: 10px; }
-        .res-trecho {
-            font-size: 0.83rem; line-height: 1.8;
-            color: #633535;
-        }
-        .res-link {
-            display: inline-block; margin-top: 14px;
-            font-size: 0.8rem; font-weight: 700;
-            color: #8b4361; text-decoration: none;
-            letter-spacing: 0.5px;
-            transition: letter-spacing 0.2s;
-        }
-        .res-link:hover { letter-spacing: 1.5px; }
+        /* ══════════════════════════════════════════
+           MODAIS — 100% CSS, sem JavaScript
+           Técnica: :target abre; #fechar fecha (volta à raiz)
+        ══════════════════════════════════════════ */
 
-        .res-vazio {
-            width: 100%; text-align: center; padding: 40px 20px;
-            font-family: 'Dancing Script', cursive;
-            font-size: 1.1rem; color: #b89794;
+        /* Overlay base — hidden por padrão */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0,0,0,0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
         }
 
-        .res-dots {
-            display: flex; gap: 6px; justify-content: center;
-            margin-top: 14px;
+        /* Abre quando a ancora #modal-xxx está ativa */
+        .modal-overlay:target {
+            display: flex;
         }
-        .res-dot {
-            width: 7px; height: 7px; border-radius: 50%;
-            background: rgba(184,151,148,0.4); cursor: pointer;
-            transition: background 0.2s;
-        }
-        .res-dot.ativo { background: #633535; }
 
-        /* ── GALERIA ── */
-        .galeria-section {
-            margin-top: 22px;
-            background: #faeeeb;
-            border-radius: 15px;
-            padding: 20px;
-            border: 1px solid rgba(255,182,193,0.3);
+        /* Clique no fundo escuro fecha (link âncora invisível cobrindo todo overlay) */
+        .modal-fechar-fundo {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            cursor: default;
         }
-        .galeria-titulo-wrap {
-            display: flex; align-items: center;
-            justify-content: space-between;
-            margin-bottom: 14px;
-        }
-        .galeria-titulo-wrap span {
-            font-family: 'Dancing Script', cursive;
-            font-size: 1.1rem; color: #633535;
-        }
-        .galeria-ver {
-            font-size: 0.72rem; font-weight: 600;
-            color: #8b4361; text-decoration: none;
-            transition: letter-spacing 0.2s;
-        }
-        .galeria-ver:hover { letter-spacing: 0.5px; }
-        .galeria-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-        }
-        .galeria-item {
-            aspect-ratio: 1; border-radius: 10px;
-            overflow: hidden; cursor: pointer;
-            box-shadow: 0 2px 8px rgba(99,53,53,0.1);
-            transition: transform 0.2s, box-shadow 0.2s;
-            background: rgba(184,151,148,0.12);
+
+        /* O conteúdo fica acima do fundo clicável */
+        .modal-content {
             position: relative;
+            z-index: 1;
+            background-color: #faeeeb;
+            padding: 40px;
+            border-radius: 20px;
+            width: 500px;
+            text-align: center;
         }
+
+        /* Botão fechar (X) — leva para âncora vazia */
+        .btn-fechar {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            color: #4a4a4a;
+            line-height: 1;
+            display: inline-block;
+        }
+        .btn-fechar:hover { color: #633535; }
+
+        /* ── PAINEL DIREITO ── */
+        .painel-dir-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.35); z-index:900; }
+        .painel-dir { position:fixed; top:0; left:-340px; width:320px; height:100vh; background:#faeeeb; border-right:1px solid #b89794; z-index:901; transition:left 0.35s cubic-bezier(0.4,0,0.2,1); display:flex; flex-direction:column; box-shadow:4px 0 20px rgba(99,53,53,0.12); overflow-y:auto; }
+        .painel-dir-header { padding:20px 22px 15px; border-bottom:1px solid rgba(184,151,148,0.4); display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
+        .painel-dir-titulo { font-family:'Dancing Script',cursive; font-size:1.8rem; color:#633535; }
+        .painel-dir-fechar { background:none; border:none; font-size:1.4rem; color:#633535; cursor:pointer; padding:4px 8px; border-radius:50%; transition:background 0.2s; }
+        .painel-dir-fechar:hover { background:rgba(139,67,97,0.12); }
+
+        /* Painel direito via CSS :target */
+        #painel-menu:target ~ .wrapper .painel-dir,
+        #painel-menu:target + .painel-dir { left: 0; }
+        #painel-menu:target ~ .wrapper .painel-dir-overlay,
+        #painel-menu:target + .painel-dir + .painel-dir-overlay { display: block; }
+
+        .menu-dir { list-style:none; padding:8px 0; flex:1; }
+        .menu-dir > li { border-bottom:1px solid rgba(184,151,148,0.12); }
+
+        .menu-dir-item { display:flex; align-items:center; justify-content:space-between; padding:13px 22px; text-decoration:none; color:#633535; font-size:0.88rem; font-weight:600; font-family:'Montserrat',sans-serif; cursor:pointer; border-left:3px solid transparent; transition:background 0.2s,border-color 0.2s; user-select:none; }
+        .menu-dir-item:hover { background:#eededa; border-left-color:#8b4361; }
+        .menu-dir-seta { font-size:0.8rem; color:#b89794; transition:transform 0.25s; flex-shrink:0; }
+
+        /* Submenus CSS puro via :target */
+        .menu-dir-sub { display:none; list-style:none; background:rgba(184,151,148,0.07); }
+        .menu-dir-sub:target { display:block; }
+        .menu-dir-sub a { display:flex; align-items:center; justify-content:space-between; padding:9px 22px 9px 34px; text-decoration:none; color:#633535; font-size:0.8rem; font-weight:500; font-family:'Montserrat',sans-serif; transition:background 0.2s; }
+        .menu-dir-sub a:hover { background:rgba(139,67,97,0.08); }
+        .sub-seta { color:#b89794; font-size:0.68rem; }
+        .menu-dir-sep { height:1px; background:rgba(184,151,148,0.3); margin:6px 18px; }
+        .painel-dir-footer { padding:16px 22px; border-top:1px solid rgba(184,151,148,0.4); font-size:0.72rem; color:#999; text-align:center; font-family:'Montserrat',sans-serif; flex-shrink:0; }
+
+        /* ── CARROSSEL RESENHAS ── */
+        .carrossel-slide-res { display:none; animation:fadeRes 0.45s ease; }
+        .carrossel-slide-res.ativo { display:flex; }
+        @keyframes fadeRes { from{opacity:0;transform:translateX(16px)} to{opacity:1;transform:translateX(0)} }
+        .slide-res-capa { width:110px; flex-shrink:0; border-radius:5px; box-shadow:5px 5px 15px rgba(0,0,0,0.2); object-fit:cover; aspect-ratio:2/3; }
+        .slide-res-info { flex:1; padding-left:4px; }
+        .slide-res-titulo { font-family:'Dancing Script',cursive; font-size:1.2rem; color:#633535; margin-bottom:4px; }
+        .slide-res-autor { font-size:0.74rem; color:#8b4361; margin-bottom:6px; }
+        .slide-res-estrelas { font-size:0.9rem; color:#633535; margin-bottom:6px; letter-spacing:2px; }
+        .slide-res-trecho { font-size:0.77rem; line-height:1.7; color:#633535; font-style:italic; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+        .btn-ver-resenha { display:inline-block; margin-top:8px; color:#8b4361; font-weight:bold; font-size:0.75rem; text-decoration:none; transition:letter-spacing 0.2s; }
+        .btn-ver-resenha:hover { letter-spacing:1px; }
+        .slide-res-vazio { width:100%; text-align:center; font-family:'Dancing Script',cursive; font-size:1.1rem; color:#b89794; padding:30px; }
+        .carrossel-controles { display:flex; align-items:center; justify-content:space-between; margin-top:10px; }
+        .carrossel-dots-res { display:flex; gap:5px; }
+        .dot-res { width:6px; height:6px; border-radius:50%; background:rgba(184,151,148,0.4); cursor:pointer; transition:background 0.25s; }
+        .dot-res.ativo { background:#633535; }
+        .btn-res-nav { background:rgba(99,53,53,0.12); border:none; color:#633535; font-size:0.85rem; font-weight:700; width:26px; height:26px; border-radius:50%; cursor:pointer; transition:background 0.2s; display:flex; align-items:center; justify-content:center; }
+        .btn-res-nav:hover { background:rgba(99,53,53,0.25); }
+
+        /* ── STATS ── */
+        .stat-card h3 { font-family:'Dancing Script',cursive; font-size:1.1rem; color:#633535; }
+        .dias-seq { font-family:'Dancing Script',cursive; font-size:0.75rem; color:#b89794; text-align:center; margin-top:3px; }
+        .progress-container + .progress-container { margin-top:8px; }
+        .btn-menu-topo { background:none; border:none; cursor:pointer; padding:8px; margin-left:6px; }
+
+        /* ── GALERIA DO LEITOR ── */
+        .galeria-section { margin-top: 22px; background-color: #faeeeb; border-radius: 15px; padding: 20px; border: 1px solid rgba(255,182,193,0.3); }
+        .galeria-titulo { font-family: 'Dancing Script', cursive; font-size: 1.1rem; color: #633535; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; }
+        .galeria-link { font-family: 'Montserrat', sans-serif; font-size: 0.72rem; color: #8b4361; text-decoration: none; font-weight: 600; transition: letter-spacing 0.2s; }
+        .galeria-link:hover { letter-spacing: 0.5px; }
+        .galeria-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+        .galeria-item { aspect-ratio: 1; border-radius: 10px; overflow: hidden; position: relative; cursor: pointer; box-shadow: 0 2px 8px rgba(99,53,53,0.1); transition: transform 0.22s, box-shadow 0.22s; background: rgba(184,151,148,0.12); }
         .galeria-item:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(99,53,53,0.18); }
-        .galeria-item img { width:100%;height:100%;object-fit:cover;display:block; }
-        .galeria-leg {
-            position: absolute; bottom:0; left:0; right:0;
-            background: linear-gradient(transparent, rgba(99,53,53,0.6));
-            color: white; font-size: 0.62rem;
-            padding: 18px 8px 6px; opacity: 0;
-            transition: opacity 0.2s;
-            font-family: 'Montserrat', sans-serif;
-        }
-        .galeria-item:hover .galeria-leg { opacity: 1; }
-        .galeria-vazia {
-            font-family: 'Dancing Script', cursive;
-            font-size: 1rem; color: #b89794;
-            text-align: center; padding: 20px;
-            grid-column: 1/-1;
+        .galeria-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .galeria-item-legenda { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(99,53,53,0.65)); color: white; font-size: 0.65rem; padding: 22px 8px 7px; opacity: 0; transition: opacity 0.2s; font-family: 'Montserrat', sans-serif; line-height: 1.4; }
+        .galeria-item:hover .galeria-item-legenda { opacity: 1; }
+        .galeria-vazia { font-family: 'Dancing Script', cursive; font-size: 1rem; color: #b89794; text-align: center; padding: 24px; grid-column: 1/-1; }
+
+        /* ── Botão hamburger como link ── */
+        .btn-menu-topo-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+            margin-left: 6px;
+            cursor: pointer;
+            text-decoration: none;
         }
 
-        /* ── STATS CARD DIAS ── */
-        .stat-card h3 {
-            font-family: 'Dancing Script', cursive;
-            font-size: 1.1rem; color: #633535;
+        /* Seta de submenu nos menus collapse CSS */
+        .seta-sub-icon {
+            display: inline-block;
+            font-size: 0.8rem;
+            color: #b89794;
+            transition: transform 0.25s;
         }
-        .dias-seq { font-family:'Dancing Script',cursive; font-size:0.75rem; color:#b89794; text-align:center; margin-top:4px; }
-        .record-text { font-size: 0.75rem; text-align: center; color: #633535; font-weight: bold; margin-top: 5px; }
-
+        .menu-dir-sub:target ~ * .seta-sub-icon { transform: rotate(90deg); }
     </style>
 </head>
 <body>
 
+    <!-- ══════════════════════════════════════════
+         PAINEL MENU LATERAL — CSS :target
+         Abrir: href="#painel-menu"  Fechar: href="#fechar"
+    ══════════════════════════════════════════ -->
+
+    <!-- âncora vazia para "fechar tudo" -->
+    <div id="fechar"></div>
+
+    <!-- âncora para abrir o painel -->
+    <div id="painel-menu"></div>
+
+    <div class="painel-dir-overlay" id="painelDirOverlay"></div>
+    <aside class="painel-dir" id="painelDir">
+        <div class="painel-dir-header">
+            <span class="painel-dir-titulo">Menu</span>
+            <a href="#fechar" class="painel-dir-fechar" style="text-decoration:none;">✕</a>
+        </div>
+        <ul class="menu-dir">
+            <li><a class="menu-dir-item" href="Registro.html"><span>Nova Resenha</span><span class="menu-dir-seta">›</span></a></li>
+
+            <li>
+                <a class="menu-dir-item" href="#sub-leituras"><span>Leituras</span><span class="menu-dir-seta seta-sub-icon">›</span></a>
+                <ul class="menu-dir-sub" id="sub-leituras">
+                    <li><a href="Biblioteca.html"><span>Livros Lidos</span><span class="sub-seta">›</span></a></li>
+                    <li><a href="Estante.html"><span>Minha Estante</span><span class="sub-seta">›</span></a></li>
+                    <li><a href="Leituras.html"><span>Quero Ler</span><span class="sub-seta">›</span></a></li>
+                    <li><a href="Calendario.html"><span>Calendário</span><span class="sub-seta">›</span></a></li>
+                    <li><a href="Memorias.html"><span>Memórias</span><span class="sub-seta">›</span></a></li>
+                </ul>
+            </li>
+
+            <li>
+                <a class="menu-dir-item" href="#sub-desafios"><span>Desafios</span><span class="menu-dir-seta seta-sub-icon">›</span></a>
+                <ul class="menu-dir-sub" id="sub-desafios">
+                    <li><a href="Bingo.html"><span>Bingo Literário</span><span class="sub-seta">›</span></a></li>
+                    <li><a href="Classicos.html"><span>30 Clássicos em 1 Ano</span><span class="sub-seta">›</span></a></li>
+                    <li><a href="Cores.html"><span>Desafio das Cores</span><span class="sub-seta">›</span></a></li>
+                    <li><a href="Estacoes.html"><span>Desafio das Estações</span><span class="sub-seta">›</span></a></li>
+                </ul>
+            </li>
+
+            <li>
+                <a class="menu-dir-item" href="#sub-metas"><span>Metas de Leitura</span><span class="menu-dir-seta seta-sub-icon">›</span></a>
+                <ul class="menu-dir-sub" id="sub-metas">
+                    <li><a href="Classicos.html"><span>Meta de Clássicos</span><span class="sub-seta">›</span></a></li>
+                    <li><a href="Leituras.html"><span>Lista de Desejos</span><span class="sub-seta">›</span></a></li>
+                    <li><a href="Calendario.html"><span>Dias de Leitura</span><span class="sub-seta">›</span></a></li>
+                    <li><a href="Estante.html"><span>Livros Pausados</span><span class="sub-seta">›</span></a></li>
+                </ul>
+            </li>
+
+            <li><div class="menu-dir-sep"></div></li>
+
+            <li>
+                <a class="menu-dir-item" href="#sub-info"><span>Informações</span><span class="menu-dir-seta seta-sub-icon">›</span></a>
+                <ul class="menu-dir-sub" id="sub-info">
+                    <li><a href="SobreNos.html"><span>Sobre Nós</span><span class="sub-seta">›</span></a></li>
+                    <li><a href="Contato.html"><span>Contato</span><span class="sub-seta">›</span></a></li>
+                    <li><a href="Privacidade.html"><span>Privacidade</span><span class="sub-seta">›</span></a></li>
+                    <li><a href="Termos.html"><span>Termos de Uso</span><span class="sub-seta">›</span></a></li>
+                </ul>
+            </li>
+        </ul>
+        <div class="painel-dir-footer">Capítulo 1 © 2026</div>
+    </aside>
+
     <div class="wrapper">
         <header class="header">
             <div class="logo">
-                <a href="index.html">
-                    <img src="imagens/capitulo1.png" alt="Capítulo 1" class="logo-img">
-                </a>
+                <a href="index.html"><img src="imagens/capitulo1.png" alt="Capítulo 1" class="logo-img"></a>
             </div>
             <nav class="user-menu">
-                <a href="#" id="btn-login-topo"><span>LOGIN</span></a>
-                <a href="#" id="btn-cadastro-topo"><span>CADASTRO</span></a>
+                <!-- LOGIN → abre #modal-login -->
+                <a href="#modal-login"><span>LOGIN</span></a>
+                <!-- CADASTRO → abre #modal-cadastro -->
+                <a href="#modal-cadastro"><span>CADASTRO</span></a>
+                <!-- MENU → abre #painel-menu -->
+                <a href="#painel-menu" class="btn-menu-topo-link" title="Menu">
+                    <svg width="26" height="18" viewBox="0 0 26 18">
+                        <rect y="0"  width="26" height="2.5" rx="1.25" fill="#633535"/>
+                        <rect y="7.5" width="26" height="2.5" rx="1.25" fill="#633535"/>
+                        <rect y="15" width="26" height="2.5" rx="1.25" fill="#633535"/>
+                    </svg>
+                </a>
             </nav>
         </header>
 
@@ -139,21 +654,21 @@
             <aside class="sidebar">
                 <nav>
                     <ul class="menu-list">
-                        <li><a href="Registro.html">Nova Resenha <span class="arrow"></span></a></li>
-                        <li><a href="Biblioteca.html">Lidos <span class="arrow"></span></a></li>
-                        <li><a href="Estante.html">Minha Estante <span class="arrow"></span></a></li>
-                        <li><a href="Leituras.html">Quero Ler <span class="arrow"></span></a></li>
-                        <li><a href="Calendario.html">Calendário <span class="arrow"></span></a></li>
-                        <li><a href="Memorias.html">Memórias <span class="arrow"></span></a></li>
-                        <li><a href="Bingo.html">Bingo Literário <span class="arrow"></span></a></li>
-                        <li><a href="Classicos.html">30 Clássicos <span class="arrow"></span></a></li>
-                        <li><a href="Cores.html">Desafio das Cores <span class="arrow"></span></a></li>
-                        <li><a href="Estacoes.html">Desafio Estações <span class="arrow"></span></a></li>
+                        <li><a href="Registro.html">Nova Resenha <span class="arrow">›</span></a></li>
+                        <li><a href="Biblioteca.html">Livros Lidos <span class="arrow">›</span></a></li>
+                        <li><a href="Estante.html">Minha Estante <span class="arrow">›</span></a></li>
+                        <li><a href="Leituras.html">Quero Ler <span class="arrow">›</span></a></li>
+                        <li><a href="Calendario.html">Calendário <span class="arrow">›</span></a></li>
+                        <li><a href="Memorias.html">Memórias <span class="arrow">›</span></a></li>
+                        <li><a href="Bingo.html">Bingo Literário <span class="arrow">›</span></a></li>
+                        <li><a href="Classicos.html">30 Clássicos <span class="arrow">›</span></a></li>
+                        <li><a href="Cores.html">Desafio das Cores <span class="arrow">›</span></a></li>
+                        <li><a href="Estacoes.html">Desafio Estações <span class="arrow">›</span></a></li>
                     </ul>
                 </nav>
             </aside>
-            <main class="content">
 
+            <main class="content">
                 <section class="banner-citacao">
                     <div class="citacao-conteudo">
                         <p class="texto-citacao">"Sempre imaginei que o paraíso fosse uma espécie de biblioteca."</p>
@@ -161,257 +676,304 @@
                     </div>
                 </section>
 
+                <!-- CARROSSEL DE RESENHAS -->
                 <section class="featured-book">
-                    <div id="resSlides"></div>
-                    <div class="res-dots" id="resDots"></div>
+                    <div id="carrosselResenhas">
+                        <div class="carrossel-slide-res ativo">
+                            <div class="slide-res-vazio">Suas resenhas aparecerão aqui.<br>
+                            <a href="Registro.html" style="font-family:Montserrat,sans-serif;font-size:0.8rem;font-weight:700;color:#633535;">+ Registrar primeiro livro</a></div>
+                        </div>
+                    </div>
+                    <div class="carrossel-controles" id="ctrlRes" style="display:none;">
+                        <div class="carrossel-dots-res" id="dotsRes"></div>
+                        <div style="display:flex;gap:6px;">
+                            <button class="btn-res-nav" id="btnResPrev">‹</button>
+                            <button class="btn-res-nav" id="btnResNext">›</button>
+                        </div>
+                    </div>
                 </section>
 
+                <!-- STATS -->
                 <section class="stats-grid">
-
                     <div class="stat-card card-conquistas">
                         <h3>Conquistas</h3>
                         <ul class="stats-list">
                             <li><span>Livros Lidos</span><span id="val-lidos" class="count">0</span></li>
                             <li><span>Resenhas Escritas</span><span id="val-resenhas" class="count">0</span></li>
+                            <li><span>Clássicos Lidos</span><span id="val-classicos" class="count">0</span></li>
                             <li><span>Desafios Ativos</span><span id="val-desafios" class="count">0</span></li>
                         </ul>
                     </div>
 
                     <div class="stat-card card-estacoes">
                         <h3>Progresso dos Desafios</h3>
-                        <div style="font-size:0.72rem;color:#8b4361;margin:10px 0 3px;">Bingo Literário</div>
+                        <div style="font-size:0.72rem;color:#8b4361;margin:8px 0 2px;">Bingo Literário</div>
                         <div class="progress-container">
                             <div id="barra-bingo" class="progress-fill" style="width:0%"></div>
                         </div>
-                        <div class="estacao-info" style="margin-bottom:10px;">
-                            <span id="txt-bingo" style="font-size:0.76rem;">0/24 desafios</span>
-                        </div>
-
-                        <div style="font-size:0.72rem;color:#8b4361;margin-bottom:3px;">Desafio das Cores</div>
+                        <div class="estacao-info" style="margin-bottom:10px;"><span id="txt-bingo" style="font-size:0.76rem;">0/24 desafios</span></div>
+                        <div style="font-size:0.72rem;color:#8b4361;margin:2px 0;">Clássicos</div>
                         <div class="progress-container">
-                            <div id="barra-cores" class="progress-fill" style="width:0%;background:#8b4361;"></div>
+                            <div id="barra-classicos" class="progress-fill" style="width:0%;background:#8b4361;"></div>
                         </div>
-                        <div class="estacao-info">
-                            <span id="txt-cores" style="font-size:0.76rem;">0/12 lidos</span>
-                        </div>
+                        <div class="estacao-info"><span id="txt-classicos" style="font-size:0.76rem;">0/30 lidos</span></div>
                     </div>
 
                     <div class="stat-card card-dias">
-                        <h3>Dias Seguidos</h3>
+                        <h3>Dias em Sequência</h3>
                         <div class="circle-container">
-                            <svg viewBox="0 0 32 28" width="80" height="80" style="display:block;margin:10px auto 4px; overflow:visible;">
-                                <path d="M16 26 C16 26 1 16 1 8.5 C1 4.4 4.4 1 8.5 1 C11.2 1 13.6 2.5 16 5.5 C18.4 2.5 20.8 1 23.5 1 C27.6 1 31 4.4 31 8.5 C31 16 16 26 16 26Z" 
-                                      fill="none" stroke="#e8d9e5" stroke-width="1.5" stroke-linejoin="round"/>
-                                
-                                <path id="heart-arc" 
-                                      d="M16 26 C16 26 1 16 1 8.5 C1 4.4 4.4 1 8.5 1 C11.2 1 13.6 2.5 16 5.5 C18.4 2.5 20.8 1 23.5 1 C27.6 1 31 4.4 31 8.5 C31 16 16 26 16 26Z" 
-                                      fill="none" stroke="#633535" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                      pathLength="100" stroke-dasharray="100" stroke-dashoffset="100" 
-                                      style="transition: stroke-dashoffset 1.5s ease-out;"/>
-                                
-                                <text x="16" y="14" dy=".3em" text-anchor="middle" font-family="Montserrat,sans-serif" font-size="7" font-weight="700" fill="#633535" id="val-dias">0</text>
-                            </svg>
+                            <div class="circle-bg"><span id="val-dias">0</span></div>
                         </div>
                         <p class="record-text">Recorde: <span id="val-record">0</span> dias</p>
                         <p class="dias-seq" id="msg-seq"></p>
                     </div>
-
                 </section>
 
+                <!-- GALERIA DO LEITOR -->
                 <section class="galeria-section">
-                    <div class="galeria-titulo-wrap">
+                    <div class="galeria-titulo">
                         <span>Galeria do Leitor</span>
-                        <a href="Memorias.html" class="galeria-ver">Ver todas →</a>
+                        <a href="Memorias.html" class="galeria-link">Ver todas →</a>
                     </div>
-                    <div class="galeria-grid" id="galeriaHome"></div>
+                    <div class="galeria-grid" id="galeriaHome">
+                        <div class="galeria-vazia">Suas fotos de memórias aparecerão aqui.<br>
+                        <a href="Memorias.html" style="font-family:Montserrat,sans-serif;font-size:0.78rem;font-weight:700;color:#633535;">+ Adicionar memórias</a></div>
+                    </div>
                 </section>
-
             </main>
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <!-- ══════════════════════════════════════════
+         MODAIS — CSS :target puro
+         Fechar: href="#fechar"   Trocar: href="#outro-modal"
+    ══════════════════════════════════════════ -->
+
+    <!-- ── MODAL CADASTRO ── -->
+    <section id="modal-cadastro" class="modal-overlay">
+        <!-- Fundo clicável fecha -->
+        <a href="#fechar" class="modal-fechar-fundo"></a>
+        <div class="modal-content">
+            <a href="#fechar" class="btn-fechar">&times;</a>
+            <div class="modal-header">
+                <img src="imagens/flor_decorativa.png" alt="" class="modal-icon">
+                <h2>Crie sua conta</h2>
+                <p>Comece sua jornada literária</p>
+            </div>
+            <form class="modal-form" action="cadastro.html" method="get">
+                <input type="text" name="usuario" placeholder="Seu nome de usuário" required>
+                <input type="email" name="email" placeholder="E-mail" required>
+                <input type="password" name="senha" placeholder="Senha" required>
+                <input type="password" name="confirma" placeholder="Confirme a senha" required>
+                <div class="checkbox-container">
+                    <input type="checkbox" id="termos-cb" required>
+                    <label for="termos-cb">Li e concordo com os <a href="Termos.html" style="color:#8b4361;">termos</a></label>
+                </div>
+                <button type="submit" class="btn-cadastrar">CADASTRAR</button>
+            </form>
+            <!-- Troca para Login -->
+            <a href="#modal-login" class="login-link">- LOGIN -</a>
+        </div>
+    </section>
+
+    <!-- ── MODAL LOGIN ── -->
+    <section id="modal-login" class="modal-overlay">
+        <a href="#fechar" class="modal-fechar-fundo"></a>
+        <div class="modal-content">
+            <a href="#fechar" class="btn-fechar">&times;</a>
+            <div class="modal-header">
+                <img src="imagens/flor_decorativa.png" alt="" class="modal-icon">
+                <h2>Acesse sua conta</h2>
+                <p>Bem-vindo de volta!</p>
+            </div>
+            <form class="modal-form" action="login.html" method="get">
+                <input type="email" name="email" placeholder="E-mail" required>
+                <input type="password" name="senha" placeholder="Senha" required>
+                <div class="login-options">
+                    <label class="remember-me"><input type="checkbox" name="lembrar"> Lembrar-me</label>
+                    <!-- Troca para Esqueci Senha -->
+                    <a href="#modal-esqueci" class="forgot-password">Esqueceu a senha?</a>
+                </div>
+                <button type="submit" class="btn-cadastrar">ENTRAR</button>
+            </form>
+            <!-- Troca para Cadastro -->
+            <a href="#modal-cadastro" class="login-link">- CADASTRE-SE -</a>
+        </div>
+    </section>
+
+    <!-- ── MODAL ESQUECI A SENHA ── -->
+    <section id="modal-esqueci" class="modal-overlay">
+        <a href="#fechar" class="modal-fechar-fundo"></a>
+        <div class="modal-content">
+            <a href="#fechar" class="btn-fechar">&times;</a>
+            <div class="modal-header">
+                <img src="imagens/flor_decorativa.png" alt="" class="modal-icon">
+                <h2>Esqueci minha senha</h2>
+                <p>Não se preocupe!</p>
+            </div>
+            <form class="modal-form" action="recuperar.html" method="get">
+                <input type="email" name="email" placeholder="E-mail" required>
+                <button type="submit" class="btn-cadastrar">ENVIAR E-MAIL</button>
+            </form>
+            <!-- Troca para Cadastro -->
+            <a href="#modal-cadastro" class="login-link">- NOVO CADASTRO -</a>
+        </div>
+    </section>
+
+    <footer>
+        <p>
+            <a href="SobreNos.html" style="color:#777;text-decoration:none;">Sobre Nós</a> |
+            <a href="Contato.html" style="color:#777;text-decoration:none;">Contato</a> |
+            <a href="Privacidade.html" style="color:#777;text-decoration:none;">Privacidade</a> |
+            <a href="Termos.html" style="color:#777;text-decoration:none;">Termos</a>
+        </p>
+        <p>&copy; 2026 Capítulo 1. Todos os direitos reservados.</p>
+    </footer>
+
+    <!-- JavaScript opcional apenas para carrossel e contadores do localStorage -->
+    <!-- Todos os MODAIS e PAINEL não usam JavaScript -->
     <script>
     // ── CARROSSEL DE RESENHAS ──
     (function() {
-        var livros = [];
-        try { livros = JSON.parse(localStorage.getItem('livros_lidos') || '[]'); } catch(e){}
-        var recentes = livros.slice().sort(function(a,b){ return (b.id||0)-(a.id||0); }).slice(0,6);
+        const livros   = JSON.parse(localStorage.getItem('livros_lidos') || '[]');
+        const recentes = [...livros].sort((a,b)=>(b.id||0)-(a.id||0)).slice(0,6);
+        const wrap  = document.getElementById('carrosselResenhas');
+        const dots  = document.getElementById('dotsRes');
+        const ctrl  = document.getElementById('ctrlRes');
+        let cur = 0, timer = null;
 
-        var slidesWrap = document.getElementById('resSlides');
-        var dotsWrap   = document.getElementById('resDots');
-        var cur = 0, timer = null;
-
-        if (!recentes.length) {
-            slidesWrap.innerHTML = '<div class="res-slide ativo"><div class="res-vazio">Suas resenhas aparecerão aqui.<br><a href="Registro.html" style="font-family:Montserrat,sans-serif;font-size:0.8rem;font-weight:700;color:#633535;">+ Registrar primeiro livro</a></div></div>';
+        if (recentes.length === 0) {
+            wrap.innerHTML = `<div class="carrossel-slide-res ativo">
+                <div class="slide-res-vazio">Suas resenhas aparecerão aqui.<br>
+                <a href="Registro.html" style="font-family:Montserrat,sans-serif;font-size:0.8rem;font-weight:700;color:#633535;">+ Registrar primeiro livro</a></div>
+            </div>`;
             return;
         }
 
-        recentes.forEach(function(l, i) {
-            var nota = parseInt(l.nota||0);
-            var s = document.createElement('div');
-            s.className = 'res-slide' + (i===0?' ativo':'');
-            var cap = l.imagem_url && l.imagem_url.trim() ? '<img class="res-capa" src="'+l.imagem_url.trim()+'" alt="'+l.titulo+'" onerror="this.style.display=\'none\'">' : '';
-            s.innerHTML = cap + '<div class="res-info">' +
-                '<div class="res-titulo">'+l.titulo+'</div>' +
-                (l.autor ? '<div class="res-autor">'+l.autor+'</div>' : '') +
-                (nota ? '<div class="res-estrelas">'+'★'.repeat(nota)+'☆'.repeat(5-nota)+'</div>' : '') +
-                '<div class="res-trecho">'+(l.resenha||l.momentos||'')+'</div>' +
-                '<a href="Resenha.html?id='+l.id+'" class="res-link">VER RESENHA</a>' +
-                '</div>';
-            slidesWrap.appendChild(s);
-
-            var dot = document.createElement('div');
-            dot.className = 'res-dot'+(i===0?' ativo':'');
-            dot.addEventListener('click', function(){ ir(i); });
-            dotsWrap.appendChild(dot);
+        recentes.forEach((l, i) => {
+            const nota = parseInt(l.nota||0);
+            const slide = document.createElement('div');
+            slide.className = 'carrossel-slide-res book-flex' + (i===0?' ativo':'');
+            const capaSrc = l.imagem_url && l.imagem_url.trim() ? l.imagem_url.trim() : '';
+            slide.innerHTML = `
+                ${capaSrc ? `<img class="slide-res-capa book-cover" src="${capaSrc}" alt="${l.titulo}" onerror="this.style.display='none'">` : ''}
+                <div class="slide-res-info book-details">
+                    <div class="slide-res-titulo">${l.titulo}</div>
+                    ${l.autor ? `<div class="slide-res-autor">${l.autor}</div>` : ''}
+                    ${nota ? `<div class="slide-res-estrelas">${'★'.repeat(nota)}${'☆'.repeat(5-nota)}</div>` : ''}
+                    <div class="slide-res-trecho">${l.resenha||l.momentos||''}</div>
+                    <a href="Resenha.html?id=${l.id}" class="btn-ver-resenha">VER RESENHA</a>
+                </div>`;
+            wrap.appendChild(slide);
+            const dot = document.createElement('div');
+            dot.className = 'dot-res'+(i===0?' ativo':'');
+            dot.addEventListener('click', () => ir(i));
+            dots.appendChild(dot);
         });
 
         if (recentes.length > 1) {
-            timer = setInterval(function(){ ir((cur+1)%recentes.length); }, 5000);
+            ctrl.style.display = 'flex';
+            document.getElementById('btnResPrev').addEventListener('click', () => mover(-1));
+            document.getElementById('btnResNext').addEventListener('click', () => mover(1));
+            timer = setInterval(() => mover(1), 4500);
         }
 
         function ir(idx) {
-            slidesWrap.querySelectorAll('.res-slide').forEach(function(s,i){ s.classList.toggle('ativo',i===idx); });
-            dotsWrap.querySelectorAll('.res-dot').forEach(function(d,i){ d.classList.toggle('ativo',i===idx); });
+            wrap.querySelectorAll('.carrossel-slide-res').forEach((s,i) => s.classList.toggle('ativo',i===idx));
+            dots.querySelectorAll('.dot-res').forEach((d,i) => d.classList.toggle('ativo',i===idx));
             cur = idx;
         }
+        function mover(d) {
+            ir((cur+d+recentes.length)%recentes.length);
+            clearInterval(timer);
+            timer = setInterval(() => mover(1), 4500);
+        }
     })();
 
-    // ── CONTADORES (COM DESAFIO DAS CORES) ──
+    // ── CONTADORES ──
     (function() {
-        var livros = [];
-        try { livros = JSON.parse(localStorage.getItem('livros_lidos')||'[]'); } catch(e){}
-        var bingo = {};
-        try { bingo = JSON.parse(localStorage.getItem('bingo_estado')||'{}'); } catch(e){}
-
-        // Filtra livros do desafio das cores (etiqueta 'cores:')
-        var coresLidas = livros.filter(function(l){ 
-            return l.desafio && l.desafio.split('||').some(function(d){ 
-                return d.trim().toLowerCase().startsWith('cores:'); 
-            }); 
+        const livros    = JSON.parse(localStorage.getItem('livros_lidos') || '[]');
+        const classicos = JSON.parse(localStorage.getItem('classicos_lidos') || '[]');
+        const bingo     = JSON.parse(localStorage.getItem('bingo_estado') || '{}');
+        const bingoCon  = (bingo.concluidos||[]).length;
+        const cores = livros.filter(l => {
+            if (!l.desafio) return false;
+            return l.desafio.split('||').some(d => d.trim().startsWith('cores:'));
+        }).length;
+        const estacoes = livros.filter(l => {
+            if (!l.desafio) return false;
+            return l.desafio.split('||').some(d => d.trim().toLowerCase().includes('esta'));
         }).length;
 
-        var bingoCon = (bingo.concluidos||[]).length;
-        var desafiosAtivos = 0;
+        let desafiosAtivos = 0;
         if (bingoCon > 0) desafiosAtivos++;
-        if (coresLidas > 0) desafiosAtivos++;
+        if (classicos.length > 0) desafiosAtivos++;
+        if (cores > 0) desafiosAtivos++;
+        if (estacoes > 0) desafiosAtivos++;
 
-        document.getElementById('val-lidos').textContent    = livros.length;
-        document.getElementById('val-resenhas').textContent = livros.filter(function(l){ return l.resenha && l.resenha.trim(); }).length;
-        document.getElementById('val-desafios').textContent = desafiosAtivos;
+        document.getElementById('val-lidos').textContent     = livros.length;
+        document.getElementById('val-resenhas').textContent  = livros.filter(l=>l.resenha&&l.resenha.trim()).length;
+        document.getElementById('val-classicos').textContent = classicos.length;
+        document.getElementById('val-desafios').textContent  = desafiosAtivos;
 
-        // Progresso Bingo
-        document.getElementById('barra-bingo').style.width = Math.round(bingoCon/24*100)+'%';
-        document.getElementById('txt-bingo').textContent   = bingoCon+'/24 desafios';
+        document.getElementById('barra-bingo').style.width       = Math.round(bingoCon/24*100)+'%';
+        document.getElementById('txt-bingo').textContent         = `${bingoCon}/24 desafios`;
+        document.getElementById('barra-classicos').style.width   = Math.round(classicos.length/30*100)+'%';
+        document.getElementById('txt-classicos').textContent     = `${classicos.length}/30 lidos`;
 
-        // Progresso Cores (Meta de 12 livros)
-        var metaCores = 12;
-        var pctCores = Math.min(Math.round(coresLidas / metaCores * 100), 100);
-        document.getElementById('barra-cores').style.width = pctCores + '%';
-        document.getElementById('txt-cores').textContent   = coresLidas + '/' + metaCores + ' lidos';
-    })();
-
-    // ── CALENDÁRIO DE LEITURA (LÓGICA RESILIENTE CORRIGIDA) ──
-    (function() {
-        try {
-            var allLidos = new Set();
-            for (var i = 0; i < localStorage.length; i++) {
-                var key = localStorage.key(i);
-                if (key && key.startsWith('calendario_')) {
-                    try {
-                        var obj = JSON.parse(localStorage.getItem(key)||'{}');
-                        var lArr = Array.isArray(obj) ? obj : (obj.lidos||[]);
-                        lArr.forEach(function(d){ allLidos.add(d); });
-                    } catch(e2){}
-                }
-            }
-
-            function formatYMD(dt) {
-                return dt.getFullYear() + '-' +
-                    String(dt.getMonth()+1).padStart(2,'0') + '-' +
-                    String(dt.getDate()).padStart(2,'0');
-            }
-
-            // 1. Calcula o Recorde Máximo em toda a história
-            var sortedDates = Array.from(allLidos).sort();
-            var maxRecord = 0, tempSeq = 0, lastDate = null;
-
-            sortedDates.forEach(function(dateStr) {
-                var parts = dateStr.split('-');
-                var currDate = new Date(parts[0], parts[1]-1, parts[2]);
-                if (lastDate) {
-                    var diff = Math.round((currDate - lastDate) / (1000 * 60 * 60 * 24));
-                    tempSeq = (diff === 1) ? tempSeq + 1 : 1;
-                } else {
-                    tempSeq = 1;
-                }
-                if (tempSeq > maxRecord) maxRecord = tempSeq;
-                lastDate = currDate;
-            });
-
-            // 2. Calcula a Sequência Atual ( Streak )
-            var hoje = new Date();
-            var hojeStr = formatYMD(hoje);
-            var ontem = new Date(); ontem.setDate(hoje.getDate() - 1);
-            var ontemStr = formatYMD(ontem);
-
-            var currentStreak = 0;
-            // Se leu hoje ou ontem, a sequência ainda é válida
-            if (allLidos.has(hojeStr) || allLidos.has(ontemStr)) {
-                var cursor = allLidos.has(hojeStr) ? hoje : ontem;
-                var check = new Date(cursor.getTime());
-                while (allLidos.has(formatYMD(check))) {
-                    currentStreak++;
-                    check.setDate(check.getDate() - 1);
-                }
-            }
-
-            // Sincroniza recorde histórico
-            var savedRec = parseInt(localStorage.getItem('dias_recorde')||'0');
-            maxRecord = Math.max(maxRecord, currentStreak, savedRec);
-            localStorage.setItem('dias_recorde', String(maxRecord));
-
-            // Interface
-            document.getElementById('val-dias').textContent   = currentStreak;
-            document.getElementById('val-record').textContent = maxRecord;
-            document.getElementById('msg-seq').textContent    =
-                currentStreak === 0 ? 'Marque um dia no calendário!' :
-                currentStreak + ' dias seguidos!';
-
-            // Coração
-            var arc = document.getElementById('heart-arc');
-            if (arc) {
-                var pct = maxRecord > 0 ? Math.min(currentStreak / maxRecord, 1) : 0;
-                var offset = 100 - (pct * 100);
-                setTimeout(function() {
-                    arc.setAttribute('stroke-dashoffset', offset);
-                    if (currentStreak >= maxRecord && currentStreak > 0) {
-                        arc.style.fill = "rgba(139,67,97,0.15)";
+        (function() {
+            try {
+                var allLidos = new Set();
+                for (var i = 0; i < localStorage.length; i++) {
+                    var key = localStorage.key(i);
+                    if (key && key.startsWith('calendario_')) {
+                        try {
+                            var obj = JSON.parse(localStorage.getItem(key) || '{}');
+                            var arr = Array.isArray(obj) ? obj : (obj.lidos || []);
+                            arr.forEach(function(d) { allLidos.add(d); });
+                        } catch(e2) {}
                     }
-                }, 100);
-            }
-        } catch(err){ console.error(err); }
+                }
+                function toStr(dt) {
+                    return dt.getFullYear() + '-' + String(dt.getMonth()+1).padStart(2,'0') + '-' + String(dt.getDate()).padStart(2,'0');
+                }
+                var hoje = new Date();
+                var cursor = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
+                var seq = 0;
+                if (!allLidos.has(toStr(cursor))) cursor.setDate(cursor.getDate() - 1);
+                for (var n = 0; n < 3650; n++) {
+                    if (allLidos.has(toStr(cursor))) { seq++; cursor.setDate(cursor.getDate() - 1); } else { break; }
+                }
+                var rec = Math.max(seq, parseInt(localStorage.getItem('dias_recorde') || '0'));
+                localStorage.setItem('dias_recorde', String(rec));
+                document.getElementById('val-dias').textContent = seq;
+                document.getElementById('val-record').textContent = rec;
+                document.getElementById('msg-seq').textContent =
+                    seq === 0 ? 'Marque um dia no calendário!' :
+                    seq === 1 ? 'Boa! Continue amanhã!' :
+                    seq + ' dias seguidos!';
+            } catch(err) {}
+        })();
     })();
 
-    // ── GALERIA ──
+    // ── GALERIA DO LEITOR ──
     (function() {
         var fotos = [];
-        try { fotos = JSON.parse(localStorage.getItem('memorias_fotos')||'[]'); } catch(e){}
+        try { fotos = JSON.parse(localStorage.getItem('memorias_fotos') || '[]'); } catch(e) {}
         var grid = document.getElementById('galeriaHome');
-        var recentes = fotos.slice(0, 6);
-        if (!recentes.length) {
-            grid.innerHTML = '<div class="galeria-vazia">Suas fotos aparecerão aqui.</div>';
-            return;
-        }
+        if (!grid) return;
+        var recentes = fotos.slice(-6).reverse();
+        if (recentes.length === 0) return;
+        grid.innerHTML = '';
         recentes.forEach(function(foto) {
             var src = foto.base64 || foto.src || '';
             if (!src) return;
             var item = document.createElement('div');
             item.className = 'galeria-item';
-            item.onclick = function(){ window.location.href='Memorias.html'; };
-            item.innerHTML = '<img src="'+src+'" alt="Memória" loading="lazy">' +
-                (foto.legenda ? '<div class="galeria-leg">'+foto.legenda+'</div>' : '');
+            item.title = foto.legenda || 'Memória';
+            item.onclick = function() { window.location.href = 'Memorias.html'; };
+            item.innerHTML = '<img src="' + src + '" alt="Memória" loading="lazy">' +
+                (foto.legenda ? '<div class="galeria-item-legenda">' + foto.legenda + '</div>' : '');
             grid.appendChild(item);
         });
     })();

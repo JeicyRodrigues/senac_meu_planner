@@ -32,6 +32,7 @@
             flex-direction: column;
         }
 
+        /* ══ HEADER ══ */
         .page-header {
             display: flex;
             justify-content: space-between;
@@ -62,170 +63,252 @@
         .titulo-pagina {
             font-family: 'Dancing Script', cursive;
             font-size: 3.5rem;
+            line-height: 1;
         }
 
-        .subtitulo-header {
-            font-family: 'Dancing Script', cursive;
-            font-size: 1.2rem;
-            color: var(--vinho);
-        }
+        .btn-drawer { background: none; border: none; cursor: pointer; transition: 0.2s; }
+        .btn-drawer:hover { transform: scale(1.1); }
+        .btn-drawer img { width: 52px; mix-blend-mode: multiply; }
 
-        .btn-drawer { background: none; border: none; cursor: pointer; }
-        .btn-drawer img { width: 52px; }
-
-        .drawer-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.35); }
+        /* ══ DRAWER / DASHBOARD LATERAL ══ */
+        .drawer-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.35); z-index: 1000; }
         .drawer-overlay.aberto { display:block; }
 
         .drawer {
             position:fixed; top:0; right:-320px;
             width:300px; height:100vh;
             background:#faeeeb;
-            transition:0.3s;
+            border-left: 1px solid var(--borda);
+            box-shadow: -4px 0 20px rgba(0,0,0,0.1);
+            transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1001;
+            display: flex;
+            flex-direction: column;
         }
         .drawer.aberto { right:0; }
 
+        .drawer-header { padding:20px; border-bottom:1px solid rgba(184,151,148,0.4); display:flex; justify-content:space-between; align-items:center; }
+        .drawer-titulo { font-family:'Dancing Script',cursive; font-size:1.8rem; }
+        .drawer-fechar { background:none; border:none; font-size:1.4rem; cursor:pointer; color:var(--marrom); }
+
+        .drawer-nav { flex:1; padding:10px 0; }
+        .drawer-nav ul { list-style:none; }
+        .drawer-nav li a, .sub-toggle {
+            display:block; padding:13px 24px; text-decoration:none; color:var(--marrom);
+            font-size:0.88rem; font-weight:600; border-left:3px solid transparent; transition:0.2s;
+            cursor: pointer;
+        }
+        .drawer-nav li a:hover, .sub-toggle:hover { background:#eededa; border-left-color:var(--vinho); }
+
+        .sub-menu { display:none; background:rgba(184,151,148,0.08); list-style:none; }
+        .sub-menu.open { display:block; }
+        .sub-menu li a { padding-left: 40px; font-size: 0.8rem; font-weight: 500; }
+
+        /* ══ CONTEÚDO ══ */
         .container-biblioteca {
             background-color: rgba(250, 238, 235, 0.72);
+            backdrop-filter: blur(2px);
             width: 92%;
             max-width: 1200px;
-            margin: 20px auto;
+            margin: 10px auto 30px;
             padding: 30px;
             border-radius: 18px;
+            border: 1px solid rgba(184,151,148,0.5);
             flex: 1;
         }
 
         .contador-bar {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 20px;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--borda);
         }
 
         .livros-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 25px;
         }
 
         .livro-card {
             text-align: center;
-            cursor: pointer;
+            transition: 0.3s;
         }
+        .livro-card:hover { transform: translateY(-5px); }
 
         .capa-wrapper {
-            width: 125px;
-            height: 185px;
-            margin: auto;
+            width: 130px;
+            height: 190px;
+            margin: 0 auto 10px;
             position: relative;
+            box-shadow: 5px 8px 15px rgba(99,53,53,0.2);
+            border-radius: 8px;
+            overflow: hidden;
         }
 
-        .capa-sombra {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 8px;
-        }
+        .capa-img { width: 100%; height: 100%; object-fit: cover; }
 
         .capa-placeholder {
-            width: 100%;
-            height: 100%;
+            width: 100%; height: 100%;
             background: #e0d0cc;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.7rem;
-            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2rem;
         }
 
         .btn-lixeira {
             position: absolute;
-            top: 5px;
-            right: 5px;
-            background: var(--vinho);
-            border: none;
-            border-radius: 50%;
-            width: 25px;
-            height: 25px;
-            cursor: pointer;
+            top: 5px; right: 5px;
+            background: rgba(139, 67, 97, 0.9);
+            color: white; border: none;
+            border-radius: 50%; width: 28px; height: 28px;
+            cursor: pointer; opacity: 0; transition: 0.2s;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.8rem;
+        }
+        .capa-wrapper:hover .btn-lixeira { opacity: 1; }
+
+        .livro-titulo { font-size: 0.85rem; font-weight: 700; color: var(--marrom); margin-top: 5px; }
+        .livro-autor { font-size: 0.75rem; color: #8b6d6a; }
+
+        .btn-registro {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: var(--marrom);
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
         }
 
-        .livro-titulo { font-size: 0.8rem; font-weight: bold; }
-        .livro-autor { font-size: 0.7rem; color: #777; }
-
-        .estado-vazio { text-align: center; }
-
-        footer { text-align: center; padding: 20px; }
+        footer { text-align: center; padding: 20px; font-size: 0.8rem; color: #777; }
     </style>
 </head>
 
 <body>
 
-<div class="container-biblioteca">
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+    
+    <aside class="drawer" id="drawer">
+        <div class="drawer-header">
+            <span class="drawer-titulo">Menu</span>
+            <button class="drawer-fechar" id="drawerFechar">✕</button>
+        </div>
+        <nav class="drawer-nav">
+            <ul>
+                <li><a href="Registro.html">Nova Resenha</a></li>
+                <li>
+                    <div class="sub-toggle" onclick="dToggle('dn-leituras')">Leituras ›</div>
+                    <ul class="sub-menu" id="dn-leituras">
+                        <li><a href="Biblioteca.html">Livros Lidos</a></li>
+                        <li><a href="Estante.html">Minha Estante</a></li>
+                        <li><a href="Leituras.html">Quero Ler</a></li>
+                    </ul>
+                </li>
+                <li><a href="index.html">Início</a></li>
+            </ul>
+        </nav>
+    </aside>
 
-    <div id="estadoVazio" class="estado-vazio" style="display:none;">
-        <h2>Sua biblioteca está vazia 📚</h2>
-        <a href="Registro.html">Adicionar livro</a>
+    <header class="page-header">
+        <a href="index.html" class="logo-link">
+            <img src="imagens/logo01.png" alt="Capítulo 1">
+        </a>
+        <div class="header-titulo">
+            <div class="titulo-linha">
+                <img src="imagens/arabesco1.PNG" alt="" class="arabesco">
+                <span class="titulo-pagina">Meus Livros Lidos</span>
+                <img src="imagens/arabesco2.PNG" alt="" class="arabesco arabesco-dir">
+            </div>
+        </div>
+        <button class="btn-drawer" id="btnDrawer">
+            <img src="imagens/icone.png" alt="Menu">
+        </button>
+    </header>
+
+    <div class="container-biblioteca">
+        <div id="estadoVazio" class="estado-vazio" style="display:none; text-align: center; padding: 40px;">
+            <h2 style="font-family: 'Dancing Script'; font-size: 2rem;">Sua biblioteca está vazia 📚</h2>
+            <p>Comece a registrar suas leituras agora mesmo.</p>
+            <a href="Registro.html" class="btn-registro">+ Registrar meu primeiro livro</a>
+        </div>
+
+        <div id="contadorBar" class="contador-bar" style="display:none;">
+            <span>Total de leituras: <strong id="totalLivros">0</strong></span>
+            <a href="Registro.html" style="font-size: 0.75rem; color: var(--vinho); font-weight: 700; text-decoration: none;">+ Adicionar Novo</a>
+        </div>
+
+        <div class="livros-grid" id="livrosGrid"></div>
     </div>
 
-    <div id="contadorBar" class="contador-bar" style="display:none;">
-        <span>Você leu <strong id="totalLivros">0</strong> livros</span>
-    </div>
+    <footer>Capítulo 1 © 2026</footer>
 
-    <div class="livros-grid" id="livrosGrid"></div>
+    <script>
+        const DB_KEY = 'livros_lidos';
 
-</div>
+        // ── LÓGICA DO DRAWER ──
+        const btnDrawer = document.getElementById('btnDrawer');
+        const drawer = document.getElementById('drawer');
+        const overlay = document.getElementById('drawerOverlay');
+        const fechar = document.getElementById('drawerFechar');
 
-<footer>Capítulo 1 © 2026</footer>
+        btnDrawer.onclick = () => { drawer.classList.add('aberto'); overlay.classList.add('aberto'); };
+        fechar.onclick = () => { drawer.classList.remove('aberto'); overlay.classList.remove('aberto'); };
+        overlay.onclick = fechar.onclick;
 
-<script>
-const DB_KEY = 'livros_lidos';
+        function dToggle(id) {
+            document.getElementById(id).classList.toggle('open');
+        }
 
-function renderBiblioteca() {
-    const grid = document.getElementById('livrosGrid');
-    const livros = JSON.parse(localStorage.getItem(DB_KEY) || '[]');
+        // ── RENDERIZAÇÃO DA BIBLIOTECA ──
+        function renderBiblioteca() {
+            const grid = document.getElementById('livrosGrid');
+            const livros = JSON.parse(localStorage.getItem(DB_KEY) || '[]');
 
-    grid.innerHTML = '';
+            grid.innerHTML = '';
+            document.getElementById('estadoVazio').style.display = livros.length === 0 ? 'block' : 'none';
+            document.getElementById('contadorBar').style.display = livros.length === 0 ? 'none' : 'flex';
 
-    document.getElementById('estadoVazio').style.display = livros.length === 0 ? 'block' : 'none';
-    document.getElementById('contadorBar').style.display = livros.length === 0 ? 'none' : 'flex';
+            if (livros.length > 0) {
+                document.getElementById('totalLivros').textContent = livros.length;
 
-    if (livros.length > 0) {
-        document.getElementById('totalLivros').textContent = livros.length;
+                [...livros].reverse().forEach(livro => {
+                    const card = document.createElement('div');
+                    card.className = 'livro-card';
 
-        [...livros].reverse().forEach(livro => {
+                    const capaHtml = livro.imagem_url
+                        ? `<img src="${livro.imagem_url}" class="capa-img">`
+                        : `<div class="capa-placeholder">📚</div>`;
 
-            const card = document.createElement('div');
-            card.className = 'livro-card';
+                    card.innerHTML = `
+                        <div class="capa-wrapper" onclick="window.location.href='Resenha.html?id=${livro.id}'">
+                            ${capaHtml}
+                            <button class="btn-lixeira" title="Excluir">🗑️</button>
+                        </div>
+                        <div class="livro-titulo">${livro.titulo}</div>
+                        <div class="livro-autor">${livro.autor || ''}</div>
+                    `;
 
-            const capa = livro.imagem_url
-                ? `<img src="${livro.imagem_url}" class="capa-sombra">`
-                : `<div class="capa-placeholder">📚</div>`;
+                    // Lógica para deletar sem entrar na resenha
+                    card.querySelector('.btn-lixeira').onclick = (e) => {
+                        e.stopPropagation(); // Impede de abrir a resenha ao clicar no lixo
+                        if (confirm(`Deseja excluir "${livro.titulo}" da sua biblioteca?`)) {
+                            const novos = livros.filter(l => l.id !== livro.id);
+                            localStorage.setItem(DB_KEY, JSON.stringify(novos));
+                            renderBiblioteca();
+                        }
+                    };
 
-            card.innerHTML = `
-                <div class="capa-wrapper">
-                    ${capa}
-                    <button class="btn-lixeira">🗑️</button>
-                </div>
-                <div class="livro-titulo">${livro.titulo}</div>
-                <div class="livro-autor">${livro.autor || ''}</div>
-            `;
+                    grid.appendChild(card);
+                });
+            }
+        }
 
-            card.addEventListener('click', (e) => {
-                if (e.target.classList.contains('btn-lixeira')) {
-                    if (confirm('Excluir livro?')) {
-                        const novos = livros.filter(l => l.id !== livro.id);
-                        localStorage.setItem(DB_KEY, JSON.stringify(novos));
-                        renderBiblioteca();
-                    }
-                }
-            });
-
-            grid.appendChild(card);
-        });
-    }
-}
-
-renderBiblioteca();
-</script>
+        renderBiblioteca();
+    </script>
 
 </body>
 </html>
